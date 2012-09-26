@@ -1,0 +1,8 @@
+# @title (custom) Configure JREs
+# @description Imports JRE settings for this machine
+# @audit_type LASTMOD
+file_export_version=3.0
+/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_DEFAULT_ENVIRONMENTS_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<defaultEnvironments>\r\n<defaultEnvironment environmentId\="J2SE-1.5" vmId\="57,org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType13,1290776336683"/>\r\n<defaultEnvironment environmentId\="JavaSE-1.6" vmId\="57,org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType13,1288882049103"/>\r\n</defaultEnvironments>\r\n
+/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_VM_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<vmSettings defaultVM\="57,org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType13,1288882049103">\r\n<vmType id\="org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType">\r\n<vm id\="1288882049103" javadocURL\="http\://java.sun.com/javase/6/docs/api/" name\="jdk1.6.0_22" path\="C\:\\jdk1.6.0_22"/>\r\n<vm id\="1290776336683" javadocURL\="http\://java.sun.com/j2se/1.5.0/docs/api/" name\="jdk1.5.0_07" path\="C\:\\jdk1.5.0_07"/>\r\n</vmType>\r\n</vmSettings>\r\n
+\!/=
+@org.eclipse.jdt.launching=3.5.0.v20090527

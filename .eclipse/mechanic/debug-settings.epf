@@ -1,0 +1,12 @@
+# @title (custom) Fix debugger settings.
+# @description Changes debug settings to keep console in background, 
+# @audit_type LASTMOD
+file_export_version=3.0
+/instance/org.eclipse.debug.ui/DEBUG.consoleOpenOnErr=false
+/instance/org.eclipse.debug.ui/DEBUG.consoleOpenOnOut=false
+/instance/org.eclipse.debug.ui/org.eclipse.debug.ui.max_detail_length=0
+/instance/org.eclipse.debug.ui/org.eclipse.debug.ui.switch_perspective_on_suspend=always
+/instance/org.eclipse.debug.ui/org.eclipse.debug.ui.UseContextualLaunch=false
+/instance/org.eclipse.jdt.debug.ui/org.eclipse.jdt.debug.ui.open_inspect_popup_on_exception=true
+/instance/org.eclipse.jdt.debug.ui/org.eclipse.jdt.debug.ui.show_hex=true
+/instance/org.eclipse.jdt.debug.ui/org.eclipse.jdt.debug.ui.show_monitor_thread_info=true

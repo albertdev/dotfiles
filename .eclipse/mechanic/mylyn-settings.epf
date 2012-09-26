@@ -1,0 +1,10 @@
+# @title (custom) Mylyn settings
+# @description Modifies the Mylyn settings
+# @audit_type LASTMOD
+file_export_version=3.0
+/instance/org.eclipse.mylyn.context.ui/org.eclipse.mylyn.ui.interest.filter.org.eclipse.jdt.ui.PackageExplorer=true
+/instance/org.eclipse.mylyn.context.ui/org.eclipse.mylyn.ui.interest.filter.org.eclipse.ui.views.TaskList=true
+/instance/org.eclipse.mylyn.context.ui/org.eclipse.mylyn.ui.perspectives.task.none=org.eclipse.jdt.ui.JavaPerspective
+/instance/org.eclipse.mylyn.java.ui/org.eclipse.mylyn.context.ui.editor.folding.enabled=true
+/instance/org.eclipse.mylyn.monitor.ui/org.eclipse.mylyn.monitor.activity.tracking.enabled.checked=true
+/instance/org.eclipse.mylyn.resources.ui/org.eclipse.mylyn.ide.resources.ignored.pattern=target, .*, 

@@ -1,0 +1,6 @@
+# @title (custom) Configure JREs
+# @description Imports JRE settings for this machine (Only for Eclipse 3.7)
+# @audit_type LASTMOD
+file_export_version=3.0
+/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_DEFAULT_ENVIRONMENTS_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<defaultEnvironments>\r\n<defaultEnvironment environmentId\="J2SE-1.5" vmId\="57,org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType13,1314175829304"/>\r\n<defaultEnvironment environmentId\="JavaSE-1.6" vmId\="57,org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType13,1314175809351"/>\r\n</defaultEnvironments>\r\n
+/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_VM_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<vmSettings defaultVM\="57,org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType13,1314175809351" defaultVMConnector\="">\r\n<vmType id\="org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType">\r\n<vm id\="1314175809351" name\="jdk1.6.0_24" path\="C\:\\jdk1.6.0_24"/>\r\n<vm id\="1314175829304" name\="jdk1.5.0_07" path\="C\:\\jdk1.5.0_07"/>\r\n</vmType>\r\n</vmSettings>\r\n

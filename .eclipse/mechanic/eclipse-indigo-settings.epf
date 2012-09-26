@@ -1,0 +1,10 @@
+# @title Workspace settings for Eclipse Indigo
+# @description Updates some of the workspace settings with newer Indigo settings.
+# @audit_type LASTMOD
+file_export_version=3.0
+# Enable lightweight refresh (because file dates are checked anyway, just refresh it) 
+/instance/org.eclipse.core.resources/refresh.lightweight.enabled=true
+
+# Enable the special get/set step filters.
+/instance/org.eclipse.core.resources/org.eclipse.jdt.debug.ui.filter_get=true
+/instance/org.eclipse.core.resources/org.eclipse.jdt.debug.ui.filter_setters=true

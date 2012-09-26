@@ -1,0 +1,24 @@
+"2.0 (created: 2009/03/28 23:48:07)
+map e k
+map s i
+map i l
+map I L
+noremap E N
+noremap N n
+map n j
+"noremap <C-e> <C-i>
+set "runtimepath=C:\\Documents and Settings\\jacobsb\\vimperator"
+
+source! ~/_vimperatorrc.local
+
+" vim: set ft=vimperator:
+
+" No longer necessary in Vimperator 3, default is fine.
+"set guioptions=rbmnB
+
+"set complete=sl
+set titlestring=" Mozilla Firefox / Vimperator"
+" Open help, etc in a new tab
+set newtab=all
+" Makes sure nothing steals the focus when opening a page or new tab.
+set focuscontent

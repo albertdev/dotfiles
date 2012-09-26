@@ -1,0 +1,5 @@
+# @title (custom) Auto-build
+# @description Disables automatic building of projects
+# @audit_type LASTMOD
+file_export_version=3.0
+/instance/org.eclipse.core.resources/description.autobuilding=false

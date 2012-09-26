@@ -1,0 +1,58 @@
+" Redesigned mapping for the Colemak layout for Vimperator 2.0
+" 2009-04-29 Andrew Kvalheim, http://aendruk.wordpress.com/. Public domain.
+
+" Instructions
+" ==============================================================================
+" Copy the following files to ~/.vimperator/plugin/:
+" 	- colemak.vimp
+" 	- colemak.png
+
+" Remapping summary
+" ==============================================================================
+"
+" Colemak layout			|QWERTY layout				
+" --------------------------------------|---------------------------------------
+" ` 1 2 3 4 5 6 7 8 9 0 - =      Move:  |  Move:    ` 1 2 3 4 5 6 7 8 9 0 - =	
+"   q w f p g j l U y ; [ ] \      u    |    k	      q w e r t y u i o p [ ] \	
+"   a r s t d h N E I o '       n     i | h     l     a s d f g H J K L ; '	
+"   z x c v b k m , . /            e    |    j        z x c v b n m , . /	
+"
+" Previously	|Now is				|Forced remapping(s)		
+" --------------|-------------------------------|-------------------------------
+" 		|<F2>	Display graphical cheat	|				
+"		|	sheet.			|				
+" --------------|-------------------------------|-------------------------------
+" h		|n	Scroll document to the	|k	Find next.		
+"		|	left.			|				
+" --------------|-------------------------------|-------------------------------
+" H		|N	Go back in the browser	|K	Find previous.		
+"		|	history.		|				
+" --------------|-------------------------------|-------------------------------
+" j		|e	Scroll document down.	|				
+" --------------|-------------------------------|-------------------------------
+" k		|u	Scroll document up.	|j	Undo closing of a tab.	
+" --------------|-------------------------------|-------------------------------
+" l		|i	Scroll document to the	|l	Start Insert mode	
+"		|	right.			|L	Launch the external
+"		|				|	editor.			
+" --------------|-------------------------------|-------------------------------
+" L		|I	Go forward in the	|				
+"		|	browser history.	|				
+
+" Remapping commands
+" ==============================================================================
+noremap <F2> :tabopen C:\\Documents and Settings\\jacobsb\\vimperator\\plugin\\colemak.png<CR>
+noremap h <Nop>
+noremap H <Nop>
+noremap n h
+noremap k n
+noremap N H
+noremap K N
+noremap e j
+noremap u k
+noremap j u
+noremap i l
+noremap l i
+noremap L I
+noremap I L
+
