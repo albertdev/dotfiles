@@ -35,6 +35,8 @@ endif
 " backspace and cursor keys wrap to previous/next line
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 
+execute pathogen#infect()
+
 syntax on
 
 filetype plugin on
@@ -56,14 +58,14 @@ source ~/vimfiles/custom.vim
 "endif
 
 " Maximize Vim on startup.
-au GUIEnter * simalt ~x
+"au GUIEnter * simalt ~x
 
 " Alt-Space is System menu
-if has("gui")
-  noremap <M-Space> :simalt ~<CR>
-  inoremap <M-Space> <C-O>:simalt ~<CR>
-  cnoremap <M-Space> <C-C>:simalt ~<CR>
-endif
+"if has("gui")
+  "noremap <M-Space> :simalt ~<CR>
+  "inoremap <M-Space> <C-O>:simalt ~<CR>
+  "cnoremap <M-Space> <C-C>:simalt ~<CR>
+"endif
 
 "Change highlighting for "Ignore" group.
 hi Ignore ctermfg=Gray guifg=Gray

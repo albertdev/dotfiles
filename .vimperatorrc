@@ -7,7 +7,7 @@ noremap E N
 noremap N n
 map n j
 "noremap <C-e> <C-i>
-set "runtimepath=C:\\Documents and Settings\\jacobsb\\vimperator"
+set "runtimepath=/home/jacobsb/vimperator"
 
 source! ~/_vimperatorrc.local
 
