@@ -1,0 +1,4 @@
+alias mmv='noglob zmv -W'
+alias pd='popd'
+alias dd='cd ..'
+alias gitsr='git svn rebase'

@@ -1,0 +1,15 @@
+
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+export RI="--format ansi"
+export EDITOR="vim"
+export NOPASTE_SSH_SERVER=paste
+export NOPASTE_SSH_MODE=0644
+if [[ "$TERM" == xterm ]]; then
+   export TERM=xterm-256color
+fi
+#export JAVA_HOME=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64
+export JAVA_HOME=/usr/lib/jvm/jdk1.7.0
+
+export MAVEN_OPTS=-Xmx1024m
+
+# vim: ft=zsh
