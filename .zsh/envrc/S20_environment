@@ -10,6 +10,6 @@ fi
 #export JAVA_HOME=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64
 export JAVA_HOME=/usr/lib/jvm/jdk1.7.0
 
-export MAVEN_OPTS=-Xmx1024m
+export MAVEN_OPTS='-Xmx1024m -XX:MaxPermSize=512M'
 
 # vim: ft=zsh
