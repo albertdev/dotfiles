@@ -1,0 +1,6 @@
+
+if [[ -r ~/.localdirs ]]; then
+   source ~/.localdirs
+fi
+
+# vim: ft=zsh
