@@ -1,5 +1,7 @@
 " Cargo cult programming to ward of vi spirits.
 set nocompatible
+" Required by Vundle initialization
+filetype off
 
 " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
 " across (heterogeneous) systems easier.
@@ -7,34 +9,55 @@ if has('win32') || has('win64')
     set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
 
-"We can do without mswin...
-"source $VIMRUNTIME/mswin.vim
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+" alternatively, pass a path where Vundle should install bundles
+"let path = '~/some/path/here'
+"call vundle#rc(path)
+
+" let Vundle manage Vundle, required
+Bundle 'gmarik/vundle'
+
+" Vundle-managed bundles.
+" scripts from github
+"Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-surround'
+" Must try this one out later
+"Bundle 'Lokaltog/vim-easymotion'
+
+" scripts from http://vim-scripts.org/vim/scripts.html
+"Bundle 'xml'
+
+" Load everything upon enabling filetype loading.
+" Required by Vundle
+filetype plugin indent on
 
 "set clipboard=unnamed
 set showtabline=2 " Always show tabs
-set selectmode=
-set keymodel=
+set selectmode=   " Never use selectmode. Visual is enough.
+set keymodel=     " Doesn't make sense since we don't want selectmode
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set autoindent
-set ffs=dos,unix
+set ffs=dos,unix  " Windows is too much used to write unix LE everywhere.
 set nowrap
-set showbreak=->\ \|
+set showbreak=->\ \| " When wrap _is_ enabled, do it in style.
 set expandtab
 set listchars=eol:$,tab:»\ ,trail:.,nbsp:·
 set ignorecase
-set wildmode=longest:list
+set wildmode=longest:list " Default zsh-style completion
 
-" End of line marker
+" End of line marker position and color
 "set colorcolumn=101
 hi ColorColumn ctermbg=lightgrey guibg=lightgrey
 
 " Fonts settings   
-" For has() use, see http://superuser.com/questions/193250/how-can-i-distinguish-current-operating-system-in-my-vimrc
 if has("mac")
 elseif has("unix")
-  " do stuff under linux and "
+    " unix might use DejaVu by default.
 elseif has("win32")
     "set guifont=PixelCarnageMonoTT:h10:cDEFAULT
     "set guifont=ProggyCleanSZ:h8:cDEFAULT
@@ -44,11 +67,7 @@ endif
 " backspace and cursor keys wrap to previous/next line
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 
-execute pathogen#infect()
-
 syntax on
-
-filetype plugin on
 
 "if has("gui_running")
 "  " GUI is running or is about to start.
