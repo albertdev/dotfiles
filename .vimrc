@@ -48,7 +48,6 @@ syntax on
 filetype plugin on
 
 source ~/vimfiles/custom.vim
-source ~/vimfiles/statusline.vim
 
 "if has("gui_running")
 "  " GUI is running or is about to start.
