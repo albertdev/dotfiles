@@ -2,6 +2,9 @@ alias mmv='noglob zmv -W'
 alias pd='popd'
 #Just use '..' thanks to AUTO_CD
 #alias dd='cd ..'
+
 alias gitsr='git svn rebase'
+alias gits='git status'
+
 # Always use tabs
 alias vim="vim -p"
