@@ -1,3 +1,6 @@
+" Cargo cult programming to ward of vi spirits.
+set nocompatible
+
 " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
 " across (heterogeneous) systems easier.
 if has('win32') || has('win64')
