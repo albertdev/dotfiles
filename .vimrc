@@ -47,8 +47,6 @@ syntax on
 
 filetype plugin on
 
-source ~/vimfiles/custom.vim
-
 "if has("gui_running")
 "  " GUI is running or is about to start.
 "  " Maximize gvim window.
