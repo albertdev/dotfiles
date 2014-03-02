@@ -3,3 +3,5 @@ alias pd='popd'
 #Just use '..' thanks to AUTO_CD
 #alias dd='cd ..'
 alias gitsr='git svn rebase'
+# Always use tabs
+alias vim="vim -p"
