@@ -1,0 +1,13 @@
+# All taken from theBlackDragon's sample rc
+startup_message off
+defutf8 on
+nethack on
+vbell off
+
+#avoid screen hanging when a connection suddenly drops
+nonblock on
+
+#use CTRL-z to exit screen so CTRL-a will still jump to start of line
+escape ^Zz
+
+caption always '%{= kG}%-Lw{= kW}%5O> %n*%f %t}= kG}%+Lw%< %{= kG}'
