@@ -1,4 +1,7 @@
-"2.0 (created: 2009/03/28 23:48:07)
+" Make runtimepath consistent for Linux and Windows
+set "runtimepath=$HOME/.vimperator"
+
+" Fix a few bindings which are weird thanks to Colemak
 map e k
 map s i
 map i l
@@ -6,12 +9,6 @@ map I L
 noremap E N
 noremap N n
 map n j
-"noremap <C-e> <C-i>
-set "runtimepath=/home/jacobsb/vimperator"
-
-source! ~/_vimperatorrc.local
-
-" vim: set ft=vimperator:
 
 " No longer necessary in Vimperator 3, default is fine.
 "set guioptions=rbmnB
