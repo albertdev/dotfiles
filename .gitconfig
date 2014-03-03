@@ -1,0 +1,13 @@
+[alias]
+	serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
+	view = !gitk $* &
+    stat = diff --stat
+[core]
+	excludesfile = ~/.git_global_ignore
+# Used for personal details, might use personal e-mail at home.
+[include]
+    path = ~/.localgitconfig
+[push]
+	default = simple
+[color]
+	ui = auto

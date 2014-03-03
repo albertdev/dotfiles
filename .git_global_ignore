@@ -1,0 +1,9 @@
+# Include this file using    git config --global core.excludesfile ~/.git_global_ignore
+#
+# Ignore vim temp files or network r/w history file.
+.*.sw[a-z]
+*.un~
+Session.vim
+.netrwhist
+# Ignore Maven target folders
+target/
