@@ -1,3 +1,4 @@
+# Heavily based on frioux's promt script.
 setopt prompt_subst
 autoload colors
 colors
