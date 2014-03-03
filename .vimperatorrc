@@ -10,12 +10,12 @@ noremap E N
 noremap N n
 map n j
 
-" No longer necessary in Vimperator 3, default is fine.
-"set guioptions=rbmnB
+source! ~/.vimperatorrc.local
 
-"set complete=sl
 set titlestring=" Mozilla Firefox / Vimperator"
+
 " Open help, etc in a new tab
 set newtab=all
+
 " Makes sure nothing steals the focus when opening a page or new tab.
 set focuscontent
