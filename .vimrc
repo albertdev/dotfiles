@@ -24,6 +24,7 @@ Bundle 'gmarik/vundle'
 "Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-surround'
+Bundle 'sukima/xmledit'
 " Must try this one out later
 "Bundle 'Lokaltog/vim-easymotion'
 
