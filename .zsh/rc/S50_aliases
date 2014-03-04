@@ -2,6 +2,7 @@ alias mmv='noglob zmv -W'
 alias pd='popd'
 #Just use '..' thanks to AUTO_CD
 #alias dd='cd ..'
+alias ls='ls --color -F'
 
 alias gitsr='git svn rebase'
 alias gits='git status'
