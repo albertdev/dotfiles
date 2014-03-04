@@ -1,3 +1,4 @@
+# vim: ft=zsh
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
 typeset -A key
@@ -36,3 +37,6 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
     zle -N zle-line-init
     zle -N zle-line-finish
 fi
+
+# Bind prepend-sudo function, see S30_functions
+bindkey "^[s" prepend-sudo
