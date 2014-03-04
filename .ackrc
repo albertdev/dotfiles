@@ -1,0 +1,6 @@
+--ignore-dir=target
+--ignore-dir=build
+--ignore-dir=work
+--pager="less"
+--type-set=pom:is:pom.xml
+--type-set=doc:ext:txt,asciidoc,md
