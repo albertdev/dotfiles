@@ -1,0 +1,10 @@
+# vim: ft=zsh
+# Functions and user widgets
+
+function prepend-sudo {
+    if [[ $BUFFER != "sudo "* ]]; then
+        BUFFER="sudo $BUFFER";
+        CURSOR+=5;
+    fi
+}
+zle -N prepend-sudo
