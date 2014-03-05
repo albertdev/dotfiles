@@ -12,4 +12,6 @@ export JAVA_HOME=/usr/lib/jvm/jdk1.7.0
 
 export MAVEN_OPTS='-Xmx1024m -XX:MaxPermSize=512M'
 
+export LESS="FXRS"
+
 # vim: ft=zsh
