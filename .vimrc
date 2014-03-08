@@ -26,7 +26,7 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-surround'
 Bundle 'sukima/xmledit'
 " Must try this one out later
-"Bundle 'Lokaltog/vim-easymotion'
+Bundle 'Lokaltog/vim-easymotion'
 
 " scripts from http://vim-scripts.org/vim/scripts.html
 "Bundle 'xml'
