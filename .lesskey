@@ -1,2 +1,2 @@
 #env
-LESS = --shift=10 -FRSX
+LESS = --shift=10 -FMRSX
