@@ -50,6 +50,7 @@ set expandtab
 set listchars=eol:$,tab:»\ ,trail:.,nbsp:·
 set ignorecase
 set wildmode=longest:list " Default zsh-style completion
+let maplocalleader = "|"
 
 " End of line marker position and color
 "set colorcolumn=101
