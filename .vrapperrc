@@ -1,0 +1,23 @@
+noremap <C-n> <LEFT>
+noremap <C-e> j
+noremap <C-u> k
+noremap <C-i> <RIGHT> 	
+"noremap e d
+"noremap E D
+"noremap l n
+"noremap L N
+"noremap s :
+"noremap ` ^
+"noremap k e
+"noremap K E
+set autoindent
+set ignorecase
+set smartcase
+"set clipboard unnamed
+
+eclipseaction copy org.eclipse.ui.edit.copy
+map <C-c> :copy<CR>
+
+set shiftwidth=4
+set tabstop=4
+set noexpandtab
