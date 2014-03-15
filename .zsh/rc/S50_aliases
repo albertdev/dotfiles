@@ -6,6 +6,7 @@ alias ls='ls --color -F'
 
 alias gitsr='git svn rebase'
 alias gits='git status'
+alias gitff='git pull --ff-only' # Or use git fast-forward alias
 
 # Always use tabs
 alias vim="vim -p"
