@@ -14,6 +14,8 @@ key[Left]=${terminfo[kcub1]}
 key[Right]=${terminfo[kcuf1]}
 key[PageUp]=${terminfo[kpp]}
 key[PageDown]=${terminfo[knp]}
+key[BckSpce]=${terminfo[kbs]}
+key[ShftTab]="^[[Z"
 
 # setup key accordingly
 [[ -n "${key[Home]}"    ]]  && bindkey  "${key[Home]}"    beginning-of-line
@@ -24,6 +26,8 @@ key[PageDown]=${terminfo[knp]}
 [[ -n "${key[Down]}"    ]]  && bindkey  "${key[Down]}"    down-line-or-history
 [[ -n "${key[Left]}"    ]]  && bindkey  "${key[Left]}"    backward-char
 [[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
+[[ -n "${key[BckSpce]}" ]]  && bindkey  "^[${key[BckSpce]}" bash-backward-delete-word
+[[ -n "${key[ShftTab]}" ]]  && bindkey  "${key[ShftTab]}" bash-backward-delete-word
 
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
@@ -38,5 +42,5 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
     zle -N zle-line-finish
 fi
 
-# Bind prepend-sudo function, see S30_functions
+# Bind prepend-sudo function to Alt-S, see S30_functions
 bindkey "^[s" prepend-sudo

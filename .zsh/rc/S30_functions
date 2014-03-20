@@ -8,3 +8,9 @@ function prepend-sudo {
     fi
 }
 zle -N prepend-sudo
+
+function bash-backward-delete-word () {
+    local WORDCHARS="${WORDCHARS:s#/#}"
+    zle backward-delete-word
+}
+zle -N bash-backward-delete-word bash-backward-delete-word 
