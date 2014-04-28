@@ -1,7 +1,9 @@
 " Always show statusline
 set laststatus=2
 
-set statusline=%t       "tail of the filename
+set statusline=
+set statusline+=(%3n)\   "buffer number
+set statusline+=%t\      "tail of the filename
 set statusline+=[%{strlen(&fenc)?&fenc:'none'}, "file encoding
 set statusline+=%{&ff}] "file format
 set statusline+=%h      "help file flag
