@@ -27,6 +27,7 @@ Bundle 'tpope/vim-surround'
 Bundle 'sukima/xmledit'
 " Must try this one out later
 Bundle 'Lokaltog/vim-easymotion'
+Bundle 'scrooloose/nerdtree'
 
 " scripts from http://vim-scripts.org/vim/scripts.html
 "Bundle 'xml'
