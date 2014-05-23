@@ -8,54 +8,61 @@ augroup customcdcmds
     autocmd BufNewFile * call CustomCDBufNewOrRead()
     autocmd BufReadPost * call CustomCDBufNewOrRead()
     autocmd BufLeave * call CustomCDBufLeave()
-    autocmd TabEnter * echomsg "Entered tab" tabpagenr()
-    autocmd TabLeave * echomsg "Left Tab" tabpagenr()
+    autocmd TabEnter * call s:DebugLog("Entered tab " . tabpagenr())
+    autocmd TabLeave * call s:DebugLog("Left Tab " . tabpagenr())
 augroup END
 let s:custom_cd_cmds_loaded=1
 
 "Note
 let s:previous_tab=-1
 let s:previous_window=-1
+let g:tcd_plugin_debug=0
+
+function! s:DebugLog(text)
+    if g:tcd_plugin_debug == 1
+        echomsg a:text
+    endif
+endfunction
 
 function! s:getcwd()
     return getcwd()
 endfunction
 
 function! CustomCDWinEnter()
-    echomsg "Entered window" tabpagenr() . ':' . winnr() "from" s:previous_tab . ':' . s:previous_window 'with buf' expand('<abuf>')
-    echomsg "Current dir" s:getcwd()
+    call s:DebugLog( "Entered window " . tabpagenr() . ':' . winnr() . " from " . s:previous_tab . ':' . s:previous_window . "with buf " . expand('<abuf>') )
+    call s:DebugLog( "Current dir " . s:getcwd() )
 endfunction
 
 function! CustomCDWinLeave()
-    echomsg "Left window" tabpagenr() . ':' . tabpagewinnr(tabpagenr()) 'with buf' expand('<abuf>')
-    echomsg "Current dir" s:getcwd()
+    call s:DebugLog( "Left window" . tabpagenr() . ':' . tabpagewinnr(tabpagenr()) . " with buf " . expand('<abuf>') )
+    call s:DebugLog( "Current dir " . s:getcwd() )
     let s:previous_tab=tabpagenr()
     let s:previous_window=winnr()
     let t:saved_cd=getcwd()
 endfunction
 
 function! CustomCDBufEnter()
-    echomsg "Entered Buffer" expand('<abuf>') '|' bufnr('%') ": '" . expand('%:p') . "' | '" . expand('<afile>:p') . "'"
+    call s:DebugLog( "Entered Buffer " . expand('<abuf>') . "|" . bufnr('%') . ": '" . expand('%:p') . "' | '" . expand('<afile>:p') . "'" )
     if s:previous_tab != -1 && s:previous_tab != tabpagenr()
-        echomsg "#Different tab"
+        call s:DebugLog( "#Different tab" )
         if expand('<afile>') == ''
-            "echomsg "!Ignored"
+            call s:DebugLog( "!Ignored" )
             cd ~/
-            echomsg "Current dir (empty buffer)" s:getcwd()
+            call s:DebugLog( "Current dir (empty buffer) " . s:getcwd() )
         elseif exists("t:saved_cd")
             execute 'cd' fnameescape(t:saved_cd)
-            echomsg "Current dir (restored)" s:getcwd()
+            call s:DebugLog( "Current dir (restored) " . s:getcwd() )
             let s:previous_tab=-1
             let s:previous_window=-1
         else
             "Fresh tab, use current file path
             cd %:p:h
-            echomsg "Current dir (new tab)" s:getcwd()
+            call s:DebugLog( "Current dir (new tab) " . s:getcwd() )
             let s:previous_tab=-1
             let s:previous_window=-1
         endif
     elseif s:previous_tab != -1 && s:previous_window != winnr()
-        echomsg "#Different window, same tab"
+        call s:DebugLog( "#Different window, same tab" )
     endif
 "    if expand('%') == '' && winnr("$") == 1 && ! exists("b:NERDTreeType")
 "        cd ~/
@@ -77,8 +84,8 @@ function! CustomCDBufEnter()
 endfunction
 "
 function! CustomCDBufNewOrRead()
-    echomsg "Read into Buffer" expand('<abuf>') '|' bufnr('%') ':'  expand('%:p') "|" expand('<afile>:p')
-    echomsg "Current dir" getcwd()
+    call s:DebugLog("Read into Buffer" . expand('<abuf>') . '|' . bufnr('%') . ": '" . expand('%:p') . "' | '" . expand('<afile>:p') . "'")
+    call s:DebugLog( "Current dir " . s:getcwd() )
 "    echomsg "Read into Buffer" expand('%:p') "also known as" expand('<afile>:p')
 "    if ! exists("t:init_cd_set")
 "        let t:init_cd_set=1
@@ -93,8 +100,8 @@ endfunction
 function! CustomCDBufLeave()
 "    let t:saved_cd=getcwd()
 "    echomsg "Left Buf and stored " t:saved_cd
-    echomsg "Left buffer" expand('<abuf>') '|' bufnr('%') '@' tabpagenr() . ':' . tabpagewinnr(tabpagenr())
-    echomsg "Current dir" getcwd()
+    call s:DebugLog("Left buffer" . expand('<abuf>') .  '|' . bufnr('%') . '@' . tabpagenr() . ':' . tabpagewinnr(tabpagenr()))
+    call s:DebugLog( "Current dir " . s:getcwd() )
     "NERDTree creates a new empty buffer in a new tab, which is then replaced
     "with a new one. Don't update numbers.
     "let s:previous_tab=tabpagenr()
