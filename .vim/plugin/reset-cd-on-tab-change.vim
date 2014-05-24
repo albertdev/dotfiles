@@ -1,3 +1,5 @@
+"let g:autotcd_plugin_debug=1
+
 if exists("s:custom_cd_cmds_loaded")
     autocmd! customcdcmds
 endif
@@ -13,13 +15,11 @@ augroup customcdcmds
 augroup END
 let s:custom_cd_cmds_loaded=1
 
-"Note
 let s:previous_tab=-1
 let s:previous_window=-1
-let g:tcd_plugin_debug=0
 
 function! s:DebugLog(text)
-    if g:tcd_plugin_debug == 1
+    if exists("g:autotcd_plugin_debug")
         echomsg a:text
     endif
 endfunction
@@ -47,16 +47,16 @@ function! CustomCDBufEnter()
         call s:DebugLog( "#Different tab" )
         if expand('<afile>') == ''
             call s:DebugLog( "!Ignored" )
-            cd ~/
+            "cd ~/
             call s:DebugLog( "Current dir (empty buffer) " . s:getcwd() )
         elseif exists("t:saved_cd")
-            execute 'cd' fnameescape(t:saved_cd)
+            "execute 'cd' fnameescape(t:saved_cd)
             call s:DebugLog( "Current dir (restored) " . s:getcwd() )
             let s:previous_tab=-1
             let s:previous_window=-1
         else
             "Fresh tab, use current file path
-            cd %:p:h
+            "cd %:p:h
             call s:DebugLog( "Current dir (new tab) " . s:getcwd() )
             let s:previous_tab=-1
             let s:previous_window=-1
@@ -86,6 +86,13 @@ endfunction
 function! CustomCDBufNewOrRead()
     call s:DebugLog("Read into Buffer" . expand('<abuf>') . '|' . bufnr('%') . ": '" . expand('%:p') . "' | '" . expand('<afile>:p') . "'")
     call s:DebugLog( "Current dir " . s:getcwd() )
+    if exists("t:set_tcd")
+        call s:DebugLog("TCD already set for tab")
+    else
+        call s:DebugLog("Setting TCD")
+        call SetTCD('%:p:h')
+        let t:set_tcd=1
+    endif
 "    echomsg "Read into Buffer" expand('%:p') "also known as" expand('<afile>:p')
 "    if ! exists("t:init_cd_set")
 "        let t:init_cd_set=1
