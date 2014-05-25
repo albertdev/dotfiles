@@ -28,6 +28,7 @@ Bundle 'sukima/xmledit'
 " Must try this one out later
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'scrooloose/nerdtree'
+Bundle 'mihaifm/bufstop'
 
 " scripts from http://vim-scripts.org/vim/scripts.html
 "Bundle 'xml'
@@ -48,7 +49,7 @@ set ffs=dos,unix  " Windows is too much used to write unix LE everywhere.
 set nowrap
 set showbreak=->\ \| " When wrap _is_ enabled, do it in style.
 set expandtab
-set listchars=eol:$,tab:»\ ,trail:.,nbsp:·
+set listchars=eol:$,tab:Â»\ ,trail:.,nbsp:âˆ™
 set ignorecase
 set wildmode=longest:list " Default zsh-style completion
 let maplocalleader = "|"
