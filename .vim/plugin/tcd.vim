@@ -45,8 +45,12 @@ endfunction
 autocmd VimEnter * call s:CheckNERDTreeInject()
 
 function! s:CheckNERDTreeInject()
-    if (exists("g:TCDUsedInNERDTree"))
+    if (exists("g:TCDUsedInNERDTree") && exists("*NERDTreeAddKeyMap"))
         call NERDTreeAddKeyMap({ 'key': g:NERDTreeMapChdir, 'scope': "Node", 'callback': "SetTCDNerdTree" })
+    elseif (exists("g:TCDUsedInNERDTree") && ! exists("*NERDTreeAddKeyMap"))
+        echohl Error
+        echomsg "Cannot integrate TCD with NERDTree, NERDTree is not installed!"
+        echohl NONE
     endif
 endfunction
 
