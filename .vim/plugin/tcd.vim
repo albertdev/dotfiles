@@ -9,7 +9,7 @@ command! -nargs=? TCD call SetTCD(<f-args>)
 function! SetTCD(...)
     let win_count = winnr('$')
     let win_focus = winnr()
-    if (a:0 == 0)
+    if (a:0 ==# 0)
         let pathStr = expand('%:p:h')
     else
         let pathStr = expand(a:1)
@@ -35,4 +35,31 @@ function! s:DebugLog(text)
     if exists("g:tcd_plugin_debug")
         echomsg a:text
     endif
+endfunction
+
+"""
+" NERDTree Integration / hack
+"""
+
+" Use delayed call so that user has the oportunity to set g:TCDUsedInNERDTree
+autocmd VimEnter * call s:CheckNERDTreeInject()
+
+function! s:CheckNERDTreeInject()
+    if (exists("g:TCDUsedInNERDTree"))
+        call NERDTreeAddKeyMap({ 'key': g:NERDTreeMapChdir, 'scope': "Node", 'callback': "SetTCDNerdTree" })
+    endif
+endfunction
+
+function! SetTCDNerdTree(node)
+    let path = a:node.path
+    let dir = path.str({'format': 'Cd'})
+    if path.isDirectory ==# 0
+        let dir = path.getParent().str({'format': 'Cd'})
+    endif
+    try
+        call SetTCD(dir)
+        call nerdtree#echo("Tab CWD is now: " . getcwd())
+    catch
+        call nerdtree#echoWarning("could not change tab cwd")
+    endtry
 endfunction
