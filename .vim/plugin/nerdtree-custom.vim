@@ -1,5 +1,7 @@
 "let g:NERDTreeQuitOnOpen=1
 
+let g:TCDUsedInNERDTree=1
+
 " Close the current tab or editor if only the NERDTree window remains
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
