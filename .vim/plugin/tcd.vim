@@ -1,6 +1,6 @@
 "let g:tcd_plugin_debug=1
 
-command! -nargs=? TCD call SetTCD(<f-args>)
+command! -nargs=? TCD call SetTCD(<args>)
 
 " Set local current directory for all windows in the current tab to get
 " a tab-local current directory.
