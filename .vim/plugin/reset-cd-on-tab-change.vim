@@ -20,7 +20,13 @@ let s:previous_window=-1
 
 function! s:DebugLog(text)
     if exists("g:autotcd_plugin_debug")
-        echomsg a:text
+        if (g:autotcd_plugin_debug ==# 1)
+            echomsg a:text
+        elseif (g:autotcd_plugin_debug ==# 2 && ! exists("g:autotcd_plugin_debug_txt"))
+            let g:autotcd_plugin_debug_txt=a:text . ''
+        elseif (g:autotcd_plugin_debug ==# 2)
+            let g:autotcd_plugin_debug_txt .= a:text . ''
+        endif
     endif
 endfunction
 
@@ -38,7 +44,7 @@ function! CustomCDWinLeave()
     call s:DebugLog( "Current dir " . s:getcwd() )
     let s:previous_tab=tabpagenr()
     let s:previous_window=winnr()
-    let t:saved_cd=getcwd()
+    "let t:saved_cd=getcwd()
 endfunction
 
 function! CustomCDBufEnter()
@@ -88,10 +94,12 @@ function! CustomCDBufNewOrRead()
     call s:DebugLog( "Current dir " . s:getcwd() )
     if exists("t:set_tcd")
         call s:DebugLog("TCD already set for tab")
-    else
+    elseif (expand('%') != '' && expand('%') !~# '^NERD_tree_' && expand('%') !~# '^--Bufstop--$')
         call s:DebugLog("Setting TCD")
         call SetTCD('%:p:h')
         let t:set_tcd=1
+    else
+        call s:DebugLog("Empty or excluded buffer '" . expand('%') . "'.")
     endif
 "    echomsg "Read into Buffer" expand('%:p') "also known as" expand('<afile>:p')
 "    if ! exists("t:init_cd_set")
