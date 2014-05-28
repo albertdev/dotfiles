@@ -30,6 +30,7 @@ Bundle 'sukima/xmledit'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'scrooloose/nerdtree'
 Bundle 'mihaifm/bufstop'
+Bundle 'moll/vim-bbye'
 
 " scripts from http://vim-scripts.org/vim/scripts.html
 "Bundle 'xml'
