@@ -22,6 +22,7 @@ Bundle 'gmarik/vundle'
 " Vundle-managed bundles.
 " scripts from github
 "Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-surround'
 Bundle 'sukima/xmledit'
