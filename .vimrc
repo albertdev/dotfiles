@@ -2,6 +2,8 @@
 set nocompatible
 " Required by Vundle initialization
 filetype off
+" 'listchars' uses UTF-8
+scriptencoding utf-8
 
 " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
 " across (heterogeneous) systems easier.
@@ -24,6 +26,7 @@ Bundle 'gmarik/vundle'
 "Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-surround'
 Bundle 'sukima/xmledit'
 Bundle 'Lokaltog/vim-easymotion'
