@@ -31,8 +31,8 @@ Bundle 'tpope/vim-surround'
 Bundle 'sukima/xmledit'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'scrooloose/nerdtree'
-"Bundle 'jlanzarotta/bufexplorer'
-Bundle 'mihaifm/bufstop'
+Bundle 'jlanzarotta/bufexplorer'
+"Bundle 'mihaifm/bufstop'
 Bundle 'moll/vim-bbye'
 
 " scripts from http://vim-scripts.org/vim/scripts.html
