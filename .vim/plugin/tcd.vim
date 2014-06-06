@@ -1,5 +1,7 @@
 "let g:tcd_plugin_debug=1
 
+command! -nargs=? Tcd call SetTCD(<args>)
+" Personal preference: typing :TCD simply means holding the shift key.
 command! -nargs=? TCD call SetTCD(<args>)
 
 " Set local current directory for all windows in the current tab to get
