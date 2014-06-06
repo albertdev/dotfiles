@@ -45,25 +45,25 @@ endfunction
 autocmd VimEnter * call s:CheckNERDTreeInject()
 
 function! s:CheckNERDTreeInject()
-    if (exists("g:TCDUsedInNERDTree") && exists("*NERDTreeAddKeyMap"))
-        call NERDTreeAddKeyMap({ 'key': g:NERDTreeMapChdir, 'scope': "Node", 'callback': "SetTCDNerdTree" })
+    if (exists("g:TCDUsedInNERDTree") && exists("*NERDTreeAddKeyMap") && g:TCDUsedInNERDTree ==# 1)
+        " Override changeToDir() method to use TCD plugin.
+        function! g:NERDTreePath.changeToDir() dict
+            let dir = self.str({'format': 'Cd'})
+            if self.isDirectory ==# 0
+                let dir = self.getParent().str({'format': 'Cd'})
+            endif
+
+            try
+                call SetTCD(dir)
+                call nerdtree#echo("Tab CWD is now: " . getcwd())
+            catch
+                throw "NERDTree.PathChangeError: cannot change Tab CWD to " . dir
+            endtry
+        endfunction
+
     elseif (exists("g:TCDUsedInNERDTree") && ! exists("*NERDTreeAddKeyMap"))
         echohl Error
         echomsg "Cannot integrate TCD with NERDTree, NERDTree is not installed!"
         echohl NONE
     endif
-endfunction
-
-function! SetTCDNerdTree(node)
-    let path = a:node.path
-    let dir = path.str({'format': 'Cd'})
-    if path.isDirectory ==# 0
-        let dir = path.getParent().str({'format': 'Cd'})
-    endif
-    try
-        call SetTCD(dir)
-        call nerdtree#echo("Tab CWD is now: " . getcwd())
-    catch
-        call nerdtree#echoWarning("could not change tab cwd")
-    endtry
 endfunction
