@@ -47,7 +47,7 @@ endfunction
 autocmd VimEnter * call s:CheckNERDTreeInject()
 
 function! s:CheckNERDTreeInject()
-    if (exists("g:TCDUsedInNERDTree") && exists("*NERDTreeAddKeyMap") && g:TCDUsedInNERDTree ==# 1)
+    if (exists("g:TCDUsedInNERDTree") && g:TCDUsedInNERDTree ==# 1 && exists("g:NERDTreePath"))
         " Override changeToDir() method to use TCD plugin.
         function! g:NERDTreePath.changeToDir() dict
             let dir = self.str({'format': 'Cd'})
@@ -63,9 +63,9 @@ function! s:CheckNERDTreeInject()
             endtry
         endfunction
 
-    elseif (exists("g:TCDUsedInNERDTree") && ! exists("*NERDTreeAddKeyMap"))
+    elseif (exists("g:TCDUsedInNERDTree") && g:TCDUsedInNERDTree ==# 1)
         echohl Error
-        echomsg "Cannot integrate TCD with NERDTree, NERDTree is not installed!"
+        echomsg "TCD: Cannot integrate TCD with NERDTree, NERDTree not installed!"
         echohl NONE
     endif
 endfunction
