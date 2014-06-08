@@ -15,19 +15,31 @@ key[Right]=${terminfo[kcuf1]}
 key[PageUp]=${terminfo[kpp]}
 key[PageDown]=${terminfo[knp]}
 key[BckSpce]=${terminfo[kbs]}
-key[ShftTab]="^[[Z"
+key[ShftTab]=${terminfo[kcbt]}
+# TODO See if the following can be grabbed from terminfo
+# Control + cursor
+key[CLeft]="^[[1;5D"
+key[CRight]="^[[1;5C"
+# Control + Shift + cursor
+key[CLEFT]="^[[1;6D"
+key[CRIGHT]="^[[1;6C"
 
 # setup key accordingly
-[[ -n "${key[Home]}"    ]]  && bindkey  "${key[Home]}"    beginning-of-line
-[[ -n "${key[End]}"     ]]  && bindkey  "${key[End]}"     end-of-line
-[[ -n "${key[Insert]}"  ]]  && bindkey  "${key[Insert]}"  overwrite-mode
-[[ -n "${key[Delete]}"  ]]  && bindkey  "${key[Delete]}"  delete-char
-[[ -n "${key[Up]}"      ]]  && bindkey  "${key[Up]}"      up-line-or-history
-[[ -n "${key[Down]}"    ]]  && bindkey  "${key[Down]}"    down-line-or-history
-[[ -n "${key[Left]}"    ]]  && bindkey  "${key[Left]}"    backward-char
-[[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
-[[ -n "${key[BckSpce]}" ]]  && bindkey  "^[${key[BckSpce]}" bash-backward-delete-word
-[[ -n "${key[ShftTab]}" ]]  && bindkey  "${key[ShftTab]}" bash-backward-delete-word
+[[ -n "${key[Home]}"    ]]  && bindkey "${key[Home]}"    beginning-of-line
+[[ -n "${key[End]}"     ]]  && bindkey "${key[End]}"     end-of-line
+[[ -n "${key[Insert]}"  ]]  && bindkey "${key[Insert]}"  overwrite-mode
+[[ -n "${key[Delete]}"  ]]  && bindkey "${key[Delete]}"  delete-char
+[[ -n "${key[Up]}"      ]]  && bindkey "${key[Up]}"      up-line-or-history
+[[ -n "${key[Down]}"    ]]  && bindkey "${key[Down]}"    down-line-or-history
+[[ -n "${key[Left]}"    ]]  && bindkey "${key[Left]}"    backward-char
+[[ -n "${key[Right]}"   ]]  && bindkey "${key[Right]}"   forward-char
+[[ -n "${key[BckSpce]}" ]]  && bindkey "^[${key[BckSpce]}" bash-backward-delete-word
+[[ -n "${key[ShftTab]}" ]]  && bindkey "${key[ShftTab]}" bash-backward-delete-word
+[[ -n "${key[CLeft]}"   ]]  && bindkey "${key[CLeft]}"   backward-word
+[[ -n "${key[CRight]}"  ]]  && bindkey "${key[CRight]}"  forward-word
+# Nice to jump within a long path
+[[ -n "${key[CLEFT]}"   ]]  && bindkey "${key[CLEFT]}"   vi-backward-word
+[[ -n "${key[CRIGHT]}"  ]]  && bindkey "${key[CRIGHT]}"  vi-forward-word
 
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
