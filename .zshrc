@@ -1,3 +1,5 @@
+# Add custom completion scripts
+fpath=(~/.zsh/completion $fpath)
 autoload -U compinit
 
 zsh_cache=${HOME}/.zshcache
