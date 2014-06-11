@@ -11,3 +11,5 @@
 	default = simple
 [color]
 	ui = auto
+[diff]
+	tool = kdiff3
