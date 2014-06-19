@@ -7,3 +7,6 @@ nnoremap <C-F6> :call NavigateBE('down', 'BufExplorer')<CR>
 inoremap <C-F6> <C-O>:call NavigateBE('down', 'BufExplorer')<CR>
 nnoremap <C-S-F6> :call NavigateBE('up', 'BufExplorer')<CR>
 inoremap <C-S-F6> <C-O>:call NavigateBE('up', 'BufExplorer')<CR>
+
+" Duplicate current selection
+vmap  <expr>  D        DVB_Duplicate()
