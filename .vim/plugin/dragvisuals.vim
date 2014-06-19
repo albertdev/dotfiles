@@ -61,9 +61,18 @@ if !exists('g:DVB_TrimWS')
 endif
 
 function! DVB_Drag (dir)
-    " No-op in Visual mode...
     if mode() ==# 'v'
-        return "\<ESC>gv"
+        if (a:dir == 'left' || a:dir == 'right')
+            " No-op in Visual mode...
+            return "\<ESC>gv"
+        elseif a:dir == 'down'
+            return ":m'>+\<CR>gv"
+        elseif a:dir == 'up'
+            return ":m-2\<CR>gv"
+        else
+            " Unknown direction
+            return "\<ESC>gv"
+        endif
 
     " Do Visual Line drag indirectly via temporary nmap
     " (to ensure we have access to block position data)...
