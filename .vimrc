@@ -34,6 +34,7 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'jlanzarotta/bufexplorer'
 "Bundle 'mihaifm/bufstop'
 Bundle 'moll/vim-bbye'
+Bundle 'vim-scripts/cecutil'
 Bundle 'vim-scripts/vis'
 
 " Load everything upon enabling filetype loading.
