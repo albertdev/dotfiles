@@ -34,9 +34,7 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'jlanzarotta/bufexplorer'
 "Bundle 'mihaifm/bufstop'
 Bundle 'moll/vim-bbye'
-
-" scripts from http://vim-scripts.org/vim/scripts.html
-"Bundle 'xml'
+Bundle 'vim-scripts/vis'
 
 " Load everything upon enabling filetype loading.
 " Required by Vundle
