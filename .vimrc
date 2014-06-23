@@ -32,10 +32,10 @@ Bundle 'sukima/xmledit'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jlanzarotta/bufexplorer'
-"Bundle 'mihaifm/bufstop'
 Bundle 'moll/vim-bbye'
 Bundle 'vim-scripts/cecutil'
 Bundle 'vim-scripts/vis'
+Bundle 'dagwieers/asciidoc-vim'
 
 " Load everything upon enabling filetype loading.
 " Required by Vundle
