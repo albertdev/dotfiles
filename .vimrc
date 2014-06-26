@@ -60,6 +60,8 @@ set wildmode=longest:list " Default zsh-style completion
 let maplocalleader = "|"
 set encoding=utf-8
 set hlsearch
+set splitbelow
+set splitright
 
 " End of line marker position and color
 "set colorcolumn=101
