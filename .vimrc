@@ -56,7 +56,7 @@ set showbreak=->\ \| " When wrap _is_ enabled, do it in style.
 set expandtab
 set listchars=eol:$,tab:»\ ,trail:.,nbsp:∙
 set ignorecase
-set wildmode=longest:list " Default zsh-style completion
+set wildmode=longest:list,full " Default zsh-style completion
 let maplocalleader = "|"
 set encoding=utf-8
 set hlsearch
