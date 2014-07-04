@@ -18,3 +18,8 @@ alias vim="vim -p"
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+# Ubuntu installs ack-grep instead of ack. Bad Ubuntu!
+if ! ( command -v ack &>/dev/null ) && command -v ack-grep &>/dev/null ; then
+    alias ack=ack-grep
+fi
