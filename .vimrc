@@ -64,6 +64,7 @@ set encoding=utf-8
 set hlsearch
 set splitbelow
 set splitright
+set hidden
 
 " End of line marker position and color
 "set colorcolumn=101
