@@ -4,7 +4,7 @@ alias pd='popd'
 #alias dd='cd ..'
 alias ls='ls --color -F'
 
-alias gitsr='git svn rebase'
+alias gitsr='git svn rebase || ( git stash ; git svn rebase ; git stash pop )'
 alias gits='git status'
 alias gitfa='git fetch --all'
 alias gitff='git pull --ff-only' # Or use git fast-forward alias
