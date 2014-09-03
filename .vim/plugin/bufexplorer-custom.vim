@@ -10,7 +10,7 @@ nnoremap \be :call NavigateBE('down', 'BufExplorer')<CR>
 
 let g:bufExplorerShowRelativePath=1
 " Only show buffers which have been opened in the current tab.
-let g:bufExplorerShowTabBuffer=1
+"let g:bufExplorerShowTabBuffer=1
 
 function! NavigateBE(direction,cmd)
     " Navigate away from NERDTree, we shouldn't replace its magic pane with BE
