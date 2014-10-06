@@ -4,3 +4,4 @@
 --pager="less"
 --type-set=pom:is:pom.xml
 --type-set=doc:ext:txt,asciidoc,md
+-C2
