@@ -10,3 +10,7 @@ inoremap <C-S-F6> <C-O>:call NavigateBE('up', 'BufExplorer')<CR>
 
 " Duplicate current selection
 vmap  <expr>  D        DVB_Duplicate()
+
+" Toggle between inclusive and exclusive selection
+nnoremap <F4> :<C-U>call UserToggleSelection()<CR>
+vnoremap <F4> :<C-U>call UserToggleSelection()<CR>gv
