@@ -21,6 +21,9 @@ set incsearch
 eclipseaction copy org.eclipse.ui.edit.copy
 map <C-c> :copy<CR>
 
+" Makes the current line empty without entirely deleting it.
+nnoremap dal 0d$
+
 set shiftwidth=4
 set tabstop=4
 set expandtab
