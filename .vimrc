@@ -39,6 +39,7 @@ Bundle 'vim-scripts/vis'
 Bundle 'dagwieers/asciidoc-vim'
 Bundle 'kana/vim-textobj-user'
 Bundle 'glts/vim-textobj-comment'
+Bundle 'kana/vim-textobj-line'
 
 " Load everything upon enabling filetype loading.
 " Required by Vundle
