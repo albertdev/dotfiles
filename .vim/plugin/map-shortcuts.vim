@@ -14,3 +14,6 @@ vmap  <expr>  D        DVB_Duplicate()
 " Toggle between inclusive and exclusive selection
 nnoremap <F4> :<C-U>call UserToggleSelection()<CR>
 vnoremap <F4> :<C-U>call UserToggleSelection()<CR>gv
+
+" Oddly, Vi back in the day treated it like yy. Make it more consistent.
+nnoremap Y y$

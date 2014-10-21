@@ -18,6 +18,8 @@ set smartcase
 "set syncmodifiable=nosync
 set incsearch
 
+nnoremap Y y$
+
 eclipseaction copy org.eclipse.ui.edit.copy
 map <C-c> :copy<CR>
 
