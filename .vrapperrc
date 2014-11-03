@@ -10,13 +10,6 @@ noremap <C-i> <RIGHT>
 "noremap ` ^
 "noremap k e
 "noremap K E
-set autoindent
-set ignorecase
-set smartcase
-"set clipboard unnamed
-"set visualother
-"set syncmodifiable=nosync
-set incsearch
 
 nnoremap Y y$
 
@@ -29,3 +22,11 @@ nnoremap dal 0d$
 set shiftwidth=4
 set tabstop=4
 set expandtab
+set autoindent
+set ignorecase
+set smartcase
+"set clipboard unnamed
+"set visualother
+"set syncmodifiable=nosync
+set incsearch
+
