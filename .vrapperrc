@@ -12,6 +12,7 @@ noremap <C-i> <RIGHT>
 "noremap K E
 
 nnoremap Y y$
+nnoremap <S-F8> <C-V>
 
 eclipseaction copy org.eclipse.ui.edit.copy
 map <C-c> :copy<CR>
