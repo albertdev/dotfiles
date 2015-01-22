@@ -1,5 +1,6 @@
 [alias]
 	serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
+	server = !git daemon --reuseaddr --verbose --base-path=. --export-all --enable=receive-pack ./.git
 	view = !gitk $* &
     stat = diff --stat
 [core]
