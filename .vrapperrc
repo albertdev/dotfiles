@@ -1,7 +1,7 @@
-noremap <C-n> <LEFT>
-noremap <C-e> j
-noremap <C-u> k
-noremap <C-i> <RIGHT> 	
+"noremap <C-n> <LEFT>
+"noremap <C-e> j
+"noremap <C-u> k
+"noremap <C-i> <RIGHT> 	
 "noremap e d
 "noremap E D
 "noremap l n
@@ -13,6 +13,7 @@ noremap <C-i> <RIGHT>
 
 nnoremap Y y$
 nnoremap <S-F8> <C-V>
+vnoremap <S-F8> <C-V>
 
 eclipseaction copy org.eclipse.ui.edit.copy
 map <C-c> :copy<CR>
@@ -30,4 +31,6 @@ set smartcase
 "set visualother
 "set syncmodifiable=nosync
 set incsearch
-
+set hlsearch
+set startnormalmode
+set noexitlinkmode
