@@ -5,6 +5,7 @@
     stat = diff --stat
 [core]
 	excludesfile = ~/.git_global_ignore
+	autocrlf = false
 # Used for personal details, might use personal e-mail at home.
 [include]
     path = ~/.localgitconfig
