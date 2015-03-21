@@ -32,5 +32,6 @@ set smartcase
 "set syncmodifiable=nosync
 set incsearch
 set hlsearch
+set hlscope=window
 set startnormalmode
 set noexitlinkmode
