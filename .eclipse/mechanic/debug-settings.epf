@@ -4,6 +4,7 @@
 file_export_version=3.0
 /instance/org.eclipse.debug.ui/DEBUG.consoleOpenOnErr=false
 /instance/org.eclipse.debug.ui/DEBUG.consoleOpenOnOut=false
+/instance/org.eclipse.debug.ui/org.eclipse.debug.ui.activate_workbench=true
 /instance/org.eclipse.debug.ui/org.eclipse.debug.ui.max_detail_length=0
 /instance/org.eclipse.debug.ui/org.eclipse.debug.ui.switch_perspective_on_suspend=always
 /instance/org.eclipse.debug.ui/org.eclipse.debug.ui.UseContextualLaunch=false
