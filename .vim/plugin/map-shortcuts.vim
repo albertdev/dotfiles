@@ -17,3 +17,6 @@ vnoremap <F4> :<C-U>call UserToggleSelection()<CR>gv
 
 " Oddly, Vi back in the day treated it like yy. Make it more consistent.
 nnoremap Y y$
+
+" Ctrl-V is used for paste in most editors. Use Shift-F8 for visual block mode.
+noremap <S-F8> <C-V>
