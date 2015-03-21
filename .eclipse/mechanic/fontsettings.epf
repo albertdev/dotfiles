@@ -1,0 +1,9 @@
+# @title (custom) DejaVu Sans Font
+# @description Uses DejaVu Sans Mono in editors
+# @task_type LASTMOD
+#
+file_export_version=3.0
+/instance/org.eclipse.ui.workbench/org.eclipse.jface.textfont=1|DejaVu Sans Mono|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|0|3|2|1|49|DejaVu Sans Mono;
+/instance/org.eclipse.ui.workbench/org.eclipse.ui.workbench.texteditor.blockSelectionModeFont=1|DejaVu Sans Mono|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|0|3|2|1|49|DejaVu Sans Mono;
+/instance/org.eclipse.jdt.ui/org.eclipse.jface.textfont=1|DejaVu Sans Mono|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|0|3|2|1|49|DejaVu Sans Mono;
+/instance/org.eclipse.wst.jsdt.ui/org.eclipse.jface.textfont=1|DejaVu Sans Mono|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|0|3|2|1|49|DejaVu Sans Mono;
