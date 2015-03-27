@@ -8,6 +8,7 @@ alias gitsr='git svn rebase || ( git stash ; git svn rebase ; git stash pop )'
 alias gits='git status'
 alias gitfa='git fetch --all'
 alias gitff='git pull --ff-only' # Or use git fast-forward alias
+alias gitmf='git merge --ff-only'
 alias giti='git diff --cached'
 alias gitd='git diff'
 
