@@ -40,6 +40,7 @@ Bundle 'dagwieers/asciidoc-vim'
 Bundle 'kana/vim-textobj-user'
 Bundle 'glts/vim-textobj-comment'
 Bundle 'kana/vim-textobj-line'
+Bundle 'kchmck/vim-coffee-script'
 
 " Load everything upon enabling filetype loading.
 " Required by Vundle
