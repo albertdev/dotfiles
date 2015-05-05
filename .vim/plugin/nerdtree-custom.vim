@@ -27,8 +27,8 @@ nnoremap <Leader>n <C-W>p
 " Allows us to close the NERDTree from anywhere, yet find the current file if it wasn't
 " open anymore.
 function! CustomNERDTreeToggle()
-    if nerdtree#isTreeOpen()
-        NERDTreeToggle
+    if g:NERDTree.IsOpen()
+        call g:NERDTree.Close()
     else
         NERDTreeFind
     endif
