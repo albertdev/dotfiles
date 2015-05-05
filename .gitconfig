@@ -2,13 +2,14 @@
 	serve = !git daemon --reuseaddr --verbose --base-path=. --export-all ./.git
 	server = !git daemon --reuseaddr --verbose --base-path=. --export-all --enable=receive-pack ./.git
 	view = !gitk $* &
-    stat = diff --stat
+	stat = diff --stat
+	permission-reset = !git diff -p -R | grep -E '^(diff|(old|new) mode)' | git apply
 [core]
 	excludesfile = ~/.git_global_ignore
 	autocrlf = false
 # Used for personal details, might use personal e-mail at home.
 [include]
-    path = ~/.localgitconfig
+	path = ~/.localgitconfig
 [push]
 	default = simple
 [color]
@@ -17,8 +18,8 @@
 	guitool = kdiff3
 	tool = kdiff3
 [cola]
-    fontdiff = DejaVu Sans Mono,9,-1,5,50,0,0,0,0,0
-    tabwidth = 4
-    textwidth = 72
+	fontdiff = DejaVu Sans Mono,9,-1,5,50,0,0,0,0,0
+	tabwidth = 4
+	textwidth = 72
 [tgit]
 	logwidthmarker = 72
