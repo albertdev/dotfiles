@@ -5,4 +5,5 @@
 --type-set=pom:is:pom.xml
 --type-set=doc:ext:txt,asciidoc,md
 --type-add=java:is:MANIFEST.MF
+--type-set=manifest:is:MANIFEST.MF
 -C2
