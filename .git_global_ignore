@@ -14,3 +14,5 @@ target/
 *.sublime-project
 #sftp configuration file
 sftp-config.json
+# Little gift from Windows when using Windows Photo Viewer
+Thumbs.db
