@@ -41,6 +41,10 @@ Bundle 'kana/vim-textobj-user'
 Bundle 'glts/vim-textobj-comment'
 Bundle 'kana/vim-textobj-line'
 Bundle 'kchmck/vim-coffee-script'
+Bundle 'chase/vim-ansible-yaml'
+Bundle 'thinca/vim-visualstar'
+Bundle 'justinmk/vim-sneak'
+Bundle 'vim-scripts/Improved-paragraph-motion'
 
 " Load everything upon enabling filetype loading.
 " Required by Vundle
