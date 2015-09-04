@@ -119,3 +119,6 @@ syntax on
 "Change highlighting for "Ignore" group.
 hi Ignore ctermfg=Gray guifg=Gray
 
+if filereadable(glob("~/.vimrc.local")) 
+    source ~/.vimrc.local
+endif
