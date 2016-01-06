@@ -71,10 +71,9 @@ param25=/X:"C:\Program Files (x86)\Notepad++\notepad++.exe" /L:"%L"
 path25=C:\Program Files\Notepad++\
 iconic25=0
 menu25=Notepad++
-button26=C:\Program Files (x86)\Vim\vim74\gvim.exe
-cmd26=D:\App\totalcmd\lst2mlt.exe
-param26=/X:"C:\Program Files (x86)\Vim\vim74\gvim.exe" /B:"--remote-tab-silent" /L:"%L" /W
-iconic26=0
+button26=C:\Program Files (x86)\vim\vim74\vim.exe
+cmd26=""C:\Program Files (x86)\vim\vim74\gvim.exe" "+n `=readfile(argv(0))`""
+param26=%L
 menu26=Vim
 button27=C:\Windows\System32\cmd.exe
 cmd27=*C:\Windows\System32\cmd.exe
