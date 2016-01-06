@@ -17,13 +17,17 @@ vnoremap <S-F8> <C-V>
 
 eclipseaction copy org.eclipse.ui.edit.copy
 map <C-c> :copy<CR>
+eclipseaction InvertCase AnyEdit.invertCase.command
+nnoremap g~ viw:InvertCase<cr>
+eclipseaction UnderCamelCase AnyEdit.camel.command
+nnoremap g- viw:UnderCamelCase<cr>
 
 " Makes the current line empty without entirely deleting it.
-nnoremap dal 0d$
+"nnoremap dal 0d$
 
-set shiftwidth=4
-set tabstop=4
-set expandtab
+"set shiftwidth=4
+"set tabstop=4
+"set expandtab
 set autoindent
 set ignorecase
 set smartcase
