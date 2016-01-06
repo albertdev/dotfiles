@@ -28,6 +28,7 @@ nnoremap g- viw:UnderCamelCase<cr>
 "set shiftwidth=4
 "set tabstop=4
 "set expandtab
+set textwidth=100
 set autoindent
 set ignorecase
 set smartcase
