@@ -76,6 +76,8 @@ set viminfo^=%   " Store buffer list in viminfo file
 " End of line marker position and color
 "set colorcolumn=101
 hi ColorColumn ctermbg=lightgrey guibg=lightgrey
+hi NonText guifg=lightblue
+hi SpecialKey guifg=lightblue
 
 " Fonts settings   
 if has("mac")
