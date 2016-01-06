@@ -75,6 +75,7 @@ button26=C:\Program Files (x86)\vim\vim74\vim.exe
 cmd26=""C:\Program Files (x86)\vim\vim74\gvim.exe" "+n `=readfile(argv(0))`""
 param26=%L
 menu26=Vim
+path26=C:\Program Files (x86)\vim\vim74\
 button27=C:\Windows\System32\cmd.exe
 cmd27=*C:\Windows\System32\cmd.exe
 param27=/K cd /d "%P" && title Command Prompt
