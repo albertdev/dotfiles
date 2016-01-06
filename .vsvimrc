@@ -1,0 +1,12 @@
+set incsearch
+set nowrap
+set hlsearch
+set ignorecase
+set smartcase
+set autoindent
+
+nnoremap [m :vsc Edit.DPack.CodeNavigator.PreviousElement<CR>
+nnoremap ]m :vsc Edit.DPack.CodeNavigator.NextElement<CR>
+vnoremap [m <ESC>:vsc Edit.DPack.CodeNavigator.PreviousElement<CR>mygv`y
+vnoremap ]m <ESC>:vsc Edit.DPack.CodeNavigator.NextElement<CR>mygv`y
+nnoremap gR :vsc Refactor.Rename<CR>
