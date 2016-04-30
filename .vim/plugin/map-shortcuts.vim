@@ -25,3 +25,9 @@ nnoremap Y y$
 
 " Ctrl-V is used for paste in most editors. Use Shift-F8 for visual block mode.
 noremap <S-F8> <C-V>
+
+" Eclipse previous / next position shortcuts
+nnoremap <silent> <M-Left>      <C-O>
+nnoremap <silent> <M-Right>     <C-I>
+inoremap         <M-Left>  <C-O><C-O>
+inoremap         <M-Right> <C-O><C-I>
