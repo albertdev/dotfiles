@@ -10,3 +10,10 @@ nnoremap ]m :vsc Edit.DPack.CodeNavigator.NextElement<CR>
 vnoremap [m <ESC>:vsc Edit.DPack.CodeNavigator.PreviousElement<CR>mygv`y
 vnoremap ]m <ESC>:vsc Edit.DPack.CodeNavigator.NextElement<CR>mygv`y
 nnoremap gR :vsc Refactor.Rename<CR>
+
+" Enter block mode using a special shortcut: <C-Q> is Quick launch whereas
+" <S-F8> is only used for Next Difference.
+nnoremap <S-F8> <C-Q>
+
+" Oddly, Vi treats it like yy. Make it more consistent with C, D or S.
+nnoremap Y y$
