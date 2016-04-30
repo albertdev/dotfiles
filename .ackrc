@@ -1,3 +1,4 @@
+--ignore-dir=$tf
 --ignore-dir=target
 --ignore-dir=build
 --ignore-dir=work
