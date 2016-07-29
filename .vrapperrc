@@ -42,3 +42,8 @@ set startnormalmode
 set noexitlinkmode
 
 source .localvrapperrc
+
+let @i=">><<"
+vnoremap @i :normal @i<RETURN>
+
+nnoremap <C-w>q :q<RETURN>
