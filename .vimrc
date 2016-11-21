@@ -45,6 +45,7 @@ Bundle 'chase/vim-ansible-yaml'
 Bundle 'thinca/vim-visualstar'
 Bundle 'justinmk/vim-sneak'
 Bundle 'vim-scripts/Improved-paragraph-motion'
+Bundle 'PProvost/vim-ps1'
 
 " Load everything upon enabling filetype loading.
 " Required by Vundle
