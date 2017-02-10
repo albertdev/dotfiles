@@ -73,6 +73,8 @@ set splitbelow
 set splitright
 set hidden
 set viminfo^=%   " Store buffer list in viminfo file
+set smartcase
+set number
 
 " End of line marker position and color
 "set colorcolumn=101
