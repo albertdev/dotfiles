@@ -8,6 +8,9 @@ let g:TCDUsedInNERDTree=1
 "New version from NERDTree's README in the git repo
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+" Take focus away from NERDTree before leaving a tab, otherwise teh tab title sticks to NERDTree X
+autocmd tableave * if (exists("b:NERDTree") && b:NERDTree.isTabTree()) | wincmd p | endif
+
 " Eclipse mapping
 nnoremap <C-A-Left> :<C-U>NERDTreeFind<CR>
 
