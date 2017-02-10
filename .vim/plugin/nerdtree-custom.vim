@@ -3,7 +3,10 @@
 let g:TCDUsedInNERDTree=1
 
 " Close the current tab or editor if only the NERDTree window remains
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTreeType == "primary") | q | endif
+
+"New version from NERDTree's README in the git repo
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Eclipse mapping
 nnoremap <C-A-Left> :<C-U>NERDTreeFind<CR>
