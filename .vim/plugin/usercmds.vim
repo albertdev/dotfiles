@@ -1,5 +1,7 @@
 command! -bang C Bdelete<bang>
 
+command! CopyPath let @+=expand("%:p") | echo "Copied path '" . expand("%:p") . "' to system clipboard"
+
 " From http://unix.stackexchange.com/a/58748/70874
 command! -range Vis call setpos('.', [0,<line1>,0,0]) |
                     \ exe "normal V" |
@@ -52,3 +54,5 @@ function! s:Hex2dec(line1, line2, arg) range
     echo (a:arg =~? '^0x') ? a:arg + 0 : ('0x'.a:arg) + 0
   endif
 endfunction
+
+
