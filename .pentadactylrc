@@ -1,0 +1,73 @@
+"1.2pre-pm-3
+
+loadplugins '\.(js|penta)$'
+group user
+" Nop the h keys, no longer used in Colemak
+map -modes=n,v -builtin h <Nop>
+map -modes=n,v -builtin H <Nop>
+
+" Find next
+map -count -modes=n,v -builtin k <count>n
+map -count -modes=n,v -builtin K <count>N
+
+" Re-add the "undo close tab" key
+map -modes=n,v -builtin j u
+
+" Colemak UNEI navigation
+map -modes=n,v -builtin e 8j
+map -modes=n,v -builtin u 8k
+map -modes=n,v -builtin n 8h
+map -modes=n,v -builtin i 8l
+
+" Move faster // Doesn't work so well on NodeBB when using a background, use native keys instead
+"map -modes=n,v -builtin <Up> 8<Up>
+"map -modes=n,v -builtin <Down> 8<Down>
+"map -modes=n,v -builtin <Left> 8<Left>
+"map -modes=n,v -builtin <Right> 8<Right>
+
+" Move back
+map -count -modes=n,v -builtin N <count>H
+" Move forward
+map -count -modes=n,v -builtin I <count>L
+
+" Do not use the default action when timeoutlen expires
+map -builtin -modes=n,v,i <C-w> <Nop>
+
+map -builtin -modes=n,v,i <C-w>q <Esc>:tabclose<CR>
+map -builtin -modes=n,v,i <C-w>Q <Esc>:winclose<CR>
+map -builtin -modes=n,v,i <C-w>p <Esc>:private winopen 
+
+" Use browser-native shortcut handlers
+map -builtin -modes=n,v <C-t> <Pass>
+map -builtin -modes=n,v <Up> <Pass>
+map -builtin -modes=n,v <Down> <Pass>
+map -builtin -modes=n,v <Left> <Pass>
+map -builtin -modes=n,v <Right> <Pass>
+map -builtin -modes=n,v <PageDown> <Pass>
+map -builtin -modes=n,v <PageUp> <Pass>
+
+" Pentadactyl does not seem to support <C-R>+ to paste from system clipboard :(
+" Use CTRL-V instead. This mapping removes the need to press it twice.
+map -builtin -modes=input <C-V> <Pass>
+
+set cdpath=''
+set guioptions=bCrsBT
+set newtab=all
+set hintkeys=arstoien
+set timeoutlen=2000
+
+" Default hints are transparent and only 10px, change it up:
+highlight Hint font: bold 12px "Droid Sans Mono", monospace !important; margin: -.2ex; padding: 0 0 0 1px; outline: 1px solid rgba(0, 0, 0, 1); background: rgba(255, 248, 231, 1); color: black;
+
+" Javascript voodoo to get an "open hint in private browsing window" mode
+" Inspired by http://superuser.com/a/914177/105704 and https://nakkaya.com/2014/01/26/pentadactyl-configuration/ 's private-tab function:
+
+javascript <<EOF
+//function openPrivateWindow (url) {
+//    dactyl.execute(":private winopen " + url);
+//}
+hints.addMode('p','Open in private browsing',function(elem) dactyl.execute(":private winopen " + elem.href));
+
+EOF
+
+" vim: set ft=pentadactyl:
