@@ -45,6 +45,9 @@ Bundle 'chase/vim-ansible-yaml'
 Bundle 'thinca/vim-visualstar'
 Bundle 'justinmk/vim-sneak'
 Bundle 'vim-scripts/Improved-paragraph-motion'
+"Bundle 'vim-scripts/csharp.vim'
+"Bundle 'OrangeT/vim-csharp'
+"Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'PProvost/vim-ps1'
 
 " Load everything upon enabling filetype loading.
@@ -58,6 +61,7 @@ set keymodel=     " Doesn't make sense since we don't want selectmode
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
+set textwidth=100
 set autoindent
 set ffs=dos,unix  " Windows is too much used to write unix LE everywhere.
 set nowrap
