@@ -48,7 +48,13 @@ map -builtin -modes=n,v <PageUp> <Pass>
 
 " Pentadactyl does not seem to support <C-R>+ to paste from system clipboard :(
 " Use CTRL-V instead. This mapping removes the need to press it twice.
-map -builtin -modes=input <C-V> <Pass>
+map -count -modes=c,i,t <C-v> <Pass>
+
+" Aaargh, Ctrl-C doesn't work as copy by default.
+map -builtin -count -modes=n,v,c,i,t <C-c> <C-v><C-c>
+
+" Aargh2, Ctrl-A doesn't do a select all by default
+map -builtin -modes=n,v,c,i,t <C-a> <C-v><C-a>
 
 set cdpath=''
 set guioptions=bCrsBT
