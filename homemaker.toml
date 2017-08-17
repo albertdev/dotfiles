@@ -1,0 +1,75 @@
+# Config file for https://github.com/FooSoft/homemaker
+
+[tasks.totalcmd]
+    # File bug with homemaker: does not work on windows due to Go's path package, should work with filepath package
+    #links = [
+    #    ["${LOCALAPPDATA}\\totalcmd\\wincmd.ini", "totalcmd\\wincmd.ini"],
+    #    ["${LOCALAPPDATA}/totalcmd/usercmd.ini", "totalcmd/usercmd.ini"],
+    #    ["${LOCALAPPDATA}/totalcmd/totalcommander.bar", "totalcmd/totalcommander.bar"],
+    #]
+    cmds = [
+        ["reg", "add", "HKCU\\Software\\Ghisler\\Total Commander", "/v", "IniFileName", "/d", "%AppData%\\totalcmd\\wincmd.ini", "/f"],
+        ["reg", "add", "HKCU\\Software\\Ghisler\\Total Commander", "/v", "FtpIniName", "/d", "%AppData%\\totalcmd\\wcx_ftp.ini", "/f"],
+    ]
+    links = [
+        ["AppData/roaming/totalcmd/wincmd.ini", "totalcmd/wincmd.ini"],
+        ["AppData/roaming/totalcmd/usercmd.ini", "totalcmd/usercmd.ini"],
+        ["AppData/roaming/totalcmd/totalcommander.bar", "totalcmd/totalcommander.bar"],
+    ]
+    #templates = [
+    #    ["AppData/local/totalcmd/wincmd_dirs_test.ini", "totalcmd/wincmd_dirs_template.ini"]
+    #]
+
+[tasks.console-z]
+    # File bug with homemaker: does not work with Go's path package, should work with filepath
+    #links = [
+    #    ["${APPDATA}/Console/console.xml", "console-z/console.xml"],
+    #]
+    links = [
+        ["AppData/roaming/Console/console.xml", "console-z/console.xml"],
+    ]
+
+[tasks.eclipse]
+    links = [
+        [".eclipse"],
+        [".vrapperrc"]
+    ]
+
+[tasks.powershell]
+    links = [
+        ["Documents/WindowsPowerShell", "WindowsPowerShell"],
+    ]
+
+[tasks.visualstudio]
+    # Make it so that double clicking on a TFS Pending Change item opens the diff viewer rather than the file
+    cmds = [
+        ["reg", "add", "HKCU\\Software\\Microsoft\\VisualStudio\\14.0\\TeamFoundation\\SourceControl\\Behavior", "/v", "DoubleClickOnChange", "/t", "REG_DWORD", "/d", "00000001", "/f"]
+    ]
+    links = [
+        [".vsvimrc"],
+    ]
+
+[tasks.shared-rc]
+    links = [
+        [".ackrc"],
+        [".bash_aliases"],
+        [".bashrc"],
+        [".git_global_ignore"],
+        [".gitconfig"],
+        [".kdiff3rc"],
+        [".lesskey"],
+        [".pentadactylrc"],
+    ]
+
+[tasks.vim]
+    links = [
+        [".vimrc"],
+        [".vim"], # Actually a folder
+    ]
+
+[tasks.default]
+    deps = ["vim", "shared-rc"]
+
+[tasks.default__windows]
+    deps = ["vim", "shared-rc", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z"]
+
