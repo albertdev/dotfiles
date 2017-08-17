@@ -61,7 +61,7 @@ set keymodel=     " Doesn't make sense since we don't want selectmode
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set textwidth=100
+set textwidth=150
 set autoindent
 set ffs=dos,unix  " Windows is too much used to write unix LE everywhere.
 set nowrap
@@ -79,6 +79,11 @@ set hidden
 set viminfo^=%   " Store buffer list in viminfo file
 set smartcase
 set number
+" Disable sound for reaching EOF - since line numbers are on it's obvious we can no longer scroll
+set t_vb=
+set visualbell
+" Settings above get reset after gVim is started, fix it AGAIN
+autocmd GUIEnter * set visualbell t_vb=
 
 " End of line marker position and color
 "set colorcolumn=101
@@ -93,7 +98,8 @@ elseif has("unix")
 elseif has("win32")
     "set guifont=PixelCarnageMonoTT:h10:cDEFAULT
     "set guifont=ProggyCleanSZ:h8:cDEFAULT
-    set guifont=DejaVu_Sans_Mono:h10:cDEFAULT
+    "set guifont=DejaVu_Sans_Mono:h10:cDEFAULT
+    set guifont=DejaVu_Sans_Mono:h09:cDEFAULT
 endif
 
 " backspace and cursor keys wrap to previous/next line
