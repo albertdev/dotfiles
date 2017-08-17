@@ -21,7 +21,7 @@
 	tool = kdiff3NoAuto
 	guitool = kdiff3NoAuto
 [mergetool "kdiff3NoAuto"]
-	cmd = kdiff3 --L1 "$MERGED (Base)" --L2 "$MERGED (Local)" --L3 "$MERGED (Remote)" -o "$MERGED" "$BASE" "$LOCAL" "$REMOTE"
+	cmd = kdiff3 --L1 \"$MERGED (Base)\" --L2 \"$MERGED (Local)\" --L3 \"$MERGED (Remote)\" -o \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
 [cola]
 	fontdiff = DejaVu Sans Mono,9,-1,5,50,0,0,0,0,0
 	tabwidth = 4
