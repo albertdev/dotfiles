@@ -1,4 +1,4 @@
-Import-Module PSCX -Arg ~\Pscx.UserPreferences.ps1
+Import-Module PSCX -Arg (Join-Path -Resolve $PSScriptRoot Pscx.UserPreferences.ps1)
 
 
 New-Alias dirs cd
