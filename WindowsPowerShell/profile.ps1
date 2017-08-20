@@ -52,15 +52,6 @@ Function Load-VsTools2015()
     Write-Host -ForegroundColor 'Yellow' "VsVars has been loaded from: $batchFile"
 }
 
-Function Load-WinAvr()
-{
-    $winavrDir = Get-ChildItem -Directory -LiteralPath 'd:\Apps' '*WinAVR*' | Select-Object -ExpandProperty FullName
-    $winavrBinDir = Join-Path $winavrDir 'bin'
-    $winavrUtilsBinDir = Join-Path $winavrDir 'utils/bin'
-    Add-PathVariable -Target Process -value ([string]$winavrBinDir, [string]$winavrUtilsBinDir)
-    Write-Host -ForegroundColor 'Yellow' "WinAvr tools have been located"
-}
-
 Function Load-MingWTools()
 {
     $mingwDir = Get-ChildItem -Directory -LiteralPath 'd:\Apps\mingw-w64' | Select-Object -First 1 -ExpandProperty FullName
@@ -75,11 +66,14 @@ Function Load-MingWTools()
     Write-Host -ForegroundColor 'Yellow' "MingW tools have been located"
 }
 
-Function Load-AvrToolchain()
-{
-    Load-MingWTools
+# Git aliases - uses very short names for convenience because definining the functions and aliases immediately after is silly.
+Function GitFA() { git fetch --all }
+Function GitS() { git status }
+Function GitI() { git diff --cached }
+Function GitSF() { git svn fetch }
+Function GitFA() { git fetch --all }
+Function GitFF() { git pull --ff-only }
+Function GitMF() { git merge --ff-only }
 
-    Add-PathVariable -Target Process -value 'd:\Apps\avr8-gnu-toolchain\bin\'
-
-    Write-Host -ForegroundColor 'Yellow' "Avr tools have been located"
-}
+# SVN Rebase: attempt to run it, if it fails we stash the changes and try again
+#Function GitSR() { git svn rebase || ( git stash ; git svn rebase ; git stash pop ) }
