@@ -2,6 +2,8 @@
 {
     Import-Module PSReadline
     Set-PSReadlineOption -EditMode Emacs
+
+    Import-Module Jump.Location
 }
 
 # Chocolatey profile
