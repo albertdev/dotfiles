@@ -9,6 +9,15 @@ Function Get-Location-Stack
     (Get-Location -Stack).GetEnumerator()
 }
 
+Function Copy-Path ($file) {
+    # Copy absolute path
+    if ($file -eq $null) {
+        Set-Clipboard -Text (Resolve-Path $PWD)
+    } else {
+        Set-Clipboard -Text (Resolve-Path $file)
+    }
+}
+
 Function Lower-ExecutionPolicy
 {
     Set-ExecutionPolicy -Scope process -ExecutionPolicy Unrestricted
@@ -50,6 +59,26 @@ Function Load-VsTools2015()
 
     $batchenv.GetEnumerator() | % { Set-Item -Path "env:$($_.Key)" -value $_.Value }
     Write-Host -ForegroundColor 'Yellow' "VsVars has been loaded from: $batchFile"
+}
+
+Function Load-MsDeploy()
+{
+    $msDeployRegKey = 'HKLM:\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\3'
+    if (!(Test-Path $msDeployRegKey)) {
+        Write-Error "Could not detect MSDeploy v3 installation"
+        return $null
+    }
+    $msDeployPath = (Get-ItemProperty $msDeployRegKey).InstallPath
+    if ($null -eq $msDeployPath -or "" -eq $msDeployPath) {
+        Write-Error "Could not detect MSDeploy v3 installation, registry key did not contain install path"
+        return $null
+    }
+    $msDeploy = Join-Path $msDeployPath "msdeploy.exe"
+    if (!(Test-Path $msDeploy)) {
+        Write-Error "Could not find MSDeploy v3 EXE at $($msDeploy.FullName)"
+        return $null
+    }
+    Add-PathVariable (Resolve-Path $msDeployPath)
 }
 
 Function Load-MingWTools()
