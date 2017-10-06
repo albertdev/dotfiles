@@ -1,6 +1,5 @@
 Import-Module PSCX -Arg (Join-Path -Resolve $PSScriptRoot Pscx.UserPreferences.ps1)
 
-
 New-Alias dirs cd
 
 
@@ -95,6 +94,15 @@ Function Load-MingWTools()
     Write-Host -ForegroundColor 'Yellow' "MingW tools have been located"
 }
 
+# TF VC aliases
+Function TFDiff {
+    if ($null -eq (Get-Command tf -ErrorAction SilentlyContinue))
+    {
+        throw "No TF VC command found in Path";
+    }
+    tf diff . /recursive /format:unified
+}
+
 # Git aliases - uses very short names for convenience because definining the functions and aliases immediately after is silly.
 Function GitFA() { git fetch --all }
 Function GitS() { git status }
@@ -102,7 +110,18 @@ Function GitI() { git diff --cached }
 Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
 Function GitFF() { git pull --ff-only }
-Function GitMF() { git merge --ff-only }
+Function GitMF() { git merge --ff-only $args }
 
 # SVN Rebase: attempt to run it, if it fails we stash the changes and try again
 #Function GitSR() { git svn rebase || ( git stash ; git svn rebase ; git stash pop ) }
+
+#TODO: Move to module
+# ----> Actually already implemented in PSCX
+#Function ConvertFrom-Base64File
+#{
+#  [CmdletBinding()]
+#  Param (
+#    [Parameter(Mandatory = $True)] [FileInfo] $InputPath,
+#    [Parameter(Mandatory = $True)] $Path
+#  )
+#}
