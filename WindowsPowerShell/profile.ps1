@@ -22,6 +22,12 @@ Function Lower-ExecutionPolicy
     Set-ExecutionPolicy -Scope process -ExecutionPolicy Unrestricted
 }
 
+# Spits out grep lines in a format useable by vim's error list functionality
+Function vimgrep ($regex, $files, $outfile)
+{
+    busybox grep -n -H $regex $files | Out-File -Encoding utf8 -Append $outfile
+}
+
 # Taken and tweaked from the comments of https://www.gurustop.net/blog/2014/02/01/using-visual-studio-developer-command-prompt-with-powershell/
 Function Get-BatchfileEnvironment ($file) {
     $cmd = "`"$file`" & set"
