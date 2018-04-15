@@ -109,6 +109,51 @@ Function TFDiff {
     tf diff . /recursive /format:unified
 }
 
+Function TFGet-LatestId {
+    [CmdletBinding()]
+    Param(
+        $LabelId,
+        $Url,
+        $RootFolder
+    )
+    if ($null -eq (Get-Command tf -ErrorAction SilentlyContinue))
+    {
+        throw "No TF VC command found in Path";
+    }
+    if ($null -eq $Url -and $null -ne $RootFolder)
+    {
+        throw "No Url specified although a root folder was given"
+    }
+    if ($null -ne $Url -and $null -eq $RootFolder)
+    {
+        $rootFolders = tf vc dir /folders "/collection:$Url" '$/'
+        throw "No root folder specified. Try one of the following:`n$([String]::Join("`n", $rootFolders))"
+    }
+
+    $cmd = "vc", "history", "/r", "/noprompt", "/stopafter:1"
+    if ($null -ne $Url -and $null -ne $RootFolder)
+    {
+        $cmd += "/collection:$Url"
+        $cmd += "`$/$RootFolder"
+    }
+    else
+    {
+        $cmd += "."
+    }
+    if ($null -eq $LabelId)
+    {
+        #tf history . /r /noprompt /stopafter:1 /version:W
+        $cmd += "/version:W"
+    }
+    else
+    {
+        #$versionSpec = "/version:L$LabelId" 
+        #tf history . /r /noprompt /stopafter:1 $versionSpec
+        $cmd += "/version:L$LabelId" 
+    }
+    & "tf" $cmd
+}
+
 # Git aliases - uses very short names for convenience because definining the functions and aliases immediately after is silly.
 Function GitFA() { git fetch --all }
 Function GitS() { git status }
