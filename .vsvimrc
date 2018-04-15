@@ -4,6 +4,8 @@ set hlsearch
 set ignorecase
 set smartcase
 set autoindent
+" Disable that dang sound when reaching end of file
+set visualbell
 
 nnoremap [m :vsc Edit.DPack.CodeNavigator.PreviousElement<CR>
 nnoremap ]m :vsc Edit.DPack.CodeNavigator.NextElement<CR>
