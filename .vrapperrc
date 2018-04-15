@@ -43,6 +43,8 @@ set noexitlinkmode
 
 source .localvrapperrc
 
+command CopyPath let @+=@%
+
 let @i=">><<"
 vnoremap @i :normal @i<RETURN>
 
