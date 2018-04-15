@@ -43,10 +43,17 @@
 [tasks.visualstudio]
     # Make it so that double clicking on a TFS Pending Change item opens the diff viewer rather than the file
     cmds = [
-        ["reg", "add", "HKCU\\Software\\Microsoft\\VisualStudio\\14.0\\TeamFoundation\\SourceControl\\Behavior", "/v", "DoubleClickOnChange", "/t", "REG_DWORD", "/d", "00000001", "/f"]
+        ["reg", "add", "HKCU\\Software\\Microsoft\\VisualStudio\\14.0\\TeamFoundation\\SourceControl\\Behavior", "/v", "DoubleClickOnChange", "/t", "REG_DWORD", "/d", "00000001", "/f"],
+        ["reg", "add", "HKCU\\Software\\Microsoft\\VisualStudio\\15.0\\TeamFoundation\\SourceControl\\Behavior", "/v", "DoubleClickOnChange", "/t", "REG_DWORD", "/d", "00000001", "/f"]
     ]
     links = [
         [".vsvimrc"],
+    ]
+
+[tasks.windows-tweaks]
+    # (Try to) Disable those annoying freemium sideloading apps you get after each major update
+    cmds = [
+        ["reg", "add", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager", "/v", "SilentInstalledAppsEnabled", "/t", "REG_DWORD", "/d", "00000000", "/f"],
     ]
 
 [tasks.shared-rc]
@@ -71,5 +78,5 @@
     deps = ["vim", "shared-rc"]
 
 [tasks.default__windows]
-    deps = ["vim", "shared-rc", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z"]
+    deps = ["vim", "shared-rc", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks"]
 
