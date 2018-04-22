@@ -8,16 +8,16 @@
     #    ["${LOCALAPPDATA}/totalcmd/totalcommander.bar", "totalcmd/totalcommander.bar"],
     #]
     cmds = [
-        ["reg", "add", "HKCU\\Software\\Ghisler\\Total Commander", "/v", "IniFileName", "/d", "%AppData%\\totalcmd\\wincmd.ini", "/f"],
-        ["reg", "add", "HKCU\\Software\\Ghisler\\Total Commander", "/v", "FtpIniName", "/d", "%AppData%\\totalcmd\\wcx_ftp.ini", "/f"],
+        ["reg", "add", "HKCU\\Software\\Ghisler\\Total Commander", "/v", "IniFileName", "/d", "%LocalAppData%\\totalcmd\\wincmd.ini", "/f"],
+        ["reg", "add", "HKCU\\Software\\Ghisler\\Total Commander", "/v", "FtpIniName", "/d", "%LocalAppData%\\totalcmd\\wcx_ftp.ini", "/f"],
     ]
     links = [
-        ["AppData/roaming/totalcmd/wincmd.ini", "totalcmd/wincmd.ini"],
-        ["AppData/roaming/totalcmd/usercmd.ini", "totalcmd/usercmd.ini"],
-        ["AppData/roaming/totalcmd/totalcommander.bar", "totalcmd/totalcommander.bar"],
+        ["AppData/local/totalcmd/wincmd.ini", "totalcmd/wincmd.ini"],
+        ["AppData/local/totalcmd/usercmd.ini", "totalcmd/usercmd.ini"],
+        ["AppData/local/totalcmd/totalcommander.bar", "totalcmd/totalcommander.bar"],
     ]
     #templates = [
-    #    ["AppData/local/totalcmd/wincmd_dirs_test.ini", "totalcmd/wincmd_dirs_template.ini"]
+    #    ["LocalAppData/local/totalcmd/wincmd_dirs_test.ini", "totalcmd/wincmd_dirs_template.ini"]
     #]
 
 [tasks.console-z]
@@ -35,7 +35,32 @@
         [".vrapperrc"]
     ]
 
+[macros.powershell-check-modules]
+    prefix = ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Import-Module"]
+
+[macros.powershell-install-module]
+    prefix = ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Install-Module"]
+
+[tasks.powershell-modules]
+    rejects = [
+        ["@powershell-check-modules", "PSCX,Jump.Location,PSReadline"]
+    ]
+    # Install nuget provider for PowerShellGet and install favourite modules
+    cmds = [
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Install-PackageProvider", "-Name", "NuGet", "-MinimumVersion", "2.8.5.201"],
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Set-PSRepository", "PSGallery", "-InstallationPolicy", "Trusted"],
+        ["@powershell-install-module", "PSCX", "-AllowClobber"],
+        ["@powershell-install-module", "Jump.Location"],
+        ["@powershell-install-module", "PSReadline"],
+    ]
+
 [tasks.powershell]
+    deps = ["powershell-modules"]
+    # Set execution policy in 64 and 32 bit modes
+    cmds = [
+        ["cmd", "/c", "powershell",                                          "-NoProfile", "-Command", "Set-ExecutionPolicy", "-Scope", "CurrentUser", "RemoteSigned"],
+        ["cmd", "/c", "%windir%/syswow64/WindowsPowerShell/v1.0/powershell", "-NoProfile", "-Command", "Set-ExecutionPolicy", "-Scope", "CurrentUser", "RemoteSigned"],
+    ]
     links = [
         ["Documents/WindowsPowerShell", "WindowsPowerShell"],
     ]
@@ -56,6 +81,14 @@
         ["reg", "add", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager", "/v", "SilentInstalledAppsEnabled", "/t", "REG_DWORD", "/d", "00000000", "/f"],
     ]
 
+[tasks.windows-software]
+    cmds = [
+        ["choco", "install", "-y", "autohotkey.portable", "sysinternals", "palemoon", "notepadplusplus.install", "dejavufonts", "vim", "adobereader", "totalcommander", "consolez", "irfanview", "iridium-browser", "kdiff3", "tortoisegit"],
+        ["choco", "pin", "add", "--name", "palemoon"],
+        ["choco", "pin", "add", "--name", "notepadplusplus.install"],
+        ["choco", "pin", "add", "--name", "adobereader"],
+    ]
+
 [tasks.shared-rc]
     links = [
         [".ackrc"],
@@ -63,7 +96,7 @@
         [".bashrc"],
         [".git_global_ignore"],
         [".gitconfig"],
-        [".kdiff3rc"],
+        #[".kdiff3rc"],
         [".lesskey"],
         [".pentadactylrc"],
     ]
@@ -78,5 +111,5 @@
     deps = ["vim", "shared-rc"]
 
 [tasks.default__windows]
-    deps = ["vim", "shared-rc", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks"]
+    deps = ["vim", "shared-rc", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks", "windows-software"]
 
