@@ -11,6 +11,7 @@ alias gitff='git pull --ff-only' # Or use git fast-forward alias
 alias gitmf='git merge --ff-only'
 alias giti='git diff --cached'
 alias gitd='git diff'
+alias gitka='gitk --all'
 
 # Always use tabs
 alias vim="vim -p"

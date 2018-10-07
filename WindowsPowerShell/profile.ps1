@@ -180,7 +180,7 @@ Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
 Function GitFF() { git pull --ff-only }
 Function GitMF() { git merge --ff-only $args }
-
+Function GitKA() { gitk --all }
 # SVN Rebase: attempt to run it, if it fails we stash the changes and try again
 #Function GitSR() { git svn rebase || ( git stash ; git svn rebase ; git stash pop ) }
 
