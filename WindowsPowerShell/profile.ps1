@@ -182,15 +182,27 @@ Function GitFF() { git pull --ff-only }
 Function GitMF() { git merge --ff-only $args }
 Function GitKA() { gitk --all }
 # SVN Rebase: attempt to run it, if it fails we stash the changes and try again
-#Function GitSR() { git svn rebase || ( git stash ; git svn rebase ; git stash pop ) }
+Function GitSR() {
+    $undoStash = $False
 
-#TODO: Move to module
-# ----> Actually already implemented in PSCX
-#Function ConvertFrom-Base64File
-#{
-#  [CmdletBinding()]
-#  Param (
-#    [Parameter(Mandatory = $True)] [FileInfo] $InputPath,
-#    [Parameter(Mandatory = $True)] $Path
-#  )
-#}
+    git svn rebase
+    if ($? -eq $False -or $LASTEXITCODE -ne 0) {
+        # There might be pending changes or there was a connection failure. Check index status
+        git update-index --refresh > $null
+        if ($? -eq $False -or $LASTEXITCODE -ne 0) {
+            Write-Warning "Repository not clean, stashing changes before retrying"
+            git stash
+            $undoStash = $True
+        }
+        else
+        {
+            return
+        }
+        # Try again
+        git svn rebase
+        if ($undoStash) {
+            git stash pop
+        }
+    }
+}
+
