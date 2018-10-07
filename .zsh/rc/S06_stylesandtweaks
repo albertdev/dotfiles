@@ -1,0 +1,4 @@
+
+# Makes completions fall back to a case-changed match when no exact match was found
+# Removing the '' should make completion pick any kind of matching result whether or not an exact match can be found.
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
