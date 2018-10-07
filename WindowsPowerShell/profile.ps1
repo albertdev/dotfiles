@@ -30,10 +30,11 @@ Function vimgrep ($regex, $files, $outfile)
 
 # Taken and tweaked from the comments of https://www.gurustop.net/blog/2014/02/01/using-visual-studio-developer-command-prompt-with-powershell/
 Function Get-BatchfileEnvironment ($file) {
-    $cmd = "`"$file`" & set"
+    $cmd = "`"$file`" && set"
     $vars = @{}
-    cmd /c $cmd | Foreach-Object {
-        $p, $v = $_.split('=')
+    # Ignore everything which is not of form key=value
+    cmd /c $cmd | ? { $_.IndexOf('=') -gt 0} | Foreach-Object {
+        $p, $v = $_.split('=', 2)
 #        Set-Item -path env:$p -value $v
         $vars[$p] = $v
     }
@@ -57,6 +58,23 @@ Function Load-VsTools2013()
 Function Load-VsTools2015()
 {
     $batchFile = [System.IO.Path]::Combine($env:VS140COMNTOOLS, "VsDevCmd.bat")
+    $batchenv = Get-BatchfileEnvironment -file $batchFile
+
+    # Verbose logging
+    $batchenv.GetEnumerator() | Sort-Object -Property Key | % {"{0}={1}" -f $_.Key, $_.Value} | Write-Verbose
+
+    $batchenv.GetEnumerator() | % { Set-Item -Path "env:$($_.Key)" -value $_.Value }
+    Write-Host -ForegroundColor 'Yellow' "VsVars has been loaded from: $batchFile"
+}
+
+Function Load-VsTools2017()
+{
+    $vsLocation = vswhere -version "[15.0,16.0)" -requires Microsoft.Component.MSBuild -property installationPath
+    if ($vsLocation -eq $null) {
+        Write-Error "Could not detect Visual Studio 2017 installation"
+        return $null
+    }
+    $batchFile = Join-Path $vsLocation "Common7\Tools\VsDevCmd.bat"
     $batchenv = Get-BatchfileEnvironment -file $batchFile
 
     # Verbose logging
