@@ -1,3 +1,9 @@
+#InstallKeybdHook
+
+;
+; Utility script to turn numpad into a virtual mouse with shortcuts for ManicTime
+;
+
 CoordMode, Mouse, Screen
 SetTitleMatchMode, RegEx
 
@@ -20,18 +26,31 @@ ExitApp
 
 Num0Pressed := 0
 NumDotPressed := 0
+Num1Pressed := 0
+Num3Pressed := 0
 
 ; Numpad shortcuts for Shift and Control
 
-Numpad1::
-NumpadEnd::
-    Send {Shift Down}
+*Numpad1::
+*NumpadEnd::
+    Num1Pressed := 1
 Return
 
-Numpad1 Up::
-NumpadEnd Up::
-    Send {Shift Up}
+*Numpad1 Up::
+*NumpadEnd Up::
+    Num1Pressed := 0
 Return
+
+*Numpad3::
+*NumpadPgDn::
+    Num3Pressed := 1
+Return
+
+*Numpad3 Up::
+*NumpadPgDn Up::
+    Num3Pressed := 0
+Return
+
 
 ; Mouse clicks
 
@@ -64,19 +83,36 @@ Return
 ; Scroll wheel
 
 *NumpadAdd Up::
-    Click, WheelUp
+    clicks := 2
+    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
+        clicks := 6
+    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
+        clicks := 1
+    }
+    Loop, % clicks {
+        Click, WheelUp
+    }
 Return
+
 *NumpadSub Up::
-    Click, WheelDown
+    clicks := 2
+    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
+        clicks := 6
+    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
+        clicks := 1
+    }
+    Loop, % clicks {
+        Click, WheelDown
+    }
 Return
 
 ; Scroll wheel with Ctrl pressed at same time
 
 *Numpad7 Up::
 *NumpadHome Up::
-    Send {LControl Down}
+    SendInput {LControl Down}
     Click, WheelDown
-    Send {LControl Up}
+    SendInput {LControl Up}
 Return
 *Numpad9 Up::
 *NumpadPgUp Up::
@@ -90,9 +126,9 @@ Return
 *Numpad4::
 *NumpadLeft::
     dist := -10
-    if (GetKeyState("Shift", "P")) {
+    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
         dist *= 3
-    } else if (GetKeyState("Control", "P")) {
+    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
         dist *= 0.5
     }
     MouseMove, %dist%, 0, 0, R
@@ -100,9 +136,9 @@ Return
 *Numpad6::
 *NumpadRight::
     dist := 10
-    if (GetKeyState("Shift", "P")) {
+    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
         dist *= 3
-    } else if (GetKeyState("Control", "P")) {
+    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
         dist *= 0.5
     }
     MouseMove, %dist%, 0, 0, R
@@ -111,9 +147,9 @@ Return
 *Numpad8::
 *NumpadUp::
     dist := -10
-    if (GetKeyState("Shift", "P")) {
+    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
         dist *= 3
-    } else if (GetKeyState("Control", "P")) {
+    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
         dist *= 0.5
     }
     MouseMove, 0, %dist%, 0, R
@@ -122,9 +158,9 @@ Return
 *Numpad5::
 *NumpadClear::
     dist := 10
-    if (GetKeyState("Shift", "P")) {
+    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
         dist *= 3
-    } else if (GetKeyState("Control", "P")) {
+    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
         dist *= 0.5
     }
     MouseMove, 0, %dist%, 0, R
