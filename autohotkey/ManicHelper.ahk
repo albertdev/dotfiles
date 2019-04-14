@@ -1,4 +1,11 @@
 #InstallKeybdHook
+#UseHook
+#SingleInstance force
+
+SetKeyDelay, -1
+SetMouseDelay, -1
+
+#MaxHotkeysPerInterval 500
 
 ;
 ; Utility script to turn numpad into a virtual mouse with shortcuts for ManicTime
@@ -14,7 +21,24 @@ SetTitleMatchMode, RegEx
 Gui, Add, Button, , Done
 ;Gui, Show, AutoSize Center Minimize ;NoActivate
 Gui, Show, AutoSize Center Minimize
+
+
+MouseLeftPressed := 0
+MouseRightPressed := 0
+
+FastButtonPressed := 0
+SlowButtonPressed := 0
+
+IsNavScrollMode := 0
+
+ScrollButton := 0
+ScrollRate := 250
+
+;;
+;; End of auto-execute
+;;
 Return
+
 
 
 ; Exit script if helper window gets closed
@@ -24,111 +48,149 @@ GuiEscape:
 
 ExitApp
 
-Num0Pressed := 0
-NumDotPressed := 0
-Num1Pressed := 0
-Num3Pressed := 0
-
 ; Numpad shortcuts for Shift and Control
 
 *Numpad1::
 *NumpadEnd::
-    Num1Pressed := 1
+    FastButtonPressed := 1
 Return
 
 *Numpad1 Up::
 *NumpadEnd Up::
-    Num1Pressed := 0
+    FastButtonPressed := 0
 Return
 
 *Numpad3::
 *NumpadPgDn::
-    Num3Pressed := 1
+    SlowButtonPressed := 1
 Return
 
 *Numpad3 Up::
 *NumpadPgDn Up::
-    Num3Pressed := 0
+    SlowButtonPressed := 0
 Return
 
 
 ; Mouse clicks
 
 *Numpad0::
-    if (Num0Pressed = 0)
+    if (MouseLeftPressed = 0)
     {
         Click, Down
-        Num0Pressed := 1
+        MouseLeftPressed := 1
     }
 Return
 *Numpad0 Up::
         Click, Up
-        Num0Pressed := 0
+        MouseLeftPressed := 0
 Return
 
 *NumpadDel::
 *NumpadDot::
-    if (NumDotPressed = 0)
+    if (MouseRightPressed = 0)
     {
         Click, Down, Right
-        NumDotPressed := 1
+        MouseRightPressed := 1
     }
 Return
 *NumpadDel Up::
 *NumpadDot Up::
     Click, Up, Right
-    NumDotPressed := 0
+    MouseRightPressed := 0
 Return
 
 ; Scroll wheel
 
-*NumpadAdd Up::
-    clicks := 2
-    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
-        clicks := 6
-    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
-        clicks := 1
+*NumpadAdd::
+    If (ScrollButton <> 0) {
+        Return
     }
-    Loop, % clicks {
-        Click, WheelUp
-    }
+    ScrollButton := "WheelUp"
+    SetTimer, DoScrolling, %ScrollRate%
+    GoSub, DoScrolling
 Return
 
-*NumpadSub Up::
-    clicks := 2
-    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
-        clicks := 6
-    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
-        clicks := 1
+*NumpadSub::
+    If (ScrollButton <> 0) {
+        Return
     }
-    Loop, % clicks {
-        Click, WheelDown
+    ScrollButton := "WheelDown"
+    SetTimer, DoScrolling, %ScrollRate%
+    GoSub, DoScrolling
+Return
+
+*NumpadAdd Up::
+*NumpadSub Up::
+    SetTimer, DoScrolling, Off
+    ScrollButton := 0
+Return
+
+DoScrolling:
+    NewRate := ScrollRate
+    if (GetKeyState("Shift", "P") || FastButtonPressed = 1) {
+        NewRate := 125
+    } else if (GetKeyState("Control", "P") || SlowButtonPressed = 1) {
+        NewRate := 500
+    } else {
+        NewRate := 250
+    }
+    If (NewRate <> ScrollRate) {
+        ScrollRate := NewRate
+        SetTimer,, %ScrollRate%
+    }
+    If (IsNavScrollMode <> 0) {
+        SendInput {LControl Down}
+    }
+    Click, %ScrollButton%
+
+    If (IsNavScrollMode <> 0) {
+        SendInput {LControl Up}
     }
 Return
 
 ; Scroll wheel with Ctrl pressed at same time
 
-*Numpad7 Up::
-*NumpadHome Up::
-    SendInput {LControl Down}
-    Click, WheelDown
-    SendInput {LControl Up}
-Return
-*Numpad9 Up::
-*NumpadPgUp Up::
-    Send {LControl Down}
-    Click, WheelUp
-    Send {LControl Up}
+*Numpad7::
+*NumpadHome::
+    If (ScrollButton <> 0) {
+        Return
+    }
+    ScrollButton := "WheelDown"
+    IsNavScrollMode := 1
+    SetTimer, DoScrolling, %ScrollRate%
+    GoSub, DoScrolling
 Return
 
-; Moving mouse
+*Numpad9::
+*NumpadPgUp::
+    If (ScrollButton <> 0) {
+        Return
+    }
+    ScrollButton := "WheelUp"
+    IsNavScrollMode := 1
+    SetTimer, DoScrolling, %ScrollRate%
+    GoSub, DoScrolling
+Return
+
+*Numpad7 Up::
+*NumpadHome Up::
+*Numpad9 Up::
+*NumpadPgUp Up::
+    SetTimer, DoScrolling, Off
+    IsNavScrollMode := 0
+    ScrollButton := 0
+Return
+
+;;
+;; Moving mouse
+;;
 
 *Numpad4::
 *NumpadLeft::
     dist := -10
-    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
+    if (GetKeyState("Shift", "P") || FastButtonPressed = 1) {
         dist *= 3
-    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
+    } else if (GetKeyState("Control", "P") || SlowButtonPressed = 1) {
         dist *= 0.5
     }
     MouseMove, %dist%, 0, 0, R
@@ -136,9 +198,9 @@ Return
 *Numpad6::
 *NumpadRight::
     dist := 10
-    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
+    if (GetKeyState("Shift", "P") || FastButtonPressed = 1) {
         dist *= 3
-    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
+    } else if (GetKeyState("Control", "P") || SlowButtonPressed = 1) {
         dist *= 0.5
     }
     MouseMove, %dist%, 0, 0, R
@@ -147,9 +209,9 @@ Return
 *Numpad8::
 *NumpadUp::
     dist := -10
-    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
+    if (GetKeyState("Shift", "P") || FastButtonPressed = 1) {
         dist *= 3
-    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
+    } else if (GetKeyState("Control", "P") || SlowButtonPressed = 1) {
         dist *= 0.5
     }
     MouseMove, 0, %dist%, 0, R
@@ -158,9 +220,9 @@ Return
 *Numpad5::
 *NumpadClear::
     dist := 10
-    if (GetKeyState("Shift", "P") || Num1Pressed = 1) {
+    if (GetKeyState("Shift", "P") || FastButtonPressed = 1) {
         dist *= 3
-    } else if (GetKeyState("Control", "P") || Num3Pressed = 1) {
+    } else if (GetKeyState("Control", "P") || SlowButtonPressed = 1) {
         dist *= 0.5
     }
     MouseMove, 0, %dist%, 0, R
