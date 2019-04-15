@@ -34,6 +34,9 @@ IsNavScrollMode := 0
 ScrollButton := 0
 ScrollRate := 250
 
+MouseButtonsPressed := {}
+MouseMoveRate := 50
+
 ;;
 ;; End of auto-execute
 ;;
@@ -187,47 +190,117 @@ Return
 
 *Numpad4::
 *NumpadLeft::
-    dist := -10
-    if (GetKeyState("Shift", "P") || FastButtonPressed = 1) {
-        dist *= 3
-    } else if (GetKeyState("Control", "P") || SlowButtonPressed = 1) {
-        dist *= 0.5
+    If (MouseButtonsPressed.HasKey("Left")) {
+        Return
     }
-    MouseMove, %dist%, 0, 0, R
+    MouseButtonsPressed["Left"] := 1
+    MouseButtonsPressed.Delete("Right")
+    SetTimer, DoMouseMove, %MouseMoveRate%
+    GoSub, DoMouseMove
 Return
+
 *Numpad6::
 *NumpadRight::
-    dist := 10
-    if (GetKeyState("Shift", "P") || FastButtonPressed = 1) {
-        dist *= 3
-    } else if (GetKeyState("Control", "P") || SlowButtonPressed = 1) {
-        dist *= 0.5
+    If (MouseButtonsPressed.HasKey("Right")) {
+        Return
     }
-    MouseMove, %dist%, 0, 0, R
+    MouseButtonsPressed["Right"] := 1
+    MouseButtonsPressed.Delete("Left")
+    SetTimer, DoMouseMove, %MouseMoveRate%
+    GoSub, DoMouseMove
 Return
 
 *Numpad8::
 *NumpadUp::
-    dist := -10
-    if (GetKeyState("Shift", "P") || FastButtonPressed = 1) {
-        dist *= 3
-    } else if (GetKeyState("Control", "P") || SlowButtonPressed = 1) {
-        dist *= 0.5
+    If (MouseButtonsPressed.HasKey("Up")) {
+        Return
     }
-    MouseMove, 0, %dist%, 0, R
+    MouseButtonsPressed["Up"] := 1
+    MouseButtonsPressed.Delete("Down")
+    SetTimer, DoMouseMove, %MouseMoveRate%
+    GoSub, DoMouseMove
 Return
 
 *Numpad5::
 *NumpadClear::
-    dist := 10
-    if (GetKeyState("Shift", "P") || FastButtonPressed = 1) {
-        dist *= 3
-    } else if (GetKeyState("Control", "P") || SlowButtonPressed = 1) {
-        dist *= 0.5
+    If (MouseButtonsPressed.HasKey("Down")) {
+        Return
     }
-    MouseMove, 0, %dist%, 0, R
+    MouseButtonsPressed["Down"] := 1
+    MouseButtonsPressed.Delete("Up")
+    SetTimer, DoMouseMove, %MouseMoveRate%
+    GoSub, DoMouseMove
 Return
 
+*Numpad4 Up::
+*NumpadLeft Up::
+    MouseButtonsPressed.Delete("Left")
+Return
+
+*Numpad6 Up::
+*NumpadRight Up::
+    MouseButtonsPressed.Delete("Right")
+Return
+
+*Numpad8 Up::
+*NumpadUp Up::
+    MouseButtonsPressed.Delete("Up")
+Return
+
+*Numpad5 Up::
+*NumpadClear Up::
+    MouseButtonsPressed.Delete("Down")
+Return
+
+
+DoMouseMove:
+    if (MouseButtonsPressed.Count() = 0) {
+        ; All buttons released
+        SetTimer,, Off
+        Return
+    }
+    distance := 10
+    if (GetKeyState("Shift", "P") || FastButtonPressed = 1) {
+        distance *= 3
+    } else if (GetKeyState("Control", "P") || SlowButtonPressed = 1) {
+        distance *= 0.5
+    }
+    ; Calculate direction (if angled it's using sine / cosine of sqrt(2)/2 )
+    distX := 0
+    distY := 0
+    sineAtAngle := 0.70710678118654752440084436210485
+    if (MouseButtonsPressed.HasKey("Right") && MouseButtonsPressed.HasKey("Up")) {
+        distX := Round(distance * sineAtAngle)
+        distY := Round(distance * sineAtAngle * -1)
+    } else if (MouseButtonsPressed.HasKey("Left") && MouseButtonsPressed.HasKey("Up")) {
+        distX := Round(distance * sineAtAngle * -1)
+        distY := Round(distance * sineAtAngle * -1)
+    } else if (MouseButtonsPressed.HasKey("Left") && MouseButtonsPressed.HasKey("Down")) {
+        distX := Round(distance * sineAtAngle * -1)
+        distY := Round(distance * sineAtAngle)
+    } else if (MouseButtonsPressed.HasKey("Right") && MouseButtonsPressed.HasKey("Down")) {
+        distX := Round(distance * sineAtAngle)
+        distY := Round(distance * sineAtAngle)
+    } else if (MouseButtonsPressed.HasKey("Right")) {
+        distX := distance
+        distY := 0
+    } else if (MouseButtonsPressed.HasKey("Up")) {
+        distX := 0
+        distY := distance * -1
+    } else if (MouseButtonsPressed.HasKey("Left")) {
+        distX := distance * -1
+        distY := 0
+    } else if (MouseButtonsPressed.HasKey("Down")) {
+        distX := 0
+        distY := distance
+    }
+    MouseMove, %distX%, %distY%, 0, R
+Return
+
+
+;
+; Utility Methods
+;
 
 
 ; [TODO] Adapted from mouse code, doesn't seem to work. Maybe maximized windows are bigger than screen
