@@ -25,6 +25,7 @@ Gui, Show, AutoSize Center Minimize
 
 MouseLeftPressed := 0
 MouseRightPressed := 0
+MouseMiddlePressed := 0
 
 FastButtonPressed := 0
 SlowButtonPressed := 0
@@ -51,7 +52,7 @@ GuiEscape:
 
 ExitApp
 
-; Numpad shortcuts for Shift and Control
+; Numpad shortcuts which will increase / decrease the mouse or scroll speed.
 
 *Numpad1::
 *NumpadEnd::
@@ -74,6 +75,19 @@ Return
 Return
 
 
+; These buttons trigger shortcuts in ManicTime 
+; Move to previous day
+*NumpadDiv:: F7
+; Move to next day
+*NumpadMult:: F8
+; Submit current dialog
+*NumpadEnter::
+    Send {Ctrl Down}
+    Send {Enter}
+    Send {Ctrl Up}
+Return
+
+
 ; Mouse clicks
 
 *Numpad0::
@@ -83,6 +97,7 @@ Return
         MouseLeftPressed := 1
     }
 Return
+
 *Numpad0 Up::
         Click, Up
         MouseLeftPressed := 0
@@ -96,10 +111,26 @@ Return
         MouseRightPressed := 1
     }
 Return
+
 *NumpadDel Up::
 *NumpadDot Up::
     Click, Up, Right
     MouseRightPressed := 0
+Return
+
+*Numpad2::
+*NumpadDown::
+    if (MouseMiddlePressed = 0)
+    {
+        Click, Down, Middle
+        MouseMiddlePressed := 1
+    }
+Return
+
+*Numpad2 Up::
+*NumpadDown Up::
+    Click, Up, Middle
+    MouseMiddlePressed := 0
 Return
 
 ; Scroll wheel
