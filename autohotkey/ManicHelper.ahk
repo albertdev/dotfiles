@@ -38,6 +38,9 @@ ScrollRate := 250
 MouseButtonsPressed := {}
 MouseMoveRate := 50
 
+; Start ManicTime focus watcher timer
+SetTimer, WinFocusLoop, 500
+
 ;;
 ;; End of auto-execute
 ;;
@@ -326,6 +329,23 @@ DoMouseMove:
         distY := distance
     }
     MouseMove, %distX%, %distY%, 0, R
+Return
+
+
+;
+; Timer handler for ManicTime focus watcher.
+; This will make the screenshots window float on top (if open)
+;
+WinFocusLoop:
+    ;ManicWindowActive := WinActive("ManicTime ahk_exe ManicTimeClient.exe")
+    ManicWindowActive := WinActive("ahk_exe ManicTimeClient.exe")
+    ManicScreenshotWinFound := WinExist("Screenshots ahk_exe ManicTimeClient.exe")
+
+	If (ManicWindowActive && ManicScreenshotWinFound) {
+        Winset, Alwaysontop, 1, Screenshots ahk_exe ManicTimeClient.exe
+	} else If (ManicScreenshotWinFound) {
+        Winset, Alwaysontop, 0, Screenshots ahk_exe ManicTimeClient.exe
+    }
 Return
 
 
