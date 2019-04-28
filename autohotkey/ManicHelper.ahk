@@ -38,6 +38,8 @@ ScrollRate := 250
 MouseButtonsPressed := {}
 MouseMoveRate := 50
 
+ScreenshotsRaised := 0
+
 ; Start ManicTime focus watcher timer
 SetTimer, WinFocusLoop, 500
 
@@ -343,8 +345,13 @@ WinFocusLoop:
 
 	If (ManicWindowActive && ManicScreenshotWinFound) {
         Winset, Alwaysontop, 1, Screenshots ahk_exe ManicTimeClient.exe
+        ScreenshotsRaised := 1
 	} else If (ManicScreenshotWinFound) {
         Winset, Alwaysontop, 0, Screenshots ahk_exe ManicTimeClient.exe
+        If (ScreenshotsRaised = 1) {
+            Winset, Bottom,, Screenshots ahk_exe ManicTimeClient.exe
+        }
+        ScreenshotsRaised := 0
     }
 Return
 
