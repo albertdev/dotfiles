@@ -34,10 +34,10 @@ function! s:StartReview()
     " Return to editor
     wincmd p
 
-    nnoremap <buffer> n zM:lnext<CR>zozt
-    nnoremap <buffer> N zM:lprev<CR>zozt
-    nnoremap <buffer> x :ll<CR>gIX zM:lnext<CR>zozt
-    nmap <buffer> r :ll<CR>gIX o
+    nnoremap <buffer> n :call <sid>MoveNext()<CR>
+    nnoremap <buffer> N :call <sid>MovePrevious()<CR>
+    nnoremap <buffer> x :call <sid>MarkReviewed()<CR>
+    nnoremap <buffer> r :call <sid>MarkRejected()<CR>
     nmap <buffer> w :ll<CR>zozt
 
     " Focus first hunk
@@ -50,4 +50,72 @@ function! GetDiffFold(lnum)
     endif
 
     return '1'
+endfunction
+
+function! <sid>MoveNext()
+    normal! zM
+    lnext
+    normal! zo
+    normal! zt
+endfunction
+
+function! <sid>MovePrevious()
+    normal! zM
+    lprev
+    normal! zo
+    normal! zt
+endfunction
+
+function! <sid>MarkReviewed()
+    ll
+    " Remove any previous Rejection text and mark (after confirmation)
+    if getline(".") =~? '\v^R diff --'
+        let choice = confirm("File was previously rejected. Do you want to delete any comments and mark as reviewed?", "&Yes\n&No")
+        if (choice == 0) || (choice == 2)
+            return
+        else
+            normal! 02x
+            let currentLine = line(".")
+            let startcommentLine = search('\v\c^index ')
+            let lastcommentLine = search('\v^--- ')
+            if (startcommentLine != 0 && lastcommentLine != 0 && (lastcommentLine - 1) > startcommentLine)
+                " This doesn't work? Instead use start line + number of lines to delete
+                "let deleteCommand = (startcommentLine + 1) . "," . (lastcommentLine -1) . "delete"
+                let deleteCommand = (startcommentLine + 1) . "delete " . (lastcommentLine - startcommentLine - 1)
+                "echom deleteCommand
+                execute deleteCommand
+            endif
+            call cursor(currentLine, 1)
+        endif
+    endif
+    " Do not mark line twice
+    if getline(".") =~? '\v^diff --'
+        normal! gIX 
+    endif
+    call <sid>MoveNext()
+endfunction
+
+function! <sid>MarkRejected()
+    "nmap <buffer> r :ll<CR>gIR o
+    ll
+    " Remove any previous 'Reviewed' mark (after confirmation)
+    if getline(".") =~? '\v^X diff --'
+        let choice = confirm("File was previously accepted. Do you want to reject it?", "&Yes\n&No")
+        if (choice == 0) || (choice == 2)
+            return
+        else
+            normal! 02x
+        endif
+    endif
+    " Do not mark line twice
+    if getline(".") =~? '\v^diff --'
+        normal! gIR 
+    endif
+    let startofdiffLine = search('\v^--- ')
+    if startofdiffLine != 0
+        call cursor(startofdiffLine, 1)
+        normal! O
+        " The 'normal' command will reset mode. Do it again
+        startinsert
+    endif
 endfunction
