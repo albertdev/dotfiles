@@ -180,7 +180,9 @@ Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
 Function GitFF() { git pull --ff-only }
 Function GitMF() { git merge --ff-only $args }
-Function GitKA() { gitk --all }
+Function GitKD() { gitk.exe --date-order $args }
+Function GitKA() { gitk.exe --all $args }
+Function GitKAD() { gitk.exe --all --date-order $args }
 # SVN Rebase: attempt to run it, if it fails we stash the changes and try again
 Function GitSR() {
     $undoStash = $False
@@ -204,5 +206,14 @@ Function GitSR() {
             git stash pop
         }
     }
+}
+# Based on https://stackoverflow.com/questions/1441010/the-shortest-possible-output-from-git-log-containing-author-and-date
+# Prints head of log as commit id <tab> date <tab> message
+Function GitLH([int] $count) {
+    $branch = "HEAD"
+    if ($count -le 0) {
+        $count = 4
+    }
+    git --no-pager log --pretty=format:"%h%x20%x20%ad%x09%s" --date=iso $branch | Select-Object -First $count
 }
 

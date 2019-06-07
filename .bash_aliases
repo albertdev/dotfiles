@@ -7,7 +7,9 @@ alias "gitsf=git svn fetch"
 alias "gitfa=git fetch --all"
 alias "gitff=git pull --ff-only"
 alias "gitmf=git merge --ff-only"
+alias "gitkd=gitk --date-order"
 alias "gitka=gitk --all"
+alias "gitkad=gitk --all --date-order"
 
 make-completion-wrapper _git _git_merge_ffonly git merge --ff-only
 complete -F _git_merge_ffonly gitmf
