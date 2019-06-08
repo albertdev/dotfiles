@@ -209,11 +209,10 @@ Function GitSR() {
 }
 # Based on https://stackoverflow.com/questions/1441010/the-shortest-possible-output-from-git-log-containing-author-and-date
 # Prints head of log as commit id <tab> date <tab> message
-Function GitLH([int] $count) {
-    $branch = "HEAD"
+Function GitLH([int] $count, [string] $branch = "HEAD") {
     if ($count -le 0) {
         $count = 4
     }
-    git --no-pager log --pretty=format:"%h%x20%x20%ad%x09%s" --date=iso $branch | Select-Object -First $count
+    git --no-pager log --max-count=$count --pretty=format:"%h%x20%x20%ad%x09%s" --date=format:'%Y-%m-%d %H:%M:%S' $branch
 }
 
