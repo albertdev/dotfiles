@@ -16,3 +16,5 @@ target/
 sftp-config.json
 # Little gift from Windows when using Windows Photo Viewer
 Thumbs.db
+# KDiff3 Merge backups
+*.orig
