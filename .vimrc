@@ -29,7 +29,7 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-surround'
 Bundle 'sukima/xmledit'
-Bundle 'Lokaltog/vim-easymotion'
+Bundle 'easymotion/vim-easymotion'
 Bundle 'tommcdo/vim-exchange'
 Bundle 'scrooloose/nerdtree'
 Bundle 'jlanzarotta/bufexplorer'
@@ -49,6 +49,7 @@ Bundle 'vim-scripts/Improved-paragraph-motion'
 "Bundle 'OrangeT/vim-csharp'
 "Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'PProvost/vim-ps1'
+Bundle 'mg979/vim-visual-multi'
 
 " Load everything upon enabling filetype loading.
 " Required by Vundle
