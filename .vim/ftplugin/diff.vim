@@ -31,17 +31,29 @@ function! s:StartReview()
     " Fill location list
     lvimgrep /diff --git/ %
     lopen
+    " Change title and status line (column is not useful, instead print current line and number of lines)
+    let w:quickfix_title='Modified files'
+    setlocal statusline=
+    setlocal statusline=%t%{exists('w:quickfix_title')?\ \'\ \'.w:quickfix_title\ :\ \'\'}\ %=%l/%L\ %P
+    " Make sure that pressing Enter in location list "focuses" on that file
+    nnoremap <buffer> <CR> <CR>zozt
+
     " Return to editor
     wincmd p
 
-    nnoremap <buffer> n :call <sid>MoveNext()<CR>
-    nnoremap <buffer> N :call <sid>MovePrevious()<CR>
+    " Use gitk keyboard mappings for next / previous file, or scroll up / down
+    nnoremap <buffer> f :call <sid>MoveNext()<CR>
+    nnoremap <buffer> b :call <sid>MovePrevious()<CR>
+    nnoremap <buffer> <space> <C-D>
+    nnoremap <buffer> <S-space> <C-U>
+    nnoremap <buffer> <BS>    <C-U>
+
     nnoremap <buffer> x :call <sid>MarkReviewed()<CR>
     nnoremap <buffer> r :call <sid>MarkRejected()<CR>
-    nmap <buffer> w :ll<CR>zozt
+    nnoremap <buffer> <CR> :ll<CR>zozt
 
     " Focus first hunk
-    normal w
+    execute "normal \<CR>"
 endfunction
 
 function! GetDiffFold(lnum)
