@@ -57,6 +57,9 @@ map -builtin -count -modes=n,v,c,i,t <C-c> <C-v><C-c>
 " Aargh2, Ctrl-A doesn't do a select all by default
 map -builtin -modes=n,v,c,i,t <C-a> <C-v><C-a>
 
+" Accept Ctrl-Enter to submit command line so that we don't need to stop ManicTime script
+map -builtin -modes=c <C-Enter> <Enter>
+
 set cdpath=''
 set guioptions=bCrsBT
 set newtab=all
