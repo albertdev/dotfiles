@@ -6,6 +6,11 @@
 
 command! StartReview call s:StartReview()
 
+" Whether the currently selected location needs updating
+let s:UpdatePending = 0
+
+let s:LocationsStatusLine = 'Files to be reviewed %=%l/%L %P'
+
 function! s:StartReview()
     normal gg
     let firstline = getline(1)
@@ -28,13 +33,21 @@ function! s:StartReview()
     setlocal foldmethod=expr
     normal zM
 
-    " Fill location list
+    " Fill location list and modify line's text to be a fancier display
+    let diffwin = winnr()
+    let diffbuffnr = bufnr(".")
     lvimgrep /diff --git/ %
-    lopen
+    let locations = getloclist(diffwin)
+    for i in locations
+        let i.text = s:BuildLocationLine(diffbuffnr, i)
+    endfor
+    call setloclist(diffwin, locations)
+
     " Change title and status line (column is not useful, instead print current line and number of lines)
-    let w:quickfix_title='Modified files'
-    setlocal statusline=
-    setlocal statusline=%t%{exists('w:quickfix_title')?\ \'\ \'.w:quickfix_title\ :\ \'\'}\ %=%l/%L\ %P
+    "let w:quickfix_title='Modified files'
+    call setloclist(diffwin, [], 'a', {'title': 'Modified files', 'context': 'diff-review-plugin'})
+    lopen
+    let &l:statusline = s:LocationsStatusLine
     " Make sure that pressing Enter in location list "focuses" on that file
     nnoremap <buffer> <CR> <CR>zozt
 
@@ -50,10 +63,14 @@ function! s:StartReview()
 
     nnoremap <buffer> x :call <sid>MarkReviewed()<CR>
     nnoremap <buffer> r :call <sid>MarkRejected()<CR>
-    nnoremap <buffer> <CR> :ll<CR>zozt
+    nnoremap <buffer> <CR> :call <sid>MoveCurrent()<CR>
+
+    " Undo / redo should update location list on next file move
+    nnoremap <buffer> u :call <sid>InvalidateCurrentLocation()<CR>u
+    nnoremap <buffer> <C-r> :call <sid>InvalidateCurrentLocation()<CR><C-r>
 
     " Focus first hunk
-    execute "normal \<CR>"
+    call <sid>MoveCurrent()
 endfunction
 
 function! GetDiffFold(lnum)
@@ -64,7 +81,20 @@ function! GetDiffFold(lnum)
     return '1'
 endfunction
 
+function! <sid>InvalidateCurrentLocation()
+    let s:UpdatePending = 1
+endfunction
+
 function! <sid>MoveNext()
+    call s:CheckPendingUpdateLocation()
+    " Check for end of file
+    let diffwin = win_getid()
+    let locationinfo = getloclist(diffwin, {'idx': 0, 'size': 0})
+    if locationinfo.idx == locationinfo.size
+        echohl ErrorMsg | echo "No next file to review" | echohl None
+        return
+    endif
+
     normal! zM
     lnext
     normal! zo
@@ -72,8 +102,25 @@ function! <sid>MoveNext()
 endfunction
 
 function! <sid>MovePrevious()
+    call s:CheckPendingUpdateLocation()
+    " Check for beginning of file
+    let diffwin = win_getid()
+    let locationinfo = getloclist(diffwin, {'idx': 0})
+    if locationinfo.idx == 1
+        echohl ErrorMsg | echo  "No previous file to review" | echohl None
+        return
+    endif
+
     normal! zM
     lprev
+    normal! zo
+    normal! zt
+endfunction
+
+" Moves to currently selected file but without collapsing folds - handy to jump back and forth
+function! <sid>MoveCurrent()
+    call s:CheckPendingUpdateLocation()
+    ll
     normal! zo
     normal! zt
 endfunction
@@ -104,6 +151,7 @@ function! <sid>MarkReviewed()
     if getline(".") =~? '\v^diff --'
         normal! gIX 
     endif
+    call s:UpdateCurrentLocation()
     call <sid>MoveNext()
 endfunction
 
@@ -123,6 +171,7 @@ function! <sid>MarkRejected()
     if getline(".") =~? '\v^diff --'
         normal! gIR 
     endif
+    call <sid>InvalidateCurrentLocation()
     let startofdiffLine = search('\v^--- ')
     if startofdiffLine != 0
         call cursor(startofdiffLine, 1)
@@ -130,4 +179,55 @@ function! <sid>MarkRejected()
         " The 'normal' command will reset mode. Do it again
         startinsert
     endif
+endfunction
+
+" Helper method which calculates the location text
+function! s:BuildLocationLine(diffbuffnr,item)
+    " Find text on line
+    let locationline = ''
+    let diffline = (getbufline(a:diffbuffnr, a:item.lnum))[0]
+    if diffline =~? '\v^X diff --'
+        let locationline .= '[X] '
+    elseif diffline =~? '\v^R diff --'
+        let locationline .= '[R] '
+    else
+        let locationline .= '[ ] '
+    endif
+    let changedfilenamepos = stridx(diffline, ' b/')
+    " Substring the target filename without b/ prefix
+    let changedfilename = strpart(diffline, changedfilenamepos + 3)
+    return locationline . changedfilename
+endfunction
+
+" Updates the [X] or [R] box in the location list
+function! s:UpdateCurrentLocation()
+    let diffwin = win_getid()
+    "echom diffwin
+    let diffbuffnr = bufnr(".")
+    let locations = getloclist(diffwin)
+    let locationinfo = getloclist(diffwin, {'idx': 0, 'winid': 0})
+    "echom string(locationinfo)
+    let idx = locationinfo.idx - 1
+    let locations[idx].text = s:BuildLocationLine(diffbuffnr, locations[idx])
+
+    " Jump to location list window to save its position, then jump back to selected item.
+    call win_gotoid(locationinfo.winid)
+    let windowpos = winsaveview()
+    call setloclist(diffwin, [], 'r', {'items': locations, 'title': 'Modified files', 'context': 'diff-review-plugin'})
+    " Fails on (old) Vim 8.1
+    "call setloclist(diffwin, [], 'a', {'idx': idx})
+    execute 'll! ' . (idx + 1)
+
+    " Restore view position and force our own statusline config
+    call win_gotoid(locationinfo.winid)
+    call winrestview(windowpos)
+    let &l:statusline = s:LocationsStatusLine
+    call win_gotoid(diffwin)
+endfunction
+
+function! s:CheckPendingUpdateLocation()
+    if s:UpdatePending == 1
+        call s:UpdateCurrentLocation()
+    endif
+    let s:UpdatePending = 0
 endfunction
