@@ -14,10 +14,6 @@ SetMouseDelay, -1
 CoordMode, Mouse, Screen
 SetTitleMatchMode, RegEx
 
-;CurrentMonitor := CurrentMonitorOfActiveWindor()
-;SysGet, Screen, Monitor, %CurrentMonitor%
-;ScreenWidth := ScreenRight - ScreenLeft
-
 Gui, Add, Button, , Done
 ;Gui, Show, AutoSize Center Minimize ;NoActivate
 Gui, Show, AutoSize Center Minimize
@@ -56,6 +52,12 @@ GuiClose:
 GuiEscape:
 
 ExitApp
+
+
+; IfWinActive will make sure that these hotkeys only work within ManicTime!
+
+#IfWinActive ahk_exe ManicTimeClient.exe
+
 
 ; Numpad shortcuts which will increase / decrease the mouse or scroll speed.
 
@@ -359,30 +361,6 @@ Return
 ;
 ; Utility Methods
 ;
-
-
-; [TODO] Adapted from mouse code, doesn't seem to work. Maybe maximized windows are bigger than screen
-CurrentMonitorOfActiveWindor() {
-    WinGetActiveStats, winTitle, winW, winH, winX, winY
-    centerX := (winW / 2) + winX
-    centerY := (winH / 2) + winY
-    ;MsgBox % "CX" . centerX . " CY" . centerY . " W" . winW . " H" . winH . " X" . winX . " Y" . winY
-
-    SysGet, numberOfMonitors, MonitorCount
-    Loop %numberOfMonitors%
-    {
-        SysGet, monArea, Monitor, %A_Index%
-        If (centerX >= monAreaLeft && centerX <= monAreaRight && centerY <= monAreaBottom && centerY >= monAreaTop)
-        {
-            ;MsgBox % A_Index . ": L" . monAreaLeft . " R" . monAreaRight . " T" . monAreaTop . " B" . monAreaBottom
-            Return %A_Index%
-        }
-    }
-    ; No monitor matched ?!? Return primary monitor number
-    SysGet, primaryNum, MonitorPrimary
-    Return primaryNum
-}
-
 
 
 
