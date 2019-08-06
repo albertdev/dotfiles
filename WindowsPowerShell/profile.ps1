@@ -182,10 +182,14 @@ Function GitFF($targetBranch) {
     $currentBranch = git rev-parse --abbrev-ref HEAD
     if ($LASTEXITCODE) { throw "Cannot determine current branch" }
 
-    if ($currentBranch -eq "HEAD" -or $currentBranch -eq $targetBranch) {
+    # If no target branch is given or requested branch is currently checked out we do a pull to let it check state of index
+    if (-not ($targetBranch) -or $currentBranch -eq $targetBranch) {
         git pull --ff-only
         if ($LASTEXITCODE -eq 0) {
             Write-Output "Branch $currentBranch in sync"
+        } elseif ($currentBranch -eq "HEAD") {
+            $detachedHeadInfo = git --no-pager log --max-count=1 --pretty=format:"%h%x20%x20%s" HEAD
+            Write-Output "Could not fast-forward due to detached head on commit $detachedHeadInfo"
         } else {
             Write-Output "Could not fast-forward head $currentBranch"
         }
