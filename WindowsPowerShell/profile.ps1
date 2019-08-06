@@ -250,4 +250,16 @@ Function GitLH([int] $count, [string] $branch = "HEAD") {
     }
     git --no-pager log --max-count=$count --pretty=format:"%h%x20%x20%ad%x09%s" --date=format:'%Y-%m-%d %H:%M:%S' $branch
 }
+Function GitClean() {
+    [CmdletBinding(SupportsShouldProcess=$true,ConfirmImpact = 'high')]
+    param()
+
+    $pathToClean = Resolve-Path (Get-Location)
+
+    if ($PSCmdlet.ShouldProcess($pathToClean, "Cleaning git repository (forced)")) {
+        Write-Output "Cleaning $()"
+        git clean -dfx
+        git clean -dfX
+    }
+}
 
