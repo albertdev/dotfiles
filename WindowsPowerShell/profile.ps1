@@ -178,17 +178,36 @@ Function GitS() { git status }
 Function GitI() { git diff --cached }
 Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
-Function GitFF() {
-    git pull --ff-only
-    if ($LASTEXITCODE -eq 0) {
-        $branchName = git symbolic-ref --short HEAD 2> $null
-        Write-Output "Branch $branchName in sync"
-    } else {
-        $headValue = git symbolic-ref HEAD 2> $null
-        if ($LASTEXITCODE -ne 0) {
-            $headValue = git show-ref --hash --head HEAD
+Function GitFF($targetBranch) {
+    $currentBranch = git rev-parse --abbrev-ref HEAD
+    if ($LASTEXITCODE) { throw "Cannot determine current branch" }
+
+    if ($currentBranch -eq "HEAD" -or $currentBranch -eq $targetBranch) {
+        git pull --ff-only
+        if ($LASTEXITCODE -eq 0) {
+            Write-Output "Branch $currentBranch in sync"
+        } else {
+            Write-Output "Could not fast-forward head $currentBranch"
         }
-        Write-Output "Could not fast-forward head $headValue"
+    } else {
+        $upstreamBranch = git rev-parse --abbrev-ref --symbolic-full-name "$targetBranch@{upstream}"
+        if ($LASTEXITCODE -or $null -eq $upstreamBranch) { throw "Failed to find branch '$targetBranch' or it has no configured upstream branch" }
+        $remoteName = $upstreamBranch.Substring(0, $upstreamBranch.IndexOf('/'))
+        git fetch $remoteName
+        if ($LASTEXITCODE) { throw "Failed to update remote for '$upstreamBranch'" }
+
+        # Make sure that local branch can be fast-forwarded (i.e. all local commits have been pushed or upstream hasn't somehow done a forced push)
+        git merge-base --is-ancestor "refs/heads/$targetBranch" $upstreamBranch
+        if ($LASTEXITCODE) { throw "Branch '$targetBranch' has diverged from '$upstreamBranch', needs a merge instead" }
+
+        $upstreamCommit = git rev-parse $upstreamBranch
+        $currentLocalCommit = git rev-parse "refs/heads/$targetBranch"
+        git update-ref "refs/heads/$targetBranch" $upstreamCommit $currentLocalCommit
+        if ($LASTEXITCODE) {
+            throw "Failed to update branch"
+        } else {
+            Write-Output "Branch $targetBranch in sync"
+        }
     }
 }
 Function GitMF() { git merge --ff-only $args }
