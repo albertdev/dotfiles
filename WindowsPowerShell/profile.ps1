@@ -178,7 +178,19 @@ Function GitS() { git status }
 Function GitI() { git diff --cached }
 Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
-Function GitFF() { git pull --ff-only }
+Function GitFF() {
+    git pull --ff-only
+    if ($LASTEXITCODE -eq 0) {
+        $branchName = git symbolic-ref --short HEAD 2> $null
+        Write-Output "Branch $branchName in sync"
+    } else {
+        $headValue = git symbolic-ref HEAD 2> $null
+        if ($LASTEXITCODE -ne 0) {
+            $headValue = git show-ref --hash --head HEAD
+        }
+        Write-Output "Could not fast-forward head $headValue"
+    }
+}
 Function GitMF() { git merge --ff-only $args }
 Function GitKD() { gitk.exe --date-order $args }
 Function GitKA() { gitk.exe --all $args }
