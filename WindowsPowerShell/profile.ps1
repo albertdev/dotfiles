@@ -192,19 +192,23 @@ Function GitFF($targetBranch) {
     } else {
         $upstreamBranch = git rev-parse --abbrev-ref --symbolic-full-name "$targetBranch@{upstream}"
         if ($LASTEXITCODE -or $null -eq $upstreamBranch) { throw "Failed to find branch '$targetBranch' or it has no configured upstream branch" }
-        $remoteName = $upstreamBranch.Substring(0, $upstreamBranch.IndexOf('/'))
-        git fetch $remoteName
-        if ($LASTEXITCODE) { throw "Failed to update remote for '$upstreamBranch'" }
+        $remoteSeparator = $upstreamBranch.IndexOf('/')
+        $remoteName = $upstreamBranch.Substring(0, $remoteSeparator)
+        $remoteBranchName = $upstreamBranch.Substring($remoteSeparator + 1)
+        #git fetch $remoteName
+        #if ($LASTEXITCODE) { throw "Failed to update remote for '$upstreamBranch'" }
 
-        # Make sure that local branch can be fast-forwarded (i.e. all local commits have been pushed or upstream hasn't somehow done a forced push)
-        git merge-base --is-ancestor "refs/heads/$targetBranch" $upstreamBranch
-        if ($LASTEXITCODE) { throw "Branch '$targetBranch' has diverged from '$upstreamBranch', needs a merge instead" }
+        ## Make sure that local branch can be fast-forwarded (i.e. all local commits have been pushed or upstream hasn't somehow done a forced push)
+        #$currentLocalCommit = git rev-parse "refs/heads/$targetBranch"
+        #$upstreamCommit = git rev-parse $upstreamBranch
+        #git merge-base --is-ancestor $currentLocalCommit $upstreamCommit
+        #if ($LASTEXITCODE) { throw "Branch '$targetBranch' has diverged from '$upstreamBranch', needs a merge instead" }
 
-        $upstreamCommit = git rev-parse $upstreamBranch
-        $currentLocalCommit = git rev-parse "refs/heads/$targetBranch"
-        git update-ref "refs/heads/$targetBranch" $upstreamCommit $currentLocalCommit
+        #git update-ref "refs/heads/$targetBranch" $upstreamCommit $currentLocalCommit
+
+        git fetch $remoteName "$($remoteBranchName):$targetBranch"
         if ($LASTEXITCODE) {
-            throw "Failed to update branch"
+            throw "Branch '$targetBranch' might have diverged from '$upstreamBranch' or fetch failed to connect to remote"
         } else {
             Write-Output "Branch $targetBranch in sync"
         }
