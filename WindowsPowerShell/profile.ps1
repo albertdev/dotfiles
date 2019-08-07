@@ -229,6 +229,17 @@ Function GitMF() { git merge --ff-only $args }
 Function GitKD() { gitk.exe --date-order $args }
 Function GitKA() { gitk.exe --all $args }
 Function GitKAD() { gitk.exe --all --date-order $args }
+Function GitKStash([string] $stash) {
+    if ($stash -eq "*") {
+        gitk.exe "--argscmd=git stash list --pretty=format:%gd^!" $args
+    } elseif ($stash -and -not ($stash -match "[0-9]+")) {
+        throw "Stash argument needs to be empty, a positive number or '*'"
+    } elseif (-not $stash) {
+        gitk.exe "stash@{0}^!" $args
+    } else {
+        gitk.exe "stash@{$stash}^!" $args
+    }
+}
 # SVN Rebase: attempt to run it, if it fails we stash the changes and try again
 Function GitSR() {
     $undoStash = $False
