@@ -2,6 +2,13 @@ Import-Module PSCX -Arg (Join-Path -Resolve $PSScriptRoot Pscx.UserPreferences.p
 
 New-Alias dirs cd
 
+# Load local profile for local aliases
+
+$localProfile = Join-Path $HOME ".localprofile.ps1"
+If (Test-Path $localProfile)
+{
+    . "$localProfile"
+}
 
 Function Get-Location-Stack
 {
