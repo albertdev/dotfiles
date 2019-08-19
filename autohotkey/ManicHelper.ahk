@@ -14,10 +14,6 @@ SetMouseDelay, -1
 CoordMode, Mouse, Screen
 SetTitleMatchMode, RegEx
 
-Gui, Add, Button, , Done
-;Gui, Show, AutoSize Center Minimize ;NoActivate
-Gui, Show, AutoSize Center Minimize
-
 
 MouseLeftPressed := 0
 MouseRightPressed := 0
@@ -44,14 +40,6 @@ SetTimer, WinFocusLoop, 500
 ;;
 Return
 
-
-
-; Exit script if helper window gets closed
-ButtonDone:
-GuiClose:
-GuiEscape:
-
-ExitApp
 
 
 ; IfWinActive will make sure that these hotkeys only work within ManicTime!
