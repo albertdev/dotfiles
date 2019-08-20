@@ -1,37 +1,49 @@
 "
-" Sets up a bunch of keyboard mappings which can help with manually reviewing unified diff files.
-" Run :StartReview to set it up. The diff file will be modified by prepending a legend, hunks which are
+" Sets up a bunch of keyboard mappings to review specially prepared unified diff files.
+" Run :StartReview to start reviewing. The diff file will be modified by prepending a legend, hunks which are
 " reviewed are prepended with X or R
 "
 
-command! StartReview call s:StartReview()
+" Taken from Vim dist's ftplugin/diff.vim
+" Only do this when not done yet for this buffer
+if exists("b:did_ftplugin")
+  finish
+endif
+let b:did_ftplugin = 1
+
+let b:undo_ftplugin = "setl modeline<"
+
+" Don't use modelines in a diff, they apply to the diffed file
+setlocal nomodeline 
+
+" End of diff ftplugin
+
+syntax enable
+set syntax=diff
+
+
+"command! RestartReview call s:StartReview()
+
+" Trigger the actual logic when Vim is initialized (Vimgrep during ftplugin load seems to do curious things)
+call timer_start(200, { tid -> s:StartReview() }, {'repeat':0})
 
 " Whether the currently selected location needs updating
 let s:UpdatePending = 0
+" Whether Review submode is active and an indicator needs to be printed
+let s:ReviewModeActive = 0
+
+let s:ReviewModeTimer = -1
 
 let s:LocationsStatusLine = 'Files to be reviewed %=%l/%L %P'
 
 function! s:StartReview()
-    normal gg
+    normal! gg
     let firstline = getline(1)
-    " Insert legend explaining meaning of prefixes
-"    if ! (firstline ==? 'Legend')
-"        normal OLegend<CR>X diff -- Reviewed file<CR>R diff -- Reviewed file with reject comments<CR>
-"    endif
-
-    " Earlier search-based reviewing
-    nnoremap <buffer> gn n
-    nnoremap <buffer> gN N
-"    nnoremap n :let @/='^diff --'<CR>nmzzt
-"    nnoremap N :let @/='^diff --'<CR>Nmzzt
-"    nmap x 'zgIX n
-"    nmap r 'zgIX o
-"    nmap w 'zzt
 
     " Setup folding and collapse everything
     setlocal foldexpr=GetDiffFold(v:lnum)
     setlocal foldmethod=expr
-    normal zM
+    normal! zM
 
     " Fill location list and modify line's text to be a fancier display
     let diffwin = winnr()
@@ -55,19 +67,24 @@ function! s:StartReview()
     wincmd p
 
     " Use gitk keyboard mappings for next / previous file, or scroll up / down
-    nnoremap <buffer> f :call <sid>MoveNext()<CR>
-    nnoremap <buffer> b :call <sid>MovePrevious()<CR>
+    nnoremap <buffer> rf :<C-U>call <sid>MoveNext(v:count1)<CR>
+    nnoremap <buffer> rb :<C-U>call <sid>MovePrevious(v:count1)<CR>
+    nnoremap <buffer> rgg :<C-U>call <sid>MoveFirst()<CR>
+    nnoremap <buffer> rG  :<C-U>call <sid>MoveLast()<CR>
     nnoremap <buffer> <space> <C-D>
     nnoremap <buffer> <S-space> <C-U>
     nnoremap <buffer> <BS>    <C-U>
 
-    nnoremap <buffer> x :call <sid>MarkReviewed()<CR>
-    nnoremap <buffer> r :call <sid>MarkRejected()<CR>
-    nnoremap <buffer> <CR> :call <sid>MoveCurrent()<CR>
+    nnoremap <buffer> rx :<C-U>call <sid>MarkReviewed()<CR>
+    nnoremap <buffer> rr :<C-U>call <sid>MarkRejected()<CR>
+    nnoremap <buffer> <CR> :<C-U>call <sid>MoveCurrent()<CR>
 
     " Undo / redo should update location list on next file move
-    nnoremap <buffer> u :call <sid>InvalidateCurrentLocation()<CR>u
-    nnoremap <buffer> <C-r> :call <sid>InvalidateCurrentLocation()<CR><C-r>
+    nnoremap <buffer> u :<C-U>call <sid>InvalidateCurrentLocation()<CR>u
+    nnoremap <buffer> <C-r> :<C-U>call <sid>InvalidateCurrentLocation()<CR><C-r>
+
+    " Bind 'R' to trigger Review mode where the above keys keep working until ESC is pressed
+    nnoremap <buffer> R :<C-U>call <sid>EnterReviewMode()<CR>
 
     " Focus first hunk
     call <sid>MoveCurrent()
@@ -85,23 +102,24 @@ function! <sid>InvalidateCurrentLocation()
     let s:UpdatePending = 1
 endfunction
 
-function! <sid>MoveNext()
+function! <sid>MoveNext(number)
     call s:CheckPendingUpdateLocation()
     " Check for end of file
     let diffwin = win_getid()
     let locationinfo = getloclist(diffwin, {'idx': 0, 'size': 0})
     if locationinfo.idx == locationinfo.size
-        echohl ErrorMsg | echo "No next file to review" | echohl None
+        echohl ErrorMsg | echo "Cannot jump to next file, end reached" | echohl None
         return
     endif
+    let filesDown = min([locationinfo.idx + a:number, locationinfo.size]) - locationinfo.idx
 
     normal! zM
-    lnext
+    execute filesDown 'lnext'
     normal! zo
     normal! zt
 endfunction
 
-function! <sid>MovePrevious()
+function! <sid>MovePrevious(number)
     call s:CheckPendingUpdateLocation()
     " Check for beginning of file
     let diffwin = win_getid()
@@ -110,9 +128,28 @@ function! <sid>MovePrevious()
         echohl ErrorMsg | echo  "No previous file to review" | echohl None
         return
     endif
+    let filesUp = min([locationinfo.idx - 1, a:number])
 
     normal! zM
-    lprev
+    execute filesUp 'lprev'
+    normal! zo
+    normal! zt
+endfunction
+
+function! <sid>MoveFirst()
+    call s:CheckPendingUpdateLocation()
+
+    normal! zM
+    lfirst
+    normal! zo
+    normal! zt
+endfunction
+
+function! <sid>MoveLast()
+    call s:CheckPendingUpdateLocation()
+
+    normal! zM
+    llast
     normal! zo
     normal! zt
 endfunction
@@ -230,4 +267,42 @@ function! s:CheckPendingUpdateLocation()
         call s:UpdateCurrentLocation()
     endif
     let s:UpdatePending = 0
+endfunction
+
+function <sid>EnterReviewMode()
+    nnoremap <buffer> f :<C-U>call <sid>MoveNext(v:count1)<CR>
+    nnoremap <buffer> b :<C-U>call <sid>MovePrevious(v:count1)<CR>
+    nnoremap <buffer> x :<C-U>call <sid>MarkReviewed()<CR>
+    nnoremap <buffer> r :<C-U>call <sid>MarkRejected()<CR>
+    nnoremap <buffer> gg :<C-U>call <sid>MoveFirst()<CR>
+    nnoremap <buffer> G  :<C-U>call <sid>MoveLast()<CR>
+    nnoremap <buffer> <ESC> :<C-U>call <sid>ExitReviewMode()<CR><ESC>
+    let s:ReviewModeActive = 1
+    if (s:ReviewModeTimer != -1) 
+        call timer_stop(s:ReviewModeTimer)
+    endif
+    let s:ReviewModeTimer = timer_start(1000, { tid -> s:PrintReviewModeInStatusLine() }, { 'repeat': -1 })
+endfunction
+
+function <sid>ExitReviewMode()
+    silent! nunmap <buffer> f
+    silent! nunmap <buffer> b
+    silent! nunmap <buffer> x
+    silent! nunmap <buffer> r
+    silent! nunmap <buffer> gg
+    silent! nunmap <buffer> G
+    let s:ReviewModeActive = 0
+    if (s:ReviewModeTimer != -1) 
+        call timer_stop(s:ReviewModeTimer)
+    endif
+    echo
+endfunction
+
+function s:PrintReviewModeInStatusLine()
+    if s:ReviewModeActive == 1
+        echohl ModeMsg
+        echo '-- REVIEW --'
+        echohl None
+    endif
+    echo
 endfunction
