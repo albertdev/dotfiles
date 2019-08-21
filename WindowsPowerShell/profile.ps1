@@ -280,8 +280,8 @@ Function GitClean() {
 
     if ($PSCmdlet.ShouldProcess($pathToClean, "Cleaning git repository (forced)")) {
         Write-Output "Cleaning $()"
-        git clean -dfx
-        git clean -dfX
+        git clean -dfx -e "*.review"
+        git clean -dfX -e "!*.review"
     }
 }
 
