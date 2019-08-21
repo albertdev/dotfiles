@@ -285,3 +285,57 @@ Function GitClean() {
     }
 }
 
+# Used to review an Azure Devops Pull Request.
+# This depends on the fact that the remote Devops server has a ref for each PR pointing to a merge commit with its contents.
+# From this commit we can learn what the target branch is
+function GitReviewPR([int] $pullRequest)
+{
+    # As part of this function we create a tag - see if it exists and if so, trash it to be recreated
+    git rev-parse --verify "refs/tags/review/PR$pullRequest" 2> $null > $null
+    $tagExists = $?
+
+    # First get access to the remote ref
+    git fetch origin refs/pull/$pullRequest/merge > $null
+    if ($? -eq $False -or $LASTEXITCODE -ne 0) {
+        throw "Failed to fetch changes in pull request $pullRequest"
+    }
+    $recreateCommit = $true
+    $commitInfo = git cat-file commit FETCH_HEAD
+    # Parse commit object to find tree id
+    $commitTree = $commitInfo | ? { $_.StartsWith("tree ") } | Select-Object -First 1 | % { $_.Substring(5) }
+    # This assumes that the PR target branch is the first parent
+    $baseCommit = $commitInfo | ? { $_.StartsWith("parent ") } | Select-Object -First 1 | % { $_.Substring(7) }
+
+    if ($tagExists) {
+        # Check if the existing tag points to the same commit tree. If so, we do not need to do regenerate the PR commit
+        $previousReviewCommitInfo = git cat-file commit "review/PR$pullRequest"
+        $previousReviewCommitTree = $previousReviewCommitInfo | ? { $_.StartsWith("tree ") } | Select-Object -First 1 | % { $_.Substring(5) }
+        $recreateCommit = $previousReviewCommitTree -ne $commitTree
+        Write-Output "Tag 'review/PR$pullRequest' is up to date"
+    }
+
+    if ($recreateCommit) {
+        # Create a new commit with the same contents as the PR, but make it only have a single parent to get clear diffs
+        # (This would be the same as doing 'git merge --squash PRbranch' onto the target branch)
+        # Then make a tag pointing to it for easier retrieval
+        $reviewCommit = git commit-tree -p $baseCommit -m "Review PR $pullRequest" $commitTree
+
+        if ($tagExists) {
+            git tag -d "review/PR$pullRequest" > $null
+        }
+        $reviewTag = git tag "review/PR$pullRequest" $reviewCommit
+    } else {
+        $reviewCommit = git rev-parse "review/PR$pullRequest"
+    }
+
+    $reviewFile = "PR$pullRequest.review"
+    if (Test-Path $reviewFile) {
+        Write-Warning "Review file '$reviewFile' already exists. Run ' GitReview `"review/PR$pullRequest`" `"PR$pullRequest.review`" ' instead"
+    } else {
+        $reviewHeader = "Subject: Review of PR $pullRequest`nCommit: $reviewCommit`nTree: $commitTree`n"
+        $reviewHeader | Out-File -Encoding UTF8 -NoNewline $reviewFile
+        # Run diff command using cmd because PowerShell tends to clobber encoding
+        $diffCommand = "git diff -u `"review/PR$pullRequest^!`" review/PR$pullRequest >> $reviewFile"
+        cmd /c $diffCommand > $null
+    }
+}
