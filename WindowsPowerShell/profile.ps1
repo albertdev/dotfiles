@@ -339,3 +339,28 @@ function GitReviewPR([int] $pullRequest)
         cmd /c $diffCommand > $null
     }
 }
+
+# Tells you whether the commit pointed to by Needle is in the history of BranchOrCommit.
+# Useful to check if a certain commit id was merged before or after the commit on which a certain build is based.
+function GitContains ([string]$Needle, [string]$BranchOrCommit)
+{
+    if ($BranchOrCommit -eq "*") {
+        $branches = git branch --contains $Needle
+        $tags     = git tag --contains $Needle
+        if ($null -ne $branches -and $branches.Count -ge 0) {
+            Write-Output "Branches:"
+            $branches | Write-Output
+        }
+        if ($null -ne $tags -and $tags.Count -ge 0) {
+            Write-Output "Tags:"
+            $tags | % { "  "  + $_ } | Write-Output
+        }
+    } else {
+        git merge-base --is-ancestor $Needle $BranchOrCommit > $null 2> $null
+        if ($? -or $LASTEXITCODE -eq 0) {
+            Write-Output "Commit '$Needle' is part of the history of '$BranchOrCommit'"
+        } else {
+            Write-Warning "Commit '$Needle' is not part of the history of '$BranchOrCommit'"
+        }
+    }
+}
