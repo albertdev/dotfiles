@@ -42,7 +42,7 @@ function! s:StartReview()
 
     let reviewCommitLine = search('\v^Commit: ')
     if (reviewCommitLine == 0)
-        echoerr 'Could not determine source commit'
+        echohl ErrorMsg | echo "Could not determine source commit" | echohl None
         return
     endif
     let b:ReviewCommit = strpart(getline(reviewCommitLine), 8)
@@ -75,6 +75,7 @@ function! s:StartReview()
 
     " Use gitk keyboard mappings for next / previous file, or scroll up / down
     nnoremap <buffer> rf :<C-U>call <sid>MoveNext(v:count1)<CR>
+    nnoremap <buffer> rF :<C-U>call <sid>MoveNextUnreviewed()<CR>
     nnoremap <buffer> rb :<C-U>call <sid>MovePrevious(v:count1)<CR>
     nnoremap <buffer> rgg :<C-U>call <sid>MoveFirst()<CR>
     nnoremap <buffer> rG  :<C-U>call <sid>MoveLast()<CR>
@@ -95,8 +96,7 @@ function! s:StartReview()
     nnoremap <buffer> R :<C-U>call <sid>EnterReviewMode()<CR>
 " Only do this when not done yet for this buffer
 
-    " Focus first hunk
-    call <sid>MoveCurrent()
+    call <sid>MoveFirstUnreviewed()
 endfunction
 
 function! GetDiffFold(lnum)
@@ -145,6 +145,59 @@ function! <sid>MovePrevious(number)
     normal! zt
 endfunction
 
+" Finds the next diff block down the file which has no 'X' or 'R' marker and jumps to it.
+" The first item can never be matched.
+function! <sid>MoveNextUnreviewed()
+    call s:CheckPendingUpdateLocation()
+    " Check for end of file
+    let diffwin = win_getid()
+    let locationinfo = getloclist(diffwin, {'idx': 0, 'size': 0})
+    if locationinfo.idx == locationinfo.size
+        echohl ErrorMsg | echo "Cannot jump to next file, end reached" | echohl None
+        return
+    endif
+    let locations = getloclist(diffwin)
+    " Move cursor to next line after the start of the currently selected item
+    let currentItemStart = locations[locationinfo.idx - 1].lnum
+    call cursor(currentItemStart + 1, 1)
+    let nextUnreviewedDiff = search('\v^diff --')
+    if nextUnreviewedDiff == 0
+        echohl ErrorMsg | echo "No next unreviewed file found." | echohl None
+        return
+    endif
+    " Find item in location list corresponding to matched line
+    let i = 0
+    while i < len(locations) && locations[i].lnum != nextUnreviewedDiff
+        let i += 1
+    endwhile
+    let itemsToMoveDown = i - (locationinfo.idx - 1)
+    call <sid>MoveNext(itemsToMoveDown)
+endfunction
+
+" Finds the first diff block in the file which has no 'X' or 'R' marker and jumps to it
+function! <sid>MoveFirstUnreviewed()
+    call cursor(1, 1)
+    let nextUnreviewedDiff = search('\v^diff --')
+    if nextUnreviewedDiff == 0
+        call <sid>MoveCurrent()
+        echohl ErrorMsg | echo "Review was completed last time" | echohl None
+        return
+    endif
+    let diffwin = win_getid()
+    let locationinfo = getloclist(diffwin, {'idx': 0, 'size': 0})
+    let locations = getloclist(diffwin)
+    let i = 0
+    while i < len(locations) && locations[i].lnum != nextUnreviewedDiff
+        let i += 1
+    endwhile
+    let itemsToMoveDown = i - (locationinfo.idx - 1)
+    if (itemsToMoveDown == 0)
+        call <sid>MoveCurrent()
+    else
+        call <sid>MoveNext(itemsToMoveDown)
+    endif
+endfunction
+
 function! <sid>MoveFirst()
     call s:CheckPendingUpdateLocation()
 
@@ -187,7 +240,6 @@ function! <sid>MarkReviewed()
                 " This doesn't work? Instead use start line + number of lines to delete
                 "let deleteCommand = (startcommentLine + 1) . "," . (lastcommentLine -1) . "delete"
                 let deleteCommand = (startcommentLine + 1) . "delete " . (lastcommentLine - startcommentLine - 1)
-                "echom deleteCommand
                 execute deleteCommand
             endif
             call cursor(currentLine, 1)
@@ -248,11 +300,9 @@ endfunction
 " Updates the [X] or [R] box in the location list
 function! s:UpdateCurrentLocation()
     let diffwin = win_getid()
-    "echom diffwin
     let diffbuffnr = bufnr(".")
     let locations = getloclist(diffwin)
     let locationinfo = getloclist(diffwin, {'idx': 0, 'winid': 0})
-    "echom string(locationinfo)
     let idx = locationinfo.idx - 1
     let locations[idx].text = s:BuildLocationLine(diffbuffnr, locations[idx])
 
@@ -278,7 +328,7 @@ function! s:CheckPendingUpdateLocation()
     let s:UpdatePending = 0
 endfunction
 
-function <sid>OpenExternalDiff()
+function! <sid>OpenExternalDiff()
     let diffwin = win_getid()
     let locationinfo = getloclist(diffwin, {'idx': 0})
     let locations = getloclist(diffwin)
@@ -294,8 +344,9 @@ function <sid>OpenExternalDiff()
     execute difftoolcommand
 endfunction
 
-function <sid>EnterReviewMode()
+function! <sid>EnterReviewMode()
     nnoremap <buffer> f :<C-U>call <sid>MoveNext(v:count1)<CR>
+    nnoremap <buffer> F :<C-U>call <sid>MoveNextUnreviewed()<CR>
     nnoremap <buffer> b :<C-U>call <sid>MovePrevious(v:count1)<CR>
     nnoremap <buffer> x :<C-U>call <sid>MarkReviewed()<CR>
     nnoremap <buffer> r :<C-U>call <sid>MarkRejected()<CR>
@@ -310,8 +361,9 @@ function <sid>EnterReviewMode()
     let s:ReviewModeTimer = timer_start(1000, { tid -> s:PrintReviewModeInStatusLine() }, { 'repeat': -1 })
 endfunction
 
-function <sid>ExitReviewMode()
+function! <sid>ExitReviewMode()
     silent! nunmap <buffer> f
+    silent! nunmap <buffer> F
     silent! nunmap <buffer> b
     silent! nunmap <buffer> x
     silent! nunmap <buffer> r
@@ -325,7 +377,7 @@ function <sid>ExitReviewMode()
     echo
 endfunction
 
-function s:PrintReviewModeInStatusLine()
+function! s:PrintReviewModeInStatusLine()
     if s:ReviewModeActive == 1
         echohl ModeMsg
         echo '-- REVIEW --'
