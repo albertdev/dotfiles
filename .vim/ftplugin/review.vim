@@ -1,11 +1,9 @@
 "
 " Sets up a bunch of keyboard mappings to review specially prepared unified diff files.
-" Run :StartReview to start reviewing. The diff file will be modified by prepending a legend, hunks which are
-" reviewed are prepended with X or R
+" Diff hunks which are reviewed are prepended with X or R.
 "
 
-" Taken from Vim dist's ftplugin/diff.vim
-" Only do this when not done yet for this buffer
+" Lines taken from Vim dist's ftplugin/diff.vim
 if exists("b:did_ftplugin")
   finish
 endif
@@ -16,7 +14,7 @@ let b:undo_ftplugin = "setl modeline<"
 " Don't use modelines in a diff, they apply to the diffed file
 setlocal nomodeline 
 
-" End of diff ftplugin
+" End of lines taken from diff ftplugin
 
 syntax enable
 set syntax=diff
@@ -34,11 +32,20 @@ let s:ReviewModeActive = 0
 
 let s:ReviewModeTimer = -1
 
+let b:ReviewCommit = ''
+
 let s:LocationsStatusLine = 'Files to be reviewed %=%l/%L %P'
 
 function! s:StartReview()
     normal! gg
-    let firstline = getline(1)
+    "let firstline = getline(1)
+
+    let reviewCommitLine = search('\v^Commit: ')
+    if (reviewCommitLine == 0)
+        echoerr 'Could not determine source commit'
+        return
+    endif
+    let b:ReviewCommit = strpart(getline(reviewCommitLine), 8)
 
     " Setup folding and collapse everything
     setlocal foldexpr=GetDiffFold(v:lnum)
@@ -71,6 +78,7 @@ function! s:StartReview()
     nnoremap <buffer> rb :<C-U>call <sid>MovePrevious(v:count1)<CR>
     nnoremap <buffer> rgg :<C-U>call <sid>MoveFirst()<CR>
     nnoremap <buffer> rG  :<C-U>call <sid>MoveLast()<CR>
+    nnoremap <buffer> rd  :<C-U>call <sid>OpenExternalDiff()<CR>
     nnoremap <buffer> <space> <C-D>
     nnoremap <buffer> <S-space> <C-U>
     nnoremap <buffer> <BS>    <C-U>
@@ -85,6 +93,7 @@ function! s:StartReview()
 
     " Bind 'R' to trigger Review mode where the above keys keep working until ESC is pressed
     nnoremap <buffer> R :<C-U>call <sid>EnterReviewMode()<CR>
+" Only do this when not done yet for this buffer
 
     " Focus first hunk
     call <sid>MoveCurrent()
@@ -189,7 +198,7 @@ function! <sid>MarkReviewed()
         normal! gIX 
     endif
     call s:UpdateCurrentLocation()
-    call <sid>MoveNext()
+    call <sid>MoveNext(1)
 endfunction
 
 function! <sid>MarkRejected()
@@ -269,6 +278,22 @@ function! s:CheckPendingUpdateLocation()
     let s:UpdatePending = 0
 endfunction
 
+function <sid>OpenExternalDiff()
+    let diffwin = win_getid()
+    let locationinfo = getloclist(diffwin, {'idx': 0})
+    let locations = getloclist(diffwin)
+    " Line number where currently selected diff starts
+    let linenumber = locations[locationinfo.idx - 1].lnum
+
+    let diffline = getline(linenumber)
+    let changedfilenamepos = stridx(diffline, ' b/')
+    " Substring the target filename without b/ prefix
+    let changedfilename = strpart(diffline, changedfilenamepos + 3)
+    "execute 'silent !git difftool -g -y ' . b:ReviewCommit . '^ ' . b:ReviewCommit . ' -- :/' . changedfilename
+    let difftoolcommand = 'silent !git difftool -g -y "' . b:ReviewCommit . '^" ' . b:ReviewCommit . ' -- ":/' . changedfilename . '"'
+    execute difftoolcommand
+endfunction
+
 function <sid>EnterReviewMode()
     nnoremap <buffer> f :<C-U>call <sid>MoveNext(v:count1)<CR>
     nnoremap <buffer> b :<C-U>call <sid>MovePrevious(v:count1)<CR>
@@ -276,6 +301,7 @@ function <sid>EnterReviewMode()
     nnoremap <buffer> r :<C-U>call <sid>MarkRejected()<CR>
     nnoremap <buffer> gg :<C-U>call <sid>MoveFirst()<CR>
     nnoremap <buffer> G  :<C-U>call <sid>MoveLast()<CR>
+    nnoremap <buffer> d  :<C-U>call <sid>OpenExternalDiff()<CR>
     nnoremap <buffer> <ESC> :<C-U>call <sid>ExitReviewMode()<CR><ESC>
     let s:ReviewModeActive = 1
     if (s:ReviewModeTimer != -1) 
@@ -291,6 +317,7 @@ function <sid>ExitReviewMode()
     silent! nunmap <buffer> r
     silent! nunmap <buffer> gg
     silent! nunmap <buffer> G
+    silent! nunmap <buffer> d
     let s:ReviewModeActive = 0
     if (s:ReviewModeTimer != -1) 
         call timer_stop(s:ReviewModeTimer)
