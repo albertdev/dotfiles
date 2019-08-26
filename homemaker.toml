@@ -53,6 +53,7 @@
         ["@powershell-install-module", "PSCX", "-AllowClobber"],
         ["@powershell-install-module", "Jump.Location"],
         ["@powershell-install-module", "PSReadline"],
+        ["@powershell-install-module", "Recycle"],
     ]
 
 [tasks.powershell]
