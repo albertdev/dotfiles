@@ -14,8 +14,13 @@ let g:bufExplorerShowRelativePath=1
 
 function! NavigateBE(direction,cmd)
     " Navigate away from NERDTree, we shouldn't replace its magic pane with BE
-    if exists("b:NERDTreeType")
+    if exists("b:NERDTree")
         wincmd p
+    endif
+    " Previous window can be closed so we cannot return to to it. Let user take action.
+    if exists("b:NERDTree")
+        echohl ErrorMsg | echom "Focus is stuck on NERDTree" | echohl None
+        return
     endif
     if (a:direction ==# 'down' && bufname('%') !=# '[BufExplorer]')
         " Run BufExplorer cmd.
