@@ -329,13 +329,16 @@ Return
 ; This will make the screenshots window float on top (if open)
 ;
 WinFocusLoop:
-    ;ManicWindowActive := WinActive("ManicTime ahk_exe ManicTimeClient.exe")
-    ManicWindowActive := WinActive("ahk_exe ManicTimeClient.exe")
+    ManicWindowActive := WinActive("ManicTime ahk_exe ManicTimeClient.exe")
+    ManicScreenshotWindowActive := WinActive("Screenshots ahk_exe ManicTimeClient.exe")
     ManicScreenshotWinFound := WinExist("Screenshots ahk_exe ManicTimeClient.exe")
 
 	If (ManicWindowActive && ManicScreenshotWinFound) {
         Winset, Alwaysontop, 1, Screenshots ahk_exe ManicTimeClient.exe
         ScreenshotsRaised := 1
+    } else If (ManicScreenshotWindowActive) {
+        ; Don't change anything - the main screen has lost focus but we might want to move the
+        ; Screenshots window without hiding it
 	} else If (ManicScreenshotWinFound) {
         Winset, Alwaysontop, 0, Screenshots ahk_exe ManicTimeClient.exe
         If (ScreenshotsRaised = 1) {
