@@ -326,10 +326,10 @@ Return
 
 ;
 ; Timer handler for ManicTime focus watcher.
-; This will make the screenshots window float on top (if open)
+; This will make the screenshots window float on top (if it's open) when the main window has focus
 ;
 WinFocusLoop:
-    ManicWindowActive := WinActive("ManicTime ahk_exe ManicTimeClient.exe")
+    ManicWindowActive := WinActive("ManicTime` - ahk_exe ManicTimeClient.exe")
     ManicScreenshotWindowActive := WinActive("Screenshots ahk_exe ManicTimeClient.exe")
     ManicScreenshotWinFound := WinExist("Screenshots ahk_exe ManicTimeClient.exe")
 
