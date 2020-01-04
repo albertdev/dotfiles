@@ -265,10 +265,24 @@ Function GitSR() {
     }
 }
 # Based on https://stackoverflow.com/questions/1441010/the-shortest-possible-output-from-git-log-containing-author-and-date
-# Prints head of log as commit id <tab> date <tab> message
-Function GitLH([int] $count, [string] $branch = "HEAD") {
+Function GitLH() {
+    <#
+        .Description
+        Prints head of log as commit id <tab> date <tab> message. It has 2 optional parameters: the number of commits to show
+        and the branch. It doesn't use regular positional parameters so they can be easily swapped or left out.
+    #>
+    foreach ($arg in $args) {
+        if ($arg -match "[0-9]+") {
+            $count = [int]$arg
+        } else {
+            $branch = $arg
+        }
+    }
     if ($count -le 0) {
         $count = 4
+    }
+    if (-not ($branch)) {
+        $branch = "HEAD"
     }
     git --no-pager log --max-count=$count --pretty=format:"%h%x20%x20%ad%x09%s" --date=format:'%Y-%m-%d %H:%M:%S' $branch
 }
