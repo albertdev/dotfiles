@@ -311,7 +311,6 @@ function GitReviewPR([int] $pullRequest)
         $previousReviewCommitInfo = git cat-file commit "review/PR$pullRequest"
         $previousReviewCommitTree = $previousReviewCommitInfo | ? { $_.StartsWith("tree ") } | Select-Object -First 1 | % { $_.Substring(5) }
         $recreateCommit = $previousReviewCommitTree -ne $commitTree
-        Write-Output "Tag 'review/PR$pullRequest' is up to date"
     }
 
     if ($recreateCommit) {
@@ -322,15 +321,19 @@ function GitReviewPR([int] $pullRequest)
 
         if ($tagExists) {
             git tag -d "review/PR$pullRequest" > $null
+            Write-Output "Tag 'review/PR$pullRequest' recreated"
+        } else {
+            Write-Output "Tag 'review/PR$pullRequest' created"
         }
         $reviewTag = git tag "review/PR$pullRequest" $reviewCommit
     } else {
+        Write-Output "Tag 'review/PR$pullRequest' is up to date"
         $reviewCommit = git rev-parse "review/PR$pullRequest"
     }
 
     $reviewFile = "PR$pullRequest.review"
     if (Test-Path $reviewFile) {
-        Write-Warning "Review file '$reviewFile' already exists. Run ' GitReview `"review/PR$pullRequest`" `"PR$pullRequest.review`" ' instead"
+        Write-Warning "Review file '$reviewFile' already exists. Run ' GitReview `"review/PR$pullRequest^`" `"review/PR$pullRequest`" `"PR$pullRequest.review`" -Clobber ' instead"
     } else {
         $reviewHeader = "Subject: Review of PR $pullRequest`nCommit: $reviewCommit`nTree: $commitTree`n"
         $reviewHeader | Out-File -Encoding UTF8 -NoNewline $reviewFile
@@ -344,6 +347,12 @@ function GitReviewPR([int] $pullRequest)
 # Useful to check if a certain commit id was merged before or after the commit on which a certain build is based.
 function GitContains ([string]$Needle, [string]$BranchOrCommit)
 {
+    if (-not ($Needle)) {
+        throw "No commit id or object specified"
+    }
+    if (-not ($BranchOrCommit)) {
+        $BranchOrCommit = "*"
+    }
     if ($BranchOrCommit -eq "*") {
         $branches = git branch --contains $Needle
         $tags     = git tag --contains $Needle
