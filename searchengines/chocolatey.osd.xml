@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/"> 
+    <ShortName>choco</ShortName>
+    <Description>Search Chocolatey's Community Package Repository</Description>
+    <InputEncoding>UTF-8</InputEncoding>
+    <Image width="16" height="16">data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAzZZtAI6JjQDarX4A7MOWABtUogDms3wABEiVAB5SlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZBERERERZgAEZmZmZmZgAGRmZmZmZmYAZGZnZmZmYAAEZnd4ZmYAAGRndmdnNgAAZGd2ZmZmAAAEZnZnZ2YAAGRmZ3dmZwAAZGZmZmZnAAAEZmZmd3cAAGREJVVVVQAAAAAAAAAAAAAAAAAAAAAAD//wAA//8AAIABAADAAwAAgAEAAIADAADABwAAgAcAAIAHAADABwAAgAcAAIAHAADABwAAgAcAAP//AAD//wAA</Image>
+    <Url type="text/html" method="get" template="https://chocolatey.org/packages?q={searchTerms}"/>
+    <SearchForm>https://chocolatey.org/</SearchForm>
+</OpenSearchDescription>

@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Search Engine Installation</title>
+    </head>
+    <body>
+        <h1>Setup</h1>
+        <ol>
+            <li>Install nmap to get access to their ncat tool.</li>
+            <li>Start ncat in the current directory like so: ncat --lua-exec .\ncat-enginerels.lua --listen 8080 --keep-open</li>
+            <li>Go to http://localhost:8080 and get this index page.</li>
+            <li>Click on one of the engine links below.</li>
+            <li>Add the engine.</li>
+            <li>???</li>
+            <li>Profit!</li>
+        </ol>
+        <h2>Engines</h2>
+        <ul>
+            <li><a href="/?type=Qwant">Qwant</a></li>
+            <li><a href="/?type=Wikipedia-en">Wikipedia (en)</a></li>
+            <li><a href="/?type=Wikipedia-nl">Wikipedia (nl)</a></li>
+            <li><a href="/?type=Chocolatey">Chocolatey</a></li>
+            <li><a href="/?type=gmaps">Google Maps (Belgium)</a></li>
+        </ul>
+    </body>
+</html>
