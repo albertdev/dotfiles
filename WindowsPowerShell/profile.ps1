@@ -411,7 +411,7 @@ function Add-ProjectPackages ()
     }
 }
 # Finds all JSON files in subdirectories and "pretifies" them. It is assumed that they used the UTF8-no-BOM encoding.
-Function ReformatJson() {
+Function ReformatJsonFiles() {
     [CmdletBinding(SupportsShouldProcess=$true,ConfirmImpact = 'high')]
     param()
 
@@ -424,13 +424,13 @@ Function ReformatJson() {
 
 
 
-            $prettyContent = Get-Content -Encoding UTF8 -Raw $jsonFile | ConvertFrom-Json | ConvertTo-Json -Depth 100 | Format-Json
+            $prettyContent = Get-Content -Encoding UTF8 -Raw $jsonFile | Format-Json
             # We explicitly convert to have no BOM, hence Byte encoding to write a byte array
             Set-Content -Path $jsonFile -Encoding Byte -Value $utf8NoBom.GetBytes($prettyContent)
         }
     }
 }
-# Taken from https://stackoverflow.com/a/56324939
+# Taken from https://stackoverflow.com/a/56324939 and modified so single quotes are left as-is
 function Format-Json {
     <#
     .SYNOPSIS
@@ -487,6 +487,9 @@ function Format-Json {
 
             # Replace all colon-space combinations by ": " unless it is inside quotes.
             $line = (' ' * $indent) + ($_.TrimStart() -replace ":\s+$regexUnlessQuoted", ': ')
+
+            # Leave single quotes as is instead of outputting them as Unicode escapes
+            $line = $line -replace "\\u0027", "'"
 
             # If the line contains a [ or { character, 
             # we need to increment the indentation level unless it is inside quotes.
