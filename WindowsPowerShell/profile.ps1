@@ -182,6 +182,7 @@ Function TFGet-LatestId {
 # Git aliases - uses very short names for convenience because definining the functions and aliases immediately after is silly.
 Function GitFA() { git fetch --all }
 Function GitS() { git status }
+Function GitB() { $currentBranch = git rev-parse --abbrev-ref HEAD; $currentBranch }
 Function GitI() { git diff --cached }
 Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
@@ -230,6 +231,10 @@ Function GitKD() { gitk.exe --date-order $args }
 Function GitKA() { gitk.exe --all $args }
 Function GitKAD() { gitk.exe --all --date-order $args }
 Function GitKStash([string] $stash) {
+    <#
+        .Description
+        Shows one or more stashes in gitk. It defaults to stash 0, pass * to see them all.
+    #>
     if ($stash -eq "*") {
         gitk.exe "--argscmd=git stash list --pretty=format:%gd^!" $args
     } elseif ($stash -and -not ($stash -match "[0-9]+")) {
@@ -272,7 +277,7 @@ Function GitLH() {
         and the branch. It doesn't use regular positional parameters so they can be easily swapped or left out.
     #>
     foreach ($arg in $args) {
-        if ($arg -match "[0-9]+") {
+        if ($arg -match "^[0-9]+$") {
             $count = [int]$arg
         } else {
             $branch = $arg
@@ -296,6 +301,12 @@ Function GitClean() {
         Write-Output "Cleaning $()"
         git clean -dfx -e "*.review"
         git clean -dfX -e "!*.review"
+    } elseif ([bool]$WhatIfPreference.IsPresent) {
+        Write-Output "Dry-run of cleaning $()"
+        $firstRun = git clean -dnx -e "*.review"
+        $secondRun = git clean -dnX -e "!*.review"
+        # Remove duplicate removals
+        $firstRun + $secondRun | Select-Object -Unique
     }
 }
 
