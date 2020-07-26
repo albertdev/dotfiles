@@ -67,6 +67,7 @@ set autoindent
 set ffs=dos,unix  " Windows is too much used to write unix LE everywhere.
 set nowrap
 set showbreak=->\ \| " When wrap _is_ enabled, do it in style.
+set sidescroll=5 " The default will advance by 1/2 window width and recenter cursor. Blech.
 set expandtab
 set listchars=eol:$,tab:»_,trail:.,nbsp:∙
 set ignorecase
