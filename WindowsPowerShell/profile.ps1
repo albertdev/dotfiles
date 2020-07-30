@@ -182,7 +182,17 @@ Function TFGet-LatestId {
 # Git aliases - uses very short names for convenience because definining the functions and aliases immediately after is silly.
 Function GitFA() { git fetch --all }
 Function GitS() { git status }
-Function GitB() { $currentBranch = git rev-parse --abbrev-ref HEAD; $currentBranch }
+Function GitB() {
+    $currentBranch = git symbolic-ref -q --short HEAD
+    if ($LASTEXITCODE -ne 0) {
+        $global:LASTEXITCODE = 0
+        $currentBranch = "tag " + (git describe --tags --exact-match 2> $null)
+        if ($LASTEXITCODE -ne 0) {
+            $currentBranch = "detached at " + (git rev-parse --short=9 HEAD)
+        }
+    }
+    $currentBranch
+}
 Function GitI() { git diff --cached }
 Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
