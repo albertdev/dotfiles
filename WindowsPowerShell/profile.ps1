@@ -438,8 +438,9 @@ Function ReformatJsonFiles() {
 
     $jsonFiles = Get-ChildItem -Recurse "*.json"
     $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+    $jsonFileNames = $jsonFiles | % { $_.FullName + "`n" }
 
-    if ($PSCmdlet.ShouldProcess($jsonFiles, "Reformatting $($jsonFiles.Length) JSON files")) {
+    if ($PSCmdlet.ShouldProcess($jsonFileNames, "Reformatting $($jsonFiles.Length) JSON files")) {
         foreach ($jsonFile in $jsonFiles) {
             Write-Output "Reformatting $(Resolve-Path $jsonFile)"
 
