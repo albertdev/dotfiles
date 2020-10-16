@@ -378,6 +378,46 @@ function GitReviewPR([int] $pullRequest)
     }
 }
 
+# Used to review changes between two commits.
+# Unlike GitReviewPR, no tag will be made (yet).
+function GitReviewDiff([string] $baseCommit, [string] $targetCommit)
+{
+    # Check that both commit parameters actually exist
+    $fullBaseCommit = git rev-parse --verify "$baseCommit^{commit}" 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Invalid base commit"
+        Write-Error $fullBaseCommit
+    }
+    $fullTargetCommit = git rev-parse --verify "$targetCommit^{commit}" 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Invalid target commit"
+        Write-Error $fullTargetCommit
+    }
+    $shortBaseCommit = $fullBaseCommit.Substring(0, 8)
+    $shortTargetCommit = $fullTargetCommit.Substring(0, 8)
+    $reviewDescription = "Review of differences between commit $baseCommit ($shortBaseCommit) and $targetCommit ($shortTargetCommit)"
+    $reviewFile = "diff-" + $shortBaseCommit  + "-" + $shortTargetCommit + ".review"
+
+    # Find target commit
+    $commitInfo = git cat-file commit $fullTargetCommit
+    # Parse commit object to find tree id
+    $commitTree = $commitInfo | ? { $_.StartsWith("tree ") } | Select-Object -First 1 | % { $_.Substring(5) }
+    # Create a commit which "squashes" all the changes into 1 big commit (needed to later run git difftool from Vim)
+    # TODO: Check if target and basecommit are actually parent and child, in which case this extra commit is overhead
+    $reviewCommit = git commit-tree -p $fullBaseCommit -m $reviewDescription $commitTree
+
+    if (Test-Path $reviewFile) {
+        # This message should really be reworked...
+        Write-Warning "Review file '$reviewFile' already exists. Run ' GitReview `"review/PR$pullRequest^`" `"review/PR$pullRequest`" `"PR$pullRequest.review`" -Clobber ' instead"
+    } else {
+        $reviewHeader = "Subject: $reviewDescription`nCommit: $reviewCommit`nTree: $commitTree`n"
+        $reviewHeader | Out-File -Encoding UTF8 -NoNewline $reviewFile
+        # Run diff command using cmd because PowerShell tends to clobber encoding.
+        $diffCommand = "git diff -u $fullBaseCommit $fullTargetCommit >> $reviewFile"
+        cmd /c $diffCommand > $null
+    }
+}
+
 # Tells you whether the commit pointed to by Needle is in the history of BranchOrCommit.
 # Useful to check if a certain commit id was merged before or after the commit on which a certain build is based.
 function GitContains ([string]$Needle, [string]$BranchOrCommit)
