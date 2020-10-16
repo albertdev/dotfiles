@@ -1,0 +1,4 @@
+Source the script and then run the cmdlet:
+
+. New-SelfSignedCertificateEx.ps1
+New-SelfSignedCertificateEx -Subject "CN=Development" -ProviderName "Microsoft Software Key Storage Provider" -AlgorithmName rsa -keylength 1024 -SignatureAlgorithm sha256 -Exportable -NotAfter "2025-01-01"
