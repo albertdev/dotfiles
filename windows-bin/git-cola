@@ -1,0 +1,19 @@
+#!/bin/sh
+# Wrapper to run git-cola in the background on msys-git
+
+# Simple attempts, all failed at one point
+#/usr/bin/git-cola $* &
+#/c/python34/pythonw '/c/Program Files (x86)/git cola/bin/git-cola' $* &
+
+# Find original command somewhere else in path
+targetCommand=`which --all git-cola | grep "git-cola/bin/" | head -1`
+if [ -z "$targetCommand" ]
+then
+    >&2 echo "Git cola not installed or not on path"
+    exit
+fi
+gitcolabindir=`dirname "$targetCommand"`
+gitcolarootdir=`dirname "$gitcolabindir"`
+
+# Run pythonw so that there's no console allocated, don't wait for return
+"$gitcolarootdir/Python/pythonw" "$gitcolabindir/git-cola-script.py" $* &
