@@ -51,7 +51,7 @@
         ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Install-PackageProvider", "-Name", "NuGet", "-MinimumVersion", "2.8.5.201"],
         ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Set-PSRepository", "PSGallery", "-InstallationPolicy", "Trusted"],
         ["@powershell-install-module", "PSCX", "-AllowClobber"],
-        ["@powershell-install-module", "Jump.Location"],
+        ["@powershell-install-module", "ZLocation"],
         ["@powershell-install-module", "PSReadline"],
         ["@powershell-install-module", "Recycle"],
     ]
@@ -85,7 +85,8 @@
 
 [tasks.windows-software]
     cmds = [
-        ["choco", "install", "-y", "autohotkey.portable", "sysinternals", "palemoon", "notepadplusplus.install", "dejavufonts", "vim", "adobereader", "totalcommander", "consolez", "irfanview", "iridium-browser", "kdiff3", "tortoisegit"],
+        ["choco", "install", "-y", "launchy", "autohotkey.portable", "sysinternals", "palemoon", "notepadplusplus.install", "dejavufonts", "vim",
+            "adobereader", "totalcommander", "consolez", "irfanview", "iridium-browser", "kdiff3", "tortoisegit", "git-cola", "logexpert"],
         ["choco", "pin", "add", "--name", "palemoon"],
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
         ["choco", "pin", "add", "--name", "adobereader"],
