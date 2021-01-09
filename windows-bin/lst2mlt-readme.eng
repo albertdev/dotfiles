@@ -1,0 +1,128 @@
+List To MultiInstance
+
+version 1.2		-	28.09.2001
+
+Freeware for any purposes. AS IS.
+
+Program was developed as Total Commander add-on, but can work as 
+standart application.
+
+!!!!
+
+By First. Sorry for my English. My native languages is Russian & 
+Pascal =)
+
+PROBLEM AND SOLVE
+
+Frequently there is a necessity to start the program and to pass to  
+the program as parameters some files. Many programs can open some 
+files (MDI-application) or start self copies for each file 
+(SDI-application). But count of programs, which can correctly process 
+a set of files passed to it in the command line, is very few.
+Usually a program only open first file in command line, all other 
+files are rejected or names of all passed files is considered as 
+continuation of a name of first file. 
+
+So, for example, next command will start the Notebook for file 
+"1.txt":
+
+  notepad.exe "1.txt" "2.txt" "3.txt"
+
+The following command will start a notebook for a file "1.txt 2.txt 
+3.txt":
+
+  notepad.exe 1.txt 2.txt 3.txt
+
+Some programs (for example, the Russian antiviruses AVP and DrWeb) can 
+accept a name of a file, which include the list of the necessary 
+files. Such programs will execute necessary operations for each file 
+in the list. Total Commander is able to create such files and to pass 
+them as parameters (more about it look in TotalCmd help files). Total
+commander put in the list-file selected files (or file under cursor if 
+nothing is selected).
+
+However, if the program does not accept as parameter the list file,
+you have to start it for each file manually. More correctly 
+it was necessary earlier. Now you have "List To MultiInstance"
+
+How It Work?
+
+You pass to lst2mlt.exe a filename of program which you want to start 
+as first parametr and filename of list-file which include filenames 
+of files needed to open as  second parameters. 
+
+Syntax:
+
+  lst2mlt.exe  [/X:<Exe file>] [/B:<B-Params>] /L:<List-file> [/E:<E_Params>] [/W]
+
+  <Exe file> - Program which will be started for each file in file-list. If <exe file>
+               absent then will be started program, default for file in list.
+
+  <List-file> - list of files which will be opened
+
+  <B-Params> - string (parameters), which will be inserted before name of file from
+               <list-file> before this command will be execute. May be absent.
+  
+  
+  <E-Params> - string (parameters), which will be inserted after name of file from
+               <list-file> before this command will be execute. May be absent.
+
+  /W - if this parameter is present, lst2mlt.exe wait while executing program open the
+               file. By default, lst2mlt.exe wait. May be absent.
+  
+
+lst2mlt.exe starts for each file from <List-file> the program  <Exe file>, pass it and
+<b-params> & <e-params> as parameter. 
+
+
+For example.
+Let "list-file.txt" content is:
+
+c:\1.txt
+c:\2.txt
+c:\autoexec.bat
+
+
+And you enter such command in RunDialog or MS-DOS Prompt or in 
+Total Commander, Far etc:
+
+ lst2mlt.exe /X:notapad.exe /L:list-file.txt
+
+After you press "Enter" "List To MultiInstance" execute this commands:
+
+notepad.exe c:\1.txt
+
+then 
+notepad.exe c:\2.txt
+
+and finally
+notapad.exe c:\autoexec.bat
+
+Now you have 3 Notepad with opened files in its. Enjoy =)
+
+Well, I think what it is possible  to receive the best results and 
+pleasure only having attached this programs to Total Commander. 
+
+
+How to attach to Total Commander? 
+
+Create menuitem of Start-menu or Toolbar button and specify so: 
+The command: <Path to lst2mlt>\lst2mlt.exe 
+Parameters: /X:"<Path to exe file>" /L:"%L"
+
+So, for example, for EditPlus2 on my computer the command look so: 
+The command: c:\wincmd\lst2mult.exe 
+Parameters: /X:"C:\Program Files\EditPlus 2\editplus.exe" /L:"%L" 
+
+Instead of %L you can use %l, %F, %f, %D, %d.  Look Help for Total
+Commander
+
+Now select files and run created menu- or toolbar- command.
+
+Enjoy =). It's Free =). And only for you =)
+
+
+Copyright © 2001, Tir Na Nog
+WWW:    http://tirna.narod.ru
+E-Mail: mailto:tirna@narod.ru 
+        mailto:tir@xakep.ru

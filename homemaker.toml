@@ -92,6 +92,12 @@
         ["choco", "pin", "add", "--name", "adobereader"],
     ]
 
+[tasks.windows-bin]
+    links = [
+        ["bin/lst2mlt.exe", "windows-bin/lst2mlt.exe"],
+        ["bin/git-cola", "windows-bin/git-cola"]
+    ]
+
 [tasks.shared-rc]
     links = [
         [".ackrc"],
@@ -114,5 +120,5 @@
     deps = ["vim", "shared-rc"]
 
 [tasks.default__windows]
-    deps = ["vim", "shared-rc", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks", "windows-software"]
+    deps = ["vim", "shared-rc", "windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks", "windows-software"]
 
