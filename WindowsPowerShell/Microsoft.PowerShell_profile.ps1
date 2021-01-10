@@ -3,7 +3,7 @@
     Import-Module PSReadline
     Set-PSReadlineOption -EditMode Emacs
 
-    Import-Module Jump.Location
+    Import-Module ZLocation
 }
 
 # Chocolatey profile
