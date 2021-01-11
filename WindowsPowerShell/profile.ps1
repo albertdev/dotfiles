@@ -111,6 +111,23 @@ Function Load-MsDeploy()
     Add-PathVariable (Resolve-Path $msDeployPath)
 }
 
+#Function Load-SqlPackage()
+#{
+#    # Basically guess the location based on a limited number of search directories
+#    $sqlDir = "C:\Program Files\Microsoft SQL Server\"
+#    # TODO: Also look in "C:\Program Files (x86)\Microsoft SQL Server\"
+#    if (! (Test-Path $sqlDir)) {
+#        throw "SQL server dir not found"
+#    }
+#    if ($vsLocation -eq $null) {
+#        Write-Error "Could not detect Visual Studio 2017 installation"
+#        return $null
+#    }
+#
+#    # Sample command
+#    #sqlpackage.exe /a:Import "/tcs:Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=WebPortal_5_4;Integrated Security=True;Application Name=ESIGNATURES" "/sf:d:\temp\local_webportal54_2019-11-19.bacpac"
+#}
+
 Function Load-MingWTools()
 {
     $mingwDir = Get-ChildItem -Directory -LiteralPath 'd:\Apps\mingw-w64' | Select-Object -First 1 -ExpandProperty FullName
