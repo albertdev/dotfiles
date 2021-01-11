@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <settings lang="auto" icon_size="0">
-	<console shell="" init_dir="" refresh="100" change_refresh="10" rows="50" columns="150" buffer_rows="500" buffer_columns="0" start_hidden="0" save_size="0">
+	<console shell="" init_dir="" refresh="100" change_refresh="10" rows="50" columns="150" buffer_rows="5000" buffer_columns="0" start_hidden="0" save_size="0">
 		<colors background_text_opacity="255">
 			<color id="0" r="0" g="0" b="0"/>
 			<color id="1" r="0" g="0" b="128"/>
@@ -26,7 +26,7 @@
 	<appearance>
 		<font name="Lucida Console" size="10" extra_width="0" bold="0" italic="0" smoothing="2" bold_intensified="0" italic_intensified="0" ligature="0">
 			<color use="0" r="0" g="0" b="0"/></font>
-		<window title="Console" icon="" main_title_format="?U([%u] )?N({%u} )%m?s( - %s)" tab_title_format="%n. ?s(%s):(%t)" use_tab_icon="1" use_tab_title="1" trim_tab_titles="20" trim_tab_titles_right="0"/>
+		<window title="Console" icon="" main_title_format="?U([%u] )?N({%u} )%m?s( - %s)" tab_title_format="%n. ?s(%s):(%t)" use_tab_icon="1" use_tab_title="1" trim_tab_titles="0" trim_tab_titles_right="0"/>
 		<fullscreen start_in_fullscreen="0" fullscreen_monitor="0">
 			<controls show_menu="1" show_toolbar="1" show_searchbar="1" show_statusbar="1" show_tabs="1" hide_single_tab="1" tabs_on_bottom="0" hide_tab_icons="0" hide_tab_close_button="0" hide_tab_new_button="0" show_scrollbars="1"/>
 			<transparency type="0" active_alpha="255" inactive_alpha="255" r="0" g="0" b="0" active="1"/></fullscreen>
@@ -37,7 +37,7 @@
 		<position x="-1" y="-1" save_position="0" w="-1" h="-1" save_size="0" z_order="0" dock="-1" snap="0" save_state="0" state="-1"/>
 		<transparency type="0" active_alpha="255" inactive_alpha="255" r="0" g="0" b="0" active="1"/></appearance>
 	<behavior>
-		<copy_paste copy_on_select="1" clear_on_copy="0" sensitive_copy="1" no_wrap="1" eol_spaces="1" trim_spaces="1" rtf="1" copy_newline_char="0" include_left_delimiter="0" include_right_delimiter="0" left_delimiters=" ([" right_delimiters=" )]"/>
+		<copy_paste copy_on_select="1" clear_on_copy="0" sensitive_copy="1" no_wrap="1" eol_spaces="1" trim_spaces="1" rtf="1" copy_newline_char="0" include_left_delimiter="0" include_right_delimiter="0" left_delimiters=" ([&quot;" right_delimiters=" )]&quot;"/>
 		<scroll page_scroll_rows="0"/>
 		<tab_highlight flashes="3" stay_highligted="1"/>
 		<environment inherit="1" sync="1"/>
@@ -73,14 +73,13 @@
 		<hotkey ctrl="1" shift="0" alt="0" extended="0" code="56" command="switchtab8"/>
 		<hotkey ctrl="1" shift="0" alt="0" extended="0" code="57" command="switchtab9"/>
 		<hotkey ctrl="1" shift="0" alt="0" extended="0" code="48" command="switchtab10"/>
-		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="switchtab11"/>
-		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="switchtab12"/>
 		<hotkey ctrl="1" shift="0" alt="0" extended="0" code="9" command="nexttab"/>
 		<hotkey ctrl="1" shift="1" alt="0" extended="0" code="9" command="prevtab"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="movetableft"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="movetabright"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="closetab"/>
-		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="renametab"/>
+		<hotkey ctrl="0" shift="1" alt="0" extended="0" code="113" command="renametab"/>
+		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="clonetab"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="nextview"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="prevview"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="leftview"/>
@@ -93,11 +92,14 @@
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="incvsize"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="closeview"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="detachview"/>
+		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="maximizeview"/>
+		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="restoreview"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="attach"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="splithoriz"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="splitvert"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="splitswap"/>
 		<hotkey ctrl="1" shift="1" alt="0" extended="0" code="84" command="clone"/>
+		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="moveinnewtab"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="fullscreen"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="zoom100"/>
 		<hotkey ctrl="0" shift="0" alt="0" extended="0" code="0" command="zoominc"/>
@@ -201,5 +203,8 @@
 					<tint opacity="0" r="0" g="0" b="0"/>
 				</image>
 			</background>
+		</tab>
+		<tab title="Powershell Core" icon="C:\Program Files\PowerShell\6\pwsh.exe" use_default_icon="0">
+			<console shell="&quot;C:\Program Files\PowerShell\6\pwsh.exe&quot; -nologo" init_dir="" priority="2" run_as_user="0" user="" net_only="0" run_as_admin="0"/>
 		</tab>
 	</tabs></settings>
