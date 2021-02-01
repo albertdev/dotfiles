@@ -86,18 +86,40 @@
 [tasks.windows-software]
     # Install software, pin some of them so software's auto-update mechanism doesn't conflict with chocolatey, create shortcuts
     cmds = [
-        ["choco", "install", "-y", "launchy", "autohotkey.portable", "sysinternals", "palemoon", "notepadplusplus.install", "dejavufonts", "vim",
-            "adobereader", "totalcommander", "consolez", "irfanview", "iridium-browser", "kdiff3", "tortoisegit", "git-cola", "logexpert"],
+        ["choco", "install", "-y", "launchy", "autohotkey.portable", "sysinternals", "palemoon", "notepadplusplus.install", "dejavufonts", "vim", "kitty",
+            "adobereader", "totalcommander", "consolez", "irfanview", "iridium-browser", "kdiff3", "tortoisegit", "git-cola", "logexpert", "baretail"],
         ["choco", "pin", "add", "--name", "palemoon"],
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
         ["choco", "pin", "add", "--name", "adobereader"],
+
         ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1",
             "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Console.lnk'",
             "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe", "-StartPath", "'%USERPROFILE%'"],
+
         ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1",
             "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Command prompt console.lnk'",
             "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe", "-StartPath", "'%USERPROFILE%'",
-            "-Arguments", "'-t Cmd'"]
+            "-Arguments", "'-t Cmd'"],
+
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1",
+            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Kitty.lnk'",
+            "-TargetPath", "C:/ProgramData/chocolatey/lib/kitty/tools/kitty.exe", "-StartPath", "'%USERPROFILE%'"],
+
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1",
+            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/BareTail.lnk'",
+            "-TargetPath", "C:/ProgramData/chocolatey/lib/baretail/tools/baretail.exe", "-StartPath", "'%USERPROFILE%'"],
+
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1",
+            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/LogExpert.lnk'",
+            "-TargetPath", "c:/ProgramData/chocolatey/lib/logexpert/tools/LogExpert.exe", "-StartPath", "'%USERPROFILE%'"],
+
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1",
+            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Calculator.lnk'",
+            "-TargetPath", "shell:appsFolder\\Microsoft.WindowsCalculator_8wekyb3d8bbwe!App"],
+
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1",
+            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Settings.lnk'",
+            "-TargetPath", "shell:appsFolder\\windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel"]
     ]
 
 [tasks.windows-bin]

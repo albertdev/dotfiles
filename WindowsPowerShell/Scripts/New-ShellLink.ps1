@@ -23,8 +23,8 @@ if ($Force) {
     $ConfirmPreference = 'None'
 }
 
-# Check the target path exists
-if (-not (Test-Path $TargetPath)) {
+# Check the target path exists - unless it's an UWP shortcut, in which case we can't really check it
+if (-not (Test-Path $TargetPath) -and -not ($TargetPath -like "shell:appsfolder\*")) {
     # Maybe targetpath uses classic CMD environnmental variables
     $expandedPath = [System.Environment]::ExpandEnvironmentVariables($TargetPath)
     if (-not (Test-Path $expandedPath)) {
