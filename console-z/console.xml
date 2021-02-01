@@ -186,7 +186,7 @@
 		<tab title="Powershell" icon="C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" use_default_icon="0">
 			<console shell="C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted" init_dir="" priority="2" run_as_user="0" user="" net_only="0" run_as_admin="0"/>
 		</tab>
-		<tab title="Console2" use_default_icon="0">
+		<tab title="Cmd" use_default_icon="0">
 			<console shell="&quot;C:\Windows\System32\cmd.exe&quot; /k &quot;c:\Program Files (x86)\clink\0.4.2\clink&quot; inject --profile ~\clink" init_dir="" priority="2" run_as_user="0" user="" net_only="0" run_as_admin="0"/>
 			<cursor style="5" r="255" g="255" b="255"/>
 			<background type="0" r="0" g="0" b="0">
