@@ -84,12 +84,20 @@
     ]
 
 [tasks.windows-software]
+    # Install software, pin some of them so software's auto-update mechanism doesn't conflict with chocolatey, create shortcuts
     cmds = [
         ["choco", "install", "-y", "launchy", "autohotkey.portable", "sysinternals", "palemoon", "notepadplusplus.install", "dejavufonts", "vim",
             "adobereader", "totalcommander", "consolez", "irfanview", "iridium-browser", "kdiff3", "tortoisegit", "git-cola", "logexpert"],
         ["choco", "pin", "add", "--name", "palemoon"],
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
         ["choco", "pin", "add", "--name", "adobereader"],
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1",
+            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Console.lnk'",
+            "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe", "-StartPath", "'%USERPROFILE%'"],
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1",
+            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Command prompt console.lnk'",
+            "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe", "-StartPath", "'%USERPROFILE%'",
+            "-Arguments", "'-t Cmd'"]
     ]
 
 [tasks.windows-bin]
@@ -105,10 +113,10 @@
         [".bashrc"],
         [".git_global_ignore"],
         [".gitconfig"],
-        #[".kdiff3rc"],
         [".lesskey"],
         [".pentadactylrc"],
     ]
+    #[".kdiff3rc"],
 
 [tasks.vim]
     links = [
