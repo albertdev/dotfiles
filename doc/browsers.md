@@ -1,6 +1,15 @@
 ## Search Engines
 Simply see ../searchengines/index.html for scripts to register favourite browser search engines.
 
+There are a few which are not added in that list though because their URL needs to be completed:
+
+### Azure Devops Pull Request search
+- Keyword: `pr`
+- `https://dev.azure.com/{organization}/_apis/git/PullRequests/%s`
+### JIRA Search
+- Keyword: `j`
+- `https://{organization}.atlassian.net/secure/QuickSearch.jspa?searchString=%s`
+
 ## Iridium browser
 Chromium port with (allegedly) all the tracking demolished.
 ### Extensions

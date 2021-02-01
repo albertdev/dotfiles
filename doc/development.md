@@ -7,7 +7,10 @@ List of development tools and their most important settings.
 - Editor Guidelines, for the line length OCD programmer. https://marketplace.visualstudio.com/items?itemName=PaulHarrington.EditorGuidelines
 - (VS 2017 / 2019) #Regions Are Evil, yes they are. https://marketplace.visualstudio.com/items?itemName=PaulMelia.RegionsAreEvil001
 - (VS 2015) I Hate #Regions, so I need this. https://marketplace.visualstudio.com/items?itemName=Shanewho.IHateRegions#overview
-- VSVim, because I've got the modal editing brainwork. https://marketplace.visualstudio.com/items?itemName=JaredParMSFT.VsVim
+- VSVim, because I've got the modal editing brainworm. https://marketplace.visualstudio.com/items?itemName=JaredParMSFT.VsVim
+### Settings
+- External tools:
+    - Add `&Vim` as external tool. Command is `c:\Program Files (x86)\vim\vim81\gvim.exe`, arguments is `--servername VimStudio --remote-silent +"call cursor($(CurLine),$(CurCol))" "$(ItemFileName)$(ItemExt)"`, initial dir is `$(ItemDir)`
 
 ## VS Code
 ### Extensions
@@ -18,7 +21,7 @@ List of development tools and their most important settings.
 - PowerShell, the replacement of the ISE. Id: `ms-vscode.powershell`
 - Remote - WSL, for better WSL project editing integration. Still experimental. Id: `ms-vscode-remote.remote-wsl`
 - Solarized, for its beige light theme. Id: `ryanolsonx.solarized`
-- Vim, because I've got the modal editing brainwork. Id: `vscodevim.vim`
+- Vim, because I've got the modal editing brainworm. Id: `vscodevim.vim`
 - XML Tools, because formatting by hand is overrated. Id: `dotjoshjohnson.xml`
 - YAML, for when you're editing raw YAML or Kubernetes descriptors. Id: `redhat.vscode-yaml`
 
