@@ -122,6 +122,17 @@
             "-TargetPath", "shell:appsFolder\\windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel"]
     ]
 
+[tasks.windows-startup]
+    cmds = [
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
+            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Startup/WinManagement.lnk'",
+            "-TargetPath", "%DOTFILESPATH%/autohotkey/WinManagement.ahk", "-StartPath", "'%USERPROFILE%'"],
+
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
+            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Startup/WinMaximizer.lnk'",
+            "-TargetPath", "%DOTFILESPATH%/autohotkey/WinMaximizer.ahk", "-StartPath", "'%USERPROFILE%'"],
+    ]
+
 [tasks.windows-bin]
     links = [
         ["bin/lst2mlt.exe", "windows-bin/lst2mlt.exe"],
@@ -150,5 +161,6 @@
     deps = ["vim", "shared-rc"]
 
 [tasks.default__windows]
-    deps = ["vim", "shared-rc", "windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks", "windows-software"]
+    deps = ["vim", "shared-rc", "windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks", "windows-software",
+            "windows-startup"]
 
