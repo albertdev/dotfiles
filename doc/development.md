@@ -34,3 +34,23 @@ List of development tools and their most important settings.
 - NppExporter (installed by default?)
 - TextFX Characters (if you can still get this)
 - XML Tools
+
+
+## Gitk
+- General: Do not forget to set `kdiff3` as diff viewer.
+- Colors: Select bg: R149, G207, B255
+- Fonts
+    - Main font: Microsoft Sans Serif, Regular, 9.
+    - Diff display font: DejaVu Sans Mono, Book, 9.
+    - UI font: Microsoft Sans Serif, Bold, 9.
+
+## KDiff3
+### Settings
+- Font: DejaVu Sans Mono, Normal, 9.
+- Editor: Tab settings set to 4.
+- Directory:
+    - File-anti-patterns: `*.orig;*.o;*.obj;*.rej;*.bak;*.vspscc;*.csproj;*.nugetreferenceswitcher;*.sha
+    - Dir-anti-patterns: `CVS;.deps;.svn;.hg;.git;bin;obj;$tf`
+    - File comparison mode: Full Analysis
+    - White space differences considered equal
+- Integration: Quit also via Escape key.

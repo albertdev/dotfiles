@@ -31,6 +31,18 @@ Chromium port with (allegedly) all the tracking demolished.
 - System: don't allow running background apps when the browser is closed.
 
 ## Palemoon
+### Settings
+- browser.tabs.closeWindowWithLastTab : false
+- browser.shell.checkDefaultBrowser : false
+- browser.startup.homepage : about:blank
+- browser.startup.page : 3
+  (Sets to remember tabs from last time)
+- browser.tabs.onTop : true
+
+Settings for extensions:
+- noscript.autoReload.allTabs : false
+- noscript.firstRunRedirection : false
+- noscript.notify : false
 ### Extensions
 - LeechBlock 1.0.9 (technically no longer available, installed using Moon Tester Tool?)
 - Adblock Latitude, an ad blocker. https://addons.palemoon.org/addon/adblock-latitude/
@@ -41,6 +53,14 @@ Chromium port with (allegedly) all the tracking demolished.
 - NoScript, fantastic page breaking utility (the PaleMoon devs hate it for that though). https://noscript.net/getit (see "classic")
 - Pentadactyl, Vi-style browsing. https://addons.palemoon.org/addon/pentadactyl-community/
 - ScrapBook X, saves pages locally for offline viewing / preserving old content. https://addons.palemoon.org/addon/scrapbook-x/
+### UI Layout
+(Right-click e.g. the Reload button, click Customize)
+
+- Tabs on top, PM button top left.
+- Leechblock counter, NoScript button, ABL button, Reload, Home, Back / Forward, URL bar, Search bar, History dropdown menu, Downloads.
+- Bookmarks bar, (on the right) ScrapBookX button, Bookmarks dropdown menu button (dragged from next to History button)
+
+
 
 ## Chrome
 Only used for development and testing.

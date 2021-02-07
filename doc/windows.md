@@ -31,3 +31,8 @@ To change it, either:
   the "Advanced Key Settings" tab.
 
 Once there you can pick an item from the list and click "Change Key Sequence". Don't forget to press OK twice.
+
+## Mouse Settings
+- Open Windows' `Run` dialog.
+- Enter `ms-settings:mousetouchpad`
+- Set cursor speed to 12, scroll multiple lines at a time, scroll 9-11 lines each time, scroll when hovering.
