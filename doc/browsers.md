@@ -43,6 +43,7 @@ Settings for extensions:
 - noscript.autoReload.allTabs : false
 - noscript.firstRunRedirection : false
 - noscript.notify : false
+- extensions.autt@ericgoldman.name.separatorString : @@
 ### Extensions
 - LeechBlock 1.0.9 (technically no longer available, installed using Moon Tester Tool?)
 - Adblock Latitude, an ad blocker. https://addons.palemoon.org/addon/adblock-latitude/
