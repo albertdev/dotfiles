@@ -87,7 +87,8 @@
     # Install software, pin some of them so software's auto-update mechanism doesn't conflict with chocolatey, create shortcuts
     cmds = [
         ["choco", "install", "-y", "launchy", "autohotkey.install", "sysinternals", "palemoon", "notepadplusplus.install", "dejavufonts", "vim", "kitty",
-            "adobereader", "totalcommander", "consolez", "irfanview", "iridium-browser", "kdiff3", "tortoisegit", "git-cola", "logexpert", "baretail"],
+            "adobereader", "totalcommander", "consolez", "irfanview", "iridium-browser", "kdiff3", "tortoisegit", "git-cola", "logexpert", "baretail",
+            "hourglass.install"],
         ["choco", "pin", "add", "--name", "palemoon"],
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
         ["choco", "pin", "add", "--name", "adobereader"],
@@ -122,6 +123,7 @@
             "-TargetPath", "shell:appsFolder\\windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel"]
     ]
 
+# Register programs which get installed somewhere in this script and which should start automatically.
 [tasks.windows-startup]
     cmds = [
         ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
