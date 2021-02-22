@@ -11,10 +11,14 @@ SetTitleMatchMode 3  ; Exact matching to avoid confusing T/B with Tab/Backspace.
         WinMaximize A
 Return
 
-#Tab::
-    WinGet MX, MinMax, A
-    If MX == -1
-	WinRestore A
-    Else
-        WinMinimize A
+;#Tab::
+;    WinGet MX, MinMax, A
+;    If MX == -1
+;	WinRestore A
+;    Else
+;        WinMinimize A
+;Return
+
+#K::
+    Winset, Alwaysontop, , A
 Return
