@@ -495,7 +495,9 @@ function Add-ProjectPackages ()
 # Finds all JSON files in subdirectories and "pretifies" them. It is assumed that they used the UTF8-no-BOM encoding.
 Function ReformatJsonFiles() {
     [CmdletBinding(SupportsShouldProcess=$true,ConfirmImpact = 'high')]
-    param()
+    param(
+        [string] $Endline
+    )
 
     $jsonFiles = Get-ChildItem -Recurse "*.json"
     $utf8NoBom = New-Object System.Text.UTF8Encoding $false
@@ -505,9 +507,7 @@ Function ReformatJsonFiles() {
         foreach ($jsonFile in $jsonFiles) {
             Write-Output "Reformatting $(Resolve-Path $jsonFile)"
 
-
-
-            $prettyContent = Get-Content -Encoding UTF8 -Raw $jsonFile | Format-Json
+            $prettyContent = Get-Content -Encoding UTF8 -Raw $jsonFile | Format-Json -Endline $Endline
             # We explicitly convert to have no BOM, hence Byte encoding to write a byte array
             Set-Content -Path $jsonFile -Encoding Byte -Value $utf8NoBom.GetBytes($prettyContent)
         }
@@ -538,6 +538,9 @@ function Format-Json {
 
         [Parameter(ParameterSetName = 'Minify')]
         [switch]$Minify,
+
+        [Parameter(ParameterSetName = 'Prettify')]
+        [string]$Endline,
 
         [Parameter(ParameterSetName = 'Prettify')]
         [ValidateRange(1, 1024)]
@@ -584,5 +587,8 @@ function Format-Json {
         }
 
     if ($AsArray) { return $result }
+    if ($Endline) {
+        return $result -Join $Endline
+    }
     return $result -Join [Environment]::NewLine
 }
