@@ -437,7 +437,7 @@ function GitReviewDiff([string] $baseCommit, [string] $targetCommit)
 
 # Tells you whether the commit pointed to by Needle is in the history of BranchOrCommit.
 # Useful to check if a certain commit id was merged before or after the commit on which a certain build is based.
-function GitContains ([string]$Needle, [string]$BranchOrCommit)
+function GitContains ([string]$Needle, [string]$BranchOrCommit, [switch]$Remotes)
 {
     if (-not ($Needle)) {
         throw "No commit id or object specified"
@@ -446,7 +446,11 @@ function GitContains ([string]$Needle, [string]$BranchOrCommit)
         $BranchOrCommit = "*"
     }
     if ($BranchOrCommit -eq "*") {
-        $branches = git branch --contains $Needle
+        if ($Remotes) {
+            $branches = git branch --all --contains $Needle
+        } else {
+            $branches = git branch --contains $Needle
+        }
         $tags     = git tag --contains $Needle
         if ($null -ne $branches -and $branches.Count -ge 0) {
             Write-Output "Branches:"
