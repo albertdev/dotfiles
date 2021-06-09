@@ -91,6 +91,23 @@ Function Load-VsTools2017()
     Write-Host -ForegroundColor 'Yellow' "VsVars has been loaded from: $batchFile"
 }
 
+Function Load-VsTools2019()
+{
+    $vsLocation = vswhere -version "[16.0,17.0)" -requires Microsoft.Component.MSBuild -property installationPath
+    if ($vsLocation -eq $null) {
+        Write-Error "Could not detect Visual Studio 2019 installation"
+        return $null
+    }
+    $batchFile = Join-Path $vsLocation "Common7\Tools\VsDevCmd.bat"
+    $batchenv = Get-BatchfileEnvironment -file $batchFile
+
+    # Verbose logging
+    $batchenv.GetEnumerator() | Sort-Object -Property Key | % {"{0}={1}" -f $_.Key, $_.Value} | Write-Verbose
+
+    $batchenv.GetEnumerator() | % { Set-Item -Path "env:$($_.Key)" -value $_.Value }
+    Write-Host -ForegroundColor 'Yellow' "VsVars has been loaded from: $batchFile"
+}
+
 Function Load-MsDeploy()
 {
     $msDeployRegKey = 'HKLM:\SOFTWARE\Microsoft\IIS Extensions\MSDeploy\3'
