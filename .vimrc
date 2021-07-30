@@ -87,6 +87,13 @@ set visualbell
 " Settings above get reset after gVim is started, fix it AGAIN
 autocmd GUIEnter * set visualbell t_vb=
 
+" Workaround for Vim patch 8.1.0561 (on Windows)
+set errorformat-=%f(%l)\ \\=:\ %t%*\\D%n:\ %m
+set errorformat-=%f(%l)\ \\=:\ %m
+" Prepend corrected errorformats (though this way they'll work on Linux too where they aren't in the default list)
+let &errorformat = '%f(%l) %\=: %t%*\D%n: %m,%f(%l) %\=: %m,' .. &errorformat
+
+
 " End of line marker position and color
 "set colorcolumn=101
 hi ColorColumn ctermbg=lightgrey guibg=lightgrey
