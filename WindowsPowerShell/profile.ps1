@@ -274,6 +274,18 @@ Function GitMF() { git merge --ff-only $args }
 Function GitKD() { gitk.exe --date-order $args }
 Function GitKA() { gitk.exe --all $args }
 Function GitKAD() { gitk.exe --all --date-order $args }
+Function GitKU($branch) {
+    if (!($branch)) {
+        $branch = "HEAD"
+    }
+    $upstreamBranch = git rev-parse --abbrev-ref --symbolic-full-name "$($branch)@{upstream}" 2>&1
+    if ($LASTEXITCODE) {
+        Write-Output "Branch $branch has no upstream or does not exist!"
+        return
+    }
+    gitk.exe --select-commit=$branch $branch "$($branch)@{upstream}" $args
+}
+Function GitKUD($branch) { GITKU $branch "--date-order" $args }
 Function GitKStash([string] $stash) {
     <#
         .Description
@@ -531,6 +543,7 @@ Function ReformatJsonFiles() {
     }
 }
 # Taken from https://stackoverflow.com/a/56324939 and modified so single quotes are left as-is
+# Also allow the endlines to be modified and escape (invisible) punctuation to make changes stand out.
 function Format-Json {
     <#
     .SYNOPSIS
