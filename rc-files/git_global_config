@@ -7,6 +7,9 @@
 [core]
 	excludesfile = ~/.git_global_ignore
 	autocrlf = false
+	# Git comes with vim built-in, but this MSYS2 version messes with Console-Z's buffers on exit
+	# Use graphical vim instead
+	editor = gvim
 # Used for personal details, might use personal e-mail at home.
 [include]
 	path = ~/.localgitconfig
