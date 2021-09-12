@@ -91,7 +91,7 @@ autocmd GUIEnter * set visualbell t_vb=
 set errorformat-=%f(%l)\ \\=:\ %t%*\\D%n:\ %m
 set errorformat-=%f(%l)\ \\=:\ %m
 " Prepend corrected errorformats (though this way they'll work on Linux too where they aren't in the default list)
-let &errorformat = '%f(%l) %\=: %t%*\D%n: %m,%f(%l) %\=: %m,' .. &errorformat
+let &errorformat = '%f(%l) %\=: %t%*\D%n: %m,%f(%l) %\=: %m,' . &errorformat
 
 
 " End of line marker position and color
