@@ -1,7 +1,7 @@
-.vim/bundle/**
-~.vim/bundle/vundle
-.vimperator/info/**
-.eclipse/**
-~.eclipse/mechanic
-/.config/Clementine/
+vim/bundle/**
+~vim/bundle/vundle
+vimperator/info/**
+eclipse/**
+~eclipse/mechanic
+/xdgconfighome/Clementine/
 /WindowsPowerShell/Modules/*

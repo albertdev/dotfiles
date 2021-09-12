@@ -1,15 +1,9 @@
 # Config file for https://github.com/FooSoft/homemaker
 
 [tasks.totalcmd]
-    # File bug with homemaker: does not work on windows due to Go's path package, should work with filepath package
-    #links = [
-    #    ["${LOCALAPPDATA}\\totalcmd\\wincmd.ini", "totalcmd\\wincmd.ini"],
-    #    ["${LOCALAPPDATA}/totalcmd/usercmd.ini", "totalcmd/usercmd.ini"],
-    #    ["${LOCALAPPDATA}/totalcmd/totalcommander.bar", "totalcmd/totalcommander.bar"],
-    #]
     cmds = [
-        ["reg", "add", "HKCU\\Software\\Ghisler\\Total Commander", "/v", "IniFileName", "/d", "%LocalAppData%\\totalcmd\\wincmd.ini", "/f"],
-        ["reg", "add", "HKCU\\Software\\Ghisler\\Total Commander", "/v", "FtpIniName", "/d", "%LocalAppData%\\totalcmd\\wcx_ftp.ini", "/f"],
+        ["reg", "add", 'HKCU\Software\Ghisler\Total Commander', "/v", "IniFileName", "/d", '%LocalAppData%\totalcmd\wincmd.ini', "/f"],
+        ["reg", "add", 'HKCU\Software\Ghisler\Total Commander', "/v", "FtpIniName",  "/d", '%LocalAppData%\totalcmd\wcx_ftp.ini', "/f"],
     ]
     links = [
         ["AppData/local/totalcmd/wincmd.ini", "totalcmd/wincmd.ini"],
@@ -22,18 +16,14 @@
     #]
 
 [tasks.console-z]
-    # File bug with homemaker: does not work with Go's path package, should work with filepath
-    #links = [
-    #    ["${APPDATA}/Console/console.xml", "console-z/console.xml"],
-    #]
     links = [
         ["AppData/roaming/Console/console.xml", "console-z/console.xml"],
     ]
 
 [tasks.eclipse]
     links = [
-        [".eclipse"],
-        [".vrapperrc"]
+        [".eclipse", "eclipse"],
+        [".vrapperrc", "rc-files/vrapperrc"]
     ]
 
 [macros.powershell-check-modules]
@@ -70,69 +60,81 @@
 [tasks.visualstudio]
     # Make it so that double clicking on a TFS Pending Change item opens the diff viewer rather than the file
     cmds = [
-        ["reg", "add", "HKCU\\Software\\Microsoft\\VisualStudio\\14.0\\TeamFoundation\\SourceControl\\Behavior", "/v", "DoubleClickOnChange", "/t", "REG_DWORD", "/d", "00000001", "/f"],
-        ["reg", "add", "HKCU\\Software\\Microsoft\\VisualStudio\\15.0\\TeamFoundation\\SourceControl\\Behavior", "/v", "DoubleClickOnChange", "/t", "REG_DWORD", "/d", "00000001", "/f"]
+        ["reg", "add", 'HKCU\Software\Microsoft\VisualStudio\14.0\TeamFoundation\SourceControl\Behavior', "/v", "DoubleClickOnChange", "/t", "REG_DWORD", "/d", "00000001", "/f"],
+        ["reg", "add", 'HKCU\Software\Microsoft\VisualStudio\15.0\TeamFoundation\SourceControl\Behavior', "/v", "DoubleClickOnChange", "/t", "REG_DWORD", "/d", "00000001", "/f"]
     ]
     links = [
-        [".vsvimrc"],
+        [".vsvimrc", "rc-files/vsvimrc"],
     ]
 
 [tasks.windows-tweaks]
     # (Try to) Disable those annoying freemium sideloading apps you get after each major update
     cmds = [
-        ["reg", "add", "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager", "/v", "SilentInstalledAppsEnabled", "/t", "REG_DWORD", "/d", "00000000", "/f"],
+        ["reg", "add", 'HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', "/v", "SilentInstalledAppsEnabled", "/t", "REG_DWORD", "/d", "00000000", "/f"],
     ]
 
+[macros.powershell-create-link-start-home]
+    # Next parameter after macro is location of link file
+    # Target path still needs to be specified to tell where to link to
+    prefix = ["cmd", "/c", "powershell", "-NoProfile", "-Command", "${HM_SRC}/WindowsPowershell/Scripts/New-ShellLink.ps1",
+                "-Force", "-LinkOutputPath"]
+    suffix = ["-StartPath", "'%USERPROFILE%'"]
+
+[macros.powershell-create-link]
+    # Next parameter after macro is location of link file
+    # Target path still needs to be specified to tell where to link to
+    prefix = ["cmd", "/c", "powershell", "-NoProfile", "-Command", "${HM_SRC}/WindowsPowershell/Scripts/New-ShellLink.ps1",
+                "-Force", "-LinkOutputPath"]
+
 [tasks.windows-software]
+    # TODO: see what https://gist.github.com/alimbada/449ddf65b4ef9752eff3 has to offer
     # Install software, pin some of them so software's auto-update mechanism doesn't conflict with chocolatey, create shortcuts
     cmds = [
-        ["choco", "install", "-y", "launchy", "autohotkey.install", "sysinternals", "palemoon", "notepadplusplus.install", "dejavufonts", "vim", "kitty",
-            "adobereader", "totalcommander", "consolez", "irfanview", "iridium-browser", "kdiff3", "tortoisegit", "git-cola", "logexpert", "baretail",
-            "hourglass.install"],
+        ["choco", "install", "-y", "${HM_SRC}/chocolatey_packages.config"],
+
         ["choco", "pin", "add", "--name", "palemoon"],
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
         ["choco", "pin", "add", "--name", "adobereader"],
 
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
-            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Console.lnk'",
-            "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe", "-StartPath", "'%USERPROFILE%'"],
+        ["@powershell-create-link-start-home",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Console.lnk'",
+            "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe"],
 
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
-            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Command prompt console.lnk'",
-            "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe", "-StartPath", "'%USERPROFILE%'",
-            "-Arguments", "'-t Cmd'"],
+        ["@powershell-create-link-start-home",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Command prompt console.lnk'",
+            "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe", "-Arguments", "'-t Cmd'"],
 
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
-            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Kitty.lnk'",
-            "-TargetPath", "C:/ProgramData/chocolatey/lib/kitty/tools/kitty.exe", "-StartPath", "'%USERPROFILE%'"],
+        ["@powershell-create-link-start-home",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Kitty.lnk'",
+            "-TargetPath", "C:/ProgramData/chocolatey/lib/kitty/tools/kitty.exe"],
 
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
-            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/BareTail.lnk'",
-            "-TargetPath", "C:/ProgramData/chocolatey/lib/baretail/tools/baretail.exe", "-StartPath", "'%USERPROFILE%'"],
+        ["@powershell-create-link-start-home",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/BareTail.lnk'",
+            "-TargetPath", "C:/ProgramData/chocolatey/lib/baretail/tools/baretail.exe"],
 
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
-            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/LogExpert.lnk'",
-            "-TargetPath", "c:/ProgramData/chocolatey/lib/logexpert/tools/LogExpert.exe", "-StartPath", "'%USERPROFILE%'"],
+        ["@powershell-create-link-start-home",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/LogExpert.lnk'",
+            "-TargetPath", "c:/ProgramData/chocolatey/lib/logexpert/tools/LogExpert.exe"],
 
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
-            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Calculator.lnk'",
+        ["@powershell-create-link",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Calculator.lnk'",
             "-TargetPath", "shell:appsFolder\\Microsoft.WindowsCalculator_8wekyb3d8bbwe!App"],
 
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
-            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Settings.lnk'",
+        ["@powershell-create-link",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Settings.lnk'",
             "-TargetPath", "shell:appsFolder\\windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel"]
     ]
 
 # Register programs which get installed somewhere in this script and which should start automatically.
 [tasks.windows-startup]
     cmds = [
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
-            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Startup/WinManagement.lnk'",
-            "-TargetPath", "%DOTFILESPATH%/autohotkey/WinManagement.ahk", "-StartPath", "'%USERPROFILE%'"],
+        ["@powershell-create-link-start-home",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/WinManagement.lnk'",
+            "-TargetPath", "%DOTFILESPATH%/autohotkey/WinManagement.ahk"],
 
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "%DOTFILESPATH%/WindowsPowershell/Scripts/New-ShellLink.ps1", "-Force",
-            "-LinkOutputPath", "'%APPDATA%/Microsoft/Windows/Start Menu/Programs/Startup/WinMaximizer.lnk'",
-            "-TargetPath", "%DOTFILESPATH%/autohotkey/WinMaximizer.ahk", "-StartPath", "'%USERPROFILE%'"],
+        ["@powershell-create-link-start-home",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/WinMaximizer.lnk'",
+            "-TargetPath", "%DOTFILESPATH%/autohotkey/WinMaximizer.ahk"],
     ]
 
 [tasks.windows-bin]
@@ -143,26 +145,32 @@
 
 [tasks.shared-rc]
     links = [
-        [".ackrc"],
-        [".bash_aliases"],
-        [".bashrc"],
-        [".git_global_ignore"],
-        [".gitconfig"],
-        [".lesskey"],
-        [".pentadactylrc"],
+        [".ackrc", "rc-files/ackrc"],
+        [".bash_aliases", "rc-files/bash_aliases"],
+        [".bashrc", "rc-files/bashrc"],
+        [".config", "xdgconfighome"],
+        [".git_global_ignore", "rc-files/git_global_ignore"],
+        [".gitconfig", "rc-files/git_global_config"],
+        [".lesskey", "rc-files/lesskey"],
+        [".pentadactylrc", "rc-files/pentadactylrc"],
+        [".themes", "gtk-themes"]
     ]
     #[".kdiff3rc"],
+    # File bug in homemaker: if file already exists then you get a prompt "clobber? Y/N". Choosing No overwrites the file anyway
+    #templates = [
+    #    [".localgitconfig", "rc-files/git_local_config_template"]
+    #]
 
 [tasks.vim]
     links = [
-        [".vimrc"],
-        [".vim"], # Actually a folder
+        [".vimrc", "rc-files/vimrc"],
+        [".vim", "vim"], # Actually a folder
     ]
 
 [tasks.default]
     deps = ["vim", "shared-rc"]
 
 [tasks.default__windows]
-    deps = ["vim", "shared-rc", "windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks", "windows-software",
+    deps = ["default__", "windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks", "windows-software",
             "windows-startup"]
 
