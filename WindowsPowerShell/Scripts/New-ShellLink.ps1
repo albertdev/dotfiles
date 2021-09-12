@@ -51,6 +51,11 @@ if (Test-Path $LinkOutputPath) {
     }
     Write-Warning "Overwriting link file $LinkOutputPath"
 }
+# Validate whether link output directory exists. If not, create it
+$outputDirectory = Split-Path -Parent $LinkOutputPath
+if (-not (Test-Path -Type Container $outputDirectory)) {
+    New-Item -Type Directory $outputDirectory -Force > $null
+}
 
 $objShell = New-Object -ComObject WScript.Shell
 $lnk = $objShell.CreateShortcut($LinkOutputPath)
