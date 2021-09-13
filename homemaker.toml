@@ -153,8 +153,9 @@
 
 [tasks.zsh]
     links = [
-        [".zshrc"],
-        [".zsh"], # Contains helper scripts
+        [".zshrc", "zsh/zshrc"],
+        [".zshenv", "zsh/zshenv"],
+        [".zsh", "zsh"], # Organize zsh stuff somewhat similar to Vim folder
     ]
 
 ##################################################################################
