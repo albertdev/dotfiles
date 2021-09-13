@@ -6,7 +6,7 @@ param (
 )
 $commands = @(Get-Command "homemaker.exe" -ErrorAction Continue)
 if (-not ($commands)) {
-	$commands = @(Join-Path -Resolve "$env:HOMEDRIVE$env:HOMEPATH" "bin/homemaker.exe")
+	$commands = @(Join-Path -Resolve "$env:HOME" "bin/homemaker.exe")
     if (-not ($commands)) {
         $commands = @(Resolve-Path ".\homemaker.exe")
     }
@@ -18,7 +18,7 @@ $homemakerExe = ($commands | Select-Object -First 1)
 #$homemakerExe = "echoargs.exe"
 
 $homemakerargs = @(
-    "-dest", (Resolve-Path "$env:HOMEDRIVE$env:HOMEPATH"),
+    "-dest", (Resolve-Path "$env:HOME"),
     "-verbose",
     "-variant", "windows",
     "homemaker.toml",
