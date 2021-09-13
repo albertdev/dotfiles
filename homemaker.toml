@@ -163,7 +163,7 @@
 
 [tasks.vim]
     links = [
-        [".vimrc", "rc-files/vimrc"],
+        [".vimrc", "vim/main-vimrc"],
         [".vim", "vim"], # Actually a folder
     ]
 

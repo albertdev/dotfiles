@@ -1,3 +1,6 @@
+" Personal Vim RC file. This file gets symlinked to ~/.vimrc, but might also
+" show up in ~/.vim/ due to the way the dotfiles repo is structured.
+"
 " Cargo cult programming to ward of vi spirits.
 set nocompatible
 " Required by Vundle initialization
