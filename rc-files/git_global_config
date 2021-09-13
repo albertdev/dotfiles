@@ -9,7 +9,7 @@
 	autocrlf = false
 	# Git comes with vim built-in, but this MSYS2 version messes with Console-Z's buffers on exit
 	# Use graphical vim instead
-	editor = gvim
+	editor = gvim.bat -f -i NONE
 # Used for personal details, might use personal e-mail at home.
 [include]
 	path = ~/.localgitconfig
