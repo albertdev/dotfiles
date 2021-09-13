@@ -1,5 +1,9 @@
 # Config file for https://github.com/FooSoft/homemaker
 
+##################################################################################
+# WINDOWS
+##################################################################################
+
 [tasks.totalcmd]
     cmds = [
         ["reg", "add", 'HKCU\Software\Ghisler\Total Commander', "/v", "IniFileName", "/d", '%LocalAppData%\totalcmd\wincmd.ini', "/f"],
@@ -143,6 +147,20 @@
         ["bin/git-cola", "windows-bin/git-cola"]
     ]
 
+##################################################################################
+# LINUX
+##################################################################################
+
+[tasks.zsh]
+    links = [
+        [".zshrc"],
+        [".zsh"], # Contains helper scripts
+    ]
+
+##################################################################################
+# SHARED
+##################################################################################
+
 [tasks.shared-rc]
     links = [
         [".ackrc", "rc-files/ackrc"],
@@ -167,6 +185,11 @@
         [".vim", "vim"], # Actually a folder
     ]
 
+##################################################################################
+# BINDING ACTIONS
+##################################################################################
+
+
 [tasks.default]
     deps = ["vim", "shared-rc"]
 
@@ -174,3 +197,5 @@
     deps = ["default__", "windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks", "windows-software",
             "windows-startup"]
 
+[tasks.default__linux]
+    deps = ["vim", "shared-rc", "zsh"]
