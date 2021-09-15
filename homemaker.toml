@@ -100,6 +100,11 @@
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
         ["choco", "pin", "add", "--name", "adobereader"],
 
+        # Make sure that Git uses GVim as editor, MSYS2 vim doesn't work properly in Console-Z. Setting this in the registry so that the git config remains platform indedendent.
+        ["powershell", "-NoProfile", "-Command", "Set-ItemProperty", "-Path", 'HKCU:\Environment', "-Name", "GIT_EDITOR", "-Value", '"gvim.exe -f -i NONE"', "-Force"],
+
+        ["powershell", "-NoProfile", "-Command", "Set-ItemProperty", "-Path", 'HKCU:\Environment', "-Name", "EDITOR", "-Value", "gvim.exe", "-Force"],
+
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Console.lnk'",
             "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe"],

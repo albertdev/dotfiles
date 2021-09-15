@@ -2,6 +2,7 @@
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 export RI="--format ansi"
 export EDITOR="vim"
+export GIT_EDITOR="vim -i NONE"
 export NOPASTE_SSH_SERVER=paste
 export NOPASTE_SSH_MODE=0644
 if [[ "$TERM" == xterm ]]; then
