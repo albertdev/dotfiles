@@ -1,0 +1,11 @@
+# Ubuntu
+################################################################################
+
+## Print which apt-get package contains a particular command
+#source /etc/zsh_command_not_found
+
+## Used to stop tty from freezing output when pressing CTRL-S
+#stty -ixon
+
+# Other
+################################################################################
