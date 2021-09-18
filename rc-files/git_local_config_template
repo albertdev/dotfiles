@@ -1,3 +1,11 @@
 [user]
     name = XXX
     email = XXX
+#
+# On regular Linux one can run gh auth login, and it will run a browser. On WSL one might need to use github-cli as follows:
+# gh auth login --with-token < fromfile.txt
+# It is assumed that the personal access token has access to the github workflow (and thus full access to all repo stuff), read:org, and gist
+# The access token will then be saved in ~/.config/gh/
+#
+#[credential "https://github.com"]
+#	helper = !/usr/bin/gh auth git-credential
