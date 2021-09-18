@@ -25,3 +25,6 @@ alias l='ls -CF'
 if ! ( command -v ack &>/dev/null ) && command -v ack-grep &>/dev/null ; then
     alias ack=ack-grep
 fi
+
+# Zsh and query parameter delimiters in URLs don't agree
+alias youtube-dl='noglob youtube-dl'

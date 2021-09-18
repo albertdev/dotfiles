@@ -175,7 +175,7 @@
         [".ackrc", "rc-files/ackrc"],
         [".bash_aliases", "rc-files/bash_aliases"],
         [".bashrc", "rc-files/bashrc"],
-        [".config", "xdgconfighome"],
+        [".config/htop", "xdgconfighome/htop"],
         [".git_global_ignore", "rc-files/git_global_ignore"],
         [".gitconfig", "rc-files/git_global_config"],
         [".lesskey", "rc-files/lesskey"],
