@@ -1,8 +1,8 @@
 "let g:tcd_plugin_debug=1
 
-command! -nargs=? Tcd call SetTCD(<args>)
+command! -nargs=? -complete=dir Tcd call SetTCD(<q-args>)
 " Personal preference: typing :TCD simply means holding the shift key.
-command! -nargs=? TCD call SetTCD(<args>)
+command! -nargs=? -complete=dir TCD call SetTCD(<q-args>)
 
 " Set local current directory for all windows in the current tab to get
 " a tab-local current directory.
