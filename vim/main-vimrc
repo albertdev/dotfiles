@@ -3,6 +3,11 @@
 "
 " Cargo cult programming to ward of vi spirits.
 set nocompatible
+
+" Do not localize vim, stick to English
+set langmenu=en_US.UTF-8
+language en
+
 " Required by Vundle initialization
 filetype off
 " 'listchars' uses UTF-8
