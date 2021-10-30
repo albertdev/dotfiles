@@ -274,16 +274,45 @@ Function GitMF() { git merge --ff-only $args }
 Function GitKD() { gitk.exe --date-order $args }
 Function GitKA() { gitk.exe --all $args }
 Function GitKAD() { gitk.exe --all --date-order $args }
-Function GitKU($branch) {
-    if (!($branch)) {
-        $branch = "HEAD"
+Function GitKU() {
+    <#
+        .Description
+        Open gitk showing one or more branches, both the local and the upstream branch of each.
+        Defaults to HEAD.
+        First branch will be selected.
+    #>
+
+    # Split off gitk options (if added) by filtering out arguments starting with '-' or '^'
+    $gitkArgs = @()
+    $branches = @()
+    for ($i = 0; $i -lt ($args.length); $i += 1) {
+        if ($args[$i] -like '-*' -or $args[$i] -like '^*') {
+            $gitkArgs += $args[$i]
+        } else {
+            $branches += $args[$i]
+        }
     }
-    $upstreamBranch = git rev-parse --abbrev-ref --symbolic-full-name "$($branch)@{upstream}" 2>&1
-    if ($LASTEXITCODE) {
-        Write-Output "Branch $branch has no upstream or does not exist!"
-        return
+    if (!($branches)) {
+        $branches += "HEAD"
     }
-    gitk.exe --select-commit=$branch $branch "$($branch)@{upstream}" $args
+    foreach ($branch in $branches) {
+        # Test if branch exists. HEAD is special because it is not a branch but a reference to the current branch or commit.
+        if ($branch -cne "HEAD") {
+            git show-ref --quiet "refs/heads/$branch" > $null
+            if ($LASTEXITCODE -ne 0) {
+                Write-Output "Branch $branch does not exist!"
+                return
+            }
+        }
+        $upstreamBranch = git rev-parse --abbrev-ref --symbolic-full-name "$($branch)@{upstream}" 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            Write-Output "Branch $branch has no upstream!"
+        }
+        $gitkArgs += $branch, $upstreamBranch
+    }
+    $selectedBranch = $branches[0]
+    $gitkArgs = @("--select-commit=$selectedBranch") + $gitkArgs
+    gitk.exe @gitkArgs
 }
 Function GitKUD($branch) { GITKU $branch "--date-order" $args }
 Function GitKStash([string] $stash) {
