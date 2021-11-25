@@ -307,6 +307,7 @@ Function GitKU() {
         $upstreamBranch = git rev-parse --abbrev-ref --symbolic-full-name "$($branch)@{upstream}" 2>&1
         if ($LASTEXITCODE -ne 0) {
             Write-Output "Branch $branch has no upstream!"
+            return
         }
         $gitkArgs += $branch, $upstreamBranch
     }
@@ -314,7 +315,7 @@ Function GitKU() {
     $gitkArgs = @("--select-commit=$selectedBranch") + $gitkArgs
     gitk.exe @gitkArgs
 }
-Function GitKUD($branch) { GITKU $branch "--date-order" $args }
+Function GitKUD() { GITKU "--date-order" $args }
 Function GitKStash([string] $stash) {
     <#
         .Description
