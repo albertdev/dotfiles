@@ -494,10 +494,14 @@ function GitReviewDiff([string] $baseCommit, [string] $targetCommit)
     }
 }
 
-# Tells you whether the commit pointed to by Needle is in the history of BranchOrCommit.
-# Useful to check if a certain commit id was merged before or after the commit on which a certain build is based.
 function GitContains ([string]$Needle, [string]$BranchOrCommit, [switch]$Remotes)
 {
+    <#
+        .Description
+        Tells you whether the commit pointed to by Needle is in the history of BranchOrCommit.
+        Useful to check if a certain commit id was merged before or after the commit on which a certain build is based.
+        Pass a -BranchOrCommit value "*" (default) to show all matching. Use the -Remotes switch to also include remote branches in that list.
+    #>
     if (-not ($Needle)) {
         throw "No commit id or object specified"
     }
@@ -510,12 +514,12 @@ function GitContains ([string]$Needle, [string]$BranchOrCommit, [switch]$Remotes
         } else {
             $branches = git branch --contains $Needle
         }
-        $tags     = git tag --contains $Needle
-        if ($null -ne $branches -and $branches.Count -ge 0) {
+        $tags = git tag --contains $Needle
+        if ($branches.Count -gt 0) {
             Write-Output "Branches:"
             $branches | Write-Output
         }
-        if ($null -ne $tags -and $tags.Count -ge 0) {
+        if ($tags.Count -gt 0) {
             Write-Output "Tags:"
             $tags | % { "  "  + $_ } | Write-Output
         }
@@ -528,9 +532,10 @@ function GitContains ([string]$Needle, [string]$BranchOrCommit, [switch]$Remotes
         }
     }
 }
-# Restores Nuget and npm packages
 function Add-ProjectPackages ()
 {
+    <# .Description
+       Restores Nuget and npm packages #>
     $solutions = Get-ChildItem -Recurse "*.sln"
     $npmFiles = Get-ChildItem -Recurse "package.json"
     $currentDir = Get-Location
