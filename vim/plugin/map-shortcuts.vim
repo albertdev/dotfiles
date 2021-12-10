@@ -20,6 +20,11 @@ vmap  <expr>  D        DVB_Duplicate()
 nnoremap <F4> :<C-U>call UserToggleSelection()<CR>
 vnoremap <F4> :<C-U>call UserToggleSelection()<CR>gv
 
+" Toggle concealing on or off.
+nnoremap <C-S-F8> :call UserToggleConcealing()<CR>
+inoremap <C-S-F8> <C-O>:call UserToggleConcealing()<CR>
+vnoremap <C-S-F8> :<C-U>call UserToggleConcealing()<CR>gv
+
 " Oddly, Vi back in the day treated it like yy. Make it more consistent.
 nnoremap Y y$
 

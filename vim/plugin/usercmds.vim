@@ -60,3 +60,6 @@ endfunction
 command! SlashForward let tmp=@/<Bar>s:\\:/:ge<Bar>let @/=tmp<Bar>noh
 "command! SlashBack let tmp=@/<Bar>s:/:\\:ge<Bar>let @/=tmp<Bar>noh
 command! SlashBack let tmp=@/<Bar>s:/:\\:ge<Bar>let @/=tmp<Bar>noh
+
+" Adds a syntax pattern to match the current search pattern, then applies the 'conceal' flag to it to optionally hide it
+command! ConcealSearch execute 'syn match Concealed ''' . @/ . ''' conceal'
