@@ -6,7 +6,7 @@ set nocompatible
 
 " Do not localize vim, stick to English
 set langmenu=en_US.UTF-8
-language en
+language en_US.UTF-8
 
 " Required by Vundle initialization
 filetype off
