@@ -1,2 +1,2 @@
 #env
-LESS = --shift=10 -EFMRSX
+LESS = --shift=10 --jump-target=.5 -EFMRSX
