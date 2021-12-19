@@ -167,6 +167,11 @@
         [".localdirs", "zsh/localdirs_template"]
     ]
 
+[tasks.xfce]
+    links = [
+        [".config/xfce4/terminal/accels.scm", "xdgconfighome/xfce4/terminal/accels.scm"],
+    ]
+
 ##################################################################################
 # SHARED
 ##################################################################################
@@ -208,4 +213,4 @@
             "windows-startup"]
 
 [tasks.default__linux]
-    deps = ["vim", "shared-rc", "zsh"]
+    deps = ["vim", "shared-rc", "xfce", "zsh"]
