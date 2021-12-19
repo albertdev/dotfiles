@@ -163,7 +163,8 @@
         [".zsh", "zsh"], # Organize zsh stuff somewhat similar to Vim folder
     ]
     templates = [
-        [".localzshrc", "zsh/localzshrc_template"]
+        [".localzshrc", "zsh/localzshrc_template"],
+        [".localdirs", "zsh/localdirs_template"]
     ]
 
 ##################################################################################

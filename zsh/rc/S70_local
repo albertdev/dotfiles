@@ -1,6 +1,8 @@
 
 if [[ -r ~/.localdirs ]]; then
-   source ~/.localdirs
+    # Config file for named directories
+    # Should contain statements of the form 'hash -d alias=/my/path'
+    source ~/.localdirs
 fi
 
 # vim: ft=zsh
