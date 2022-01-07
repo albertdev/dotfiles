@@ -108,6 +108,19 @@ hi ColorColumn ctermbg=lightgrey guibg=lightgrey
 hi NonText guifg=lightblue
 hi SpecialKey guifg=lightblue
 
+" Change color theme when running in WSL terminal.
+" Trick from https://github.com/neovim/neovim/issues/12642#issuecomment-658944841
+function! Is_WSL() abort
+  let proc_version = '/proc/version'
+  return filereadable(proc_version)
+        \  ? !empty(filter(
+        \    readfile(proc_version, '', 1), { _, val -> val =~? 'microsoft' }))
+        \  : v:false
+endfunction
+if !has("gui") && Is_WSL()
+	color desert
+endif
+
 " Fonts settings   
 if has("mac")
 elseif has("unix")
