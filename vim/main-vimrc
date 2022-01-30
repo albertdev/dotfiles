@@ -58,6 +58,8 @@ Bundle 'vim-scripts/Improved-paragraph-motion'
 "Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'PProvost/vim-ps1'
 Bundle 'mg979/vim-visual-multi'
+Bundle 'inkarkat/vim-ingo-library'
+Bundle 'inkarkat/vim-Concealer'
 
 " Load everything upon enabling filetype loading.
 " Required by Vundle

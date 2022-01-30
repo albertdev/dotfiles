@@ -61,5 +61,15 @@ command! SlashForward let tmp=@/<Bar>s:\\:/:ge<Bar>let @/=tmp<Bar>noh
 "command! SlashBack let tmp=@/<Bar>s:/:\\:ge<Bar>let @/=tmp<Bar>noh
 command! SlashBack let tmp=@/<Bar>s:/:\\:ge<Bar>let @/=tmp<Bar>noh
 
-" Adds a syntax pattern to match the current search pattern, then applies the 'conceal' flag to it to optionally hide it
-command! ConcealSearch execute 'syn match Concealed ''' . @/ . ''' conceal'
+" Builds on Ingo Karkat's Concealer plugin to add a (local) conceal group based on the current search pattern
+command! ConcealSearch execute 'ConcealHere '.@/
+
+" Commands which will initiate concealing with patterns I frequently use; traveling through the search history is messy
+" and might at some point lose some favorites
+
+" Search logfiles of eSignatures, which has this format:
+" INFO  2020-01-01 01:02:03,456 [(request-correlation-guid)] [(tenant identifier)] classname trimmed and/or padded to 80 chars - Message
+command! ConcealEsigIds ConcealAdd \[(\w\+-\zs[^]]\+] \[[^]]\+] .\{50}
+
+" Search pattern which matches the filename column in a quickfix list, can be combined with ConcealSearch
+command! ConcealQuickListFiles ConcealHere \v^[^|]+\|
