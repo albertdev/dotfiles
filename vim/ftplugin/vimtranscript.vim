@@ -52,10 +52,10 @@ nnoremap <buffer> <F12> :<C-U>TranscribeSpeedSet 1.2<cr>
 " Automatically strip trailing whitespace in vimtranscript
 function! StripTrailingWhitespace()
     let pos = getpos(".")
-    %s/\s\+$//e
-    if pos != getpos(".")
-        echo "Stripped whitespace\n"
-    endif
+    silent! %s/\s\+$//e
+    "if pos != getpos(".")
+    "    echo "Stripped whitespace\n"
+    "endif
     call setpos(".", pos)
 endfunction
 autocmd BufWritePre <buffer> :call StripTrailingWhitespace()
