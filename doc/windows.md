@@ -37,6 +37,13 @@ Once there you can pick an item from the list and click "Change Key Sequence". D
 - Enter `ms-settings:mousetouchpad`
 - Set cursor speed to 12, scroll multiple lines at a time, scroll 9-11 lines each time, scroll when hovering.
 
+## System Tricks
+### Disabling Intel HD Screen Dimming
+Found instructions on https://mikebattistablog.wordpress.com/2016/05/27/disable-intel-dpst-on-sp4/
+
+Basically open regedit, find the `[HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000]` (or `\0001`)
+folder, then edit the `FeatureTestControl` so that the number has its 5th bit set (4th bit if 0-indexed). Reboot and check it again.
+
 ## Windows Subsystem for Linux (WSL)
 ### Binding WSL ports to host IP or loopback adapter
 WSL runs a part of Hyper-V in the background (referred to as "Virtual Machine Platform") and each WSL distribution gets its own IP address, which then
