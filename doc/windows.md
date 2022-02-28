@@ -36,3 +36,47 @@ Once there you can pick an item from the list and click "Change Key Sequence". D
 - Open Windows' `Run` dialog.
 - Enter `ms-settings:mousetouchpad`
 - Set cursor speed to 12, scroll multiple lines at a time, scroll 9-11 lines each time, scroll when hovering.
+
+## Windows Subsystem for Linux (WSL)
+### Binding WSL ports to host IP or loopback adapter
+WSL runs a part of Hyper-V in the background (referred to as "Virtual Machine Platform") and each WSL distribution gets its own IP address, which then
+sits behind a NAT to access the outside world.
+
+When you start a program listening on a port then WSL will automatically expose that port to the host by binding it to 127.0.0.1 / ::1 (well, in most
+cases, see next section). If you want to reach this service from the outside world then you can setup a port proxy.
+
+See for example https://stackoverflow.com/a/65387586/983949 which links to https://github.com/microsoft/WSL/issues/4150#issuecomment-504209723
+
+These are the most important bit of the script:
+
+````
+  iex "netsh interface portproxy delete v4tov4 listenport=$port listenaddress=$addr";
+  iex "netsh interface portproxy add v4tov4 listenport=$port listenaddress=$addr connectport=$port connectaddress=$remoteport";
+````
+
+The only extra trick is that we can forward to 127.0.0.1 because WSL will often automatically bind that port, even if the most surefire way _is_ to
+connect to the distribution's internal IP address (again, see next section).
+
+### Connection Refused errors when connecting from host to WSL
+Start e.g. ncat on port 1337 on WSL, then try to connect to it from the host. Sometimes this works, sometimes this doesn't after you rebooted.
+
+[People on Github](https://github.com/microsoft/WSL/issues/4769#issuecomment-667947222) figured out that WSL will sometimes reserve ranges of ports on the host, which then won't be available for automatic forwarding from
+the internal WSL network to the host's "localhost". To confirm, run these commands in an elevated terminal:
+
+````
+netsh int ipv4 show excludedportrange protocol=tcp
+netsh int ipv4 show dynamicport tcp
+````
+
+[Others](https://github.com/microsoft/WSL/issues/5306#issuecomment-643603942) figured out that [this might even be a Windows
+bug](https://github.com/docker/for-win/issues/3171#issuecomment-554587817) or at least some weird quirk because the dynamic port range is supposed to
+start at a rather large number:
+
+https://docs.microsoft.com/en-US/troubleshoot/windows-server/networking/default-dynamic-port-range-tcpip-chang
+
+The easiest way to permanently avoid this problem is thus to update the range of ephemereal / dynamic ports using the following commands:
+
+````
+netsh int ipv4 set dynamic tcp start=49152 num=16384
+netsh int ipv6 set dynamic tcp start=49152 num=16384
+````
