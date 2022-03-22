@@ -52,7 +52,7 @@ Settings for extensions:
 - Github Web Components Polyfill, stops GitHub from breaking. https://github.com/JustOff/github-wc-polyfill/
 - Guerilla scripting. https://addons.palemoon.org/addon/guerilla-scripting/
 - Moon Tester Tool. https://addons.palemoon.org/addon/moon-tester-tool/
-- NoScript, fantastic page breaking utility (the PaleMoon devs hate it for that though). https://noscript.net/getit (see "classic")
+- nMatrix, fantastic page breaking utility. https://addons.palemoon.org/addon/ematrix/
 - Pentadactyl, Vi-style browsing. https://addons.palemoon.org/addon/pentadactyl-community/
 - ScrapBook X, saves pages locally for offline viewing / preserving old content. https://addons.palemoon.org/addon/scrapbook-x/
 ### UI Layout
