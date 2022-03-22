@@ -238,6 +238,7 @@ Function GitFF($targetBranch) {
     if (-not ($targetBranch) -or $currentBranch -eq $targetBranch) {
         git pull --ff-only
         if ($LASTEXITCODE -eq 0) {
+            git submodule update
             Write-Output "Branch $currentBranch in sync"
         } elseif ($currentBranch -eq "HEAD") {
             $detachedHeadInfo = git --no-pager log --max-count=1 --pretty=format:"%h%x20%x20%s" HEAD
