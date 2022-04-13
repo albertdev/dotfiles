@@ -1,5 +1,10 @@
 set wrap
 set textwidth=0
+set nojoinspaces
+set showbreak=---------->\ \|\ 
+
+let g:TranscribeInsertTimecodeSetsCue = 1
+let g:TranscribeInsertTimecodeCorrection = 15
 
 map <buffer>  <M-Up>  <Plug>(transcribe-seekcode-backward)
 imap <buffer> <M-Up>  <Plug>(transcribe-seekcode-backward)
@@ -12,6 +17,11 @@ imap <buffer> <C-Up>  <Plug>(transcribe-findcode-backward)
 
 map <buffer>  <C-Down> <Plug>(transcribe-findcode-forward)
 imap <buffer> <C-Down> <Plug>(transcribe-findcode-forward)
+
+nmap + <Plug>(transcribe-movenextline)
+nmap - <Plug>(transcribe-moveprevline)
+nmap _ <Plug>(transcribe-underscoreline)
+nmap ^ <Plug>(transcribe-startofline)
 
 map <buffer> <M-Right> <Plug>(transcribe-inc-frames-seek)
 map <buffer> <M-Left> <Plug>(transcribe-dec-frames-seek)
@@ -32,6 +42,8 @@ imap <buffer> <C-T> <Plug>(transcribe-insertcode)
 
 nmap <buffer> dc <Plug>(transcribe-deletecode)
 
+nmap <buffer> dC J<Plug>(transcribe-deletecode)
+
 map <buffer>  <C-Tab> <Plug>(transcribe-seek-backward-long)
 imap <buffer> <C-Tab> <Plug>(transcribe-seek-backward-long)
 
@@ -41,6 +53,8 @@ imap <buffer> <PageDown> <Plug>(transcribe-seek-forward)
 map <buffer>  <PageUp>   <Plug>(transcribe-seek-backward)
 imap <buffer> <PageUp>   <Plug>(transcribe-seek-backward)
 
+map <buffer>  <bar>      <Plug>(transcribe-seekautocue)
+imap <buffer> <bar>      <Plug>(transcribe-seekautocue)
 
 nnoremap <buffer> <F7>  :<C-U>TranscribeSpeedSet 0.7<cr>
 nnoremap <buffer> <F8>  :<C-U>TranscribeSpeedSet 0.8<cr>
@@ -59,3 +73,13 @@ function! StripTrailingWhitespace()
     call setpos(".", pos)
 endfunction
 autocmd BufWritePre <buffer> :call StripTrailingWhitespace()
+
+iabbrev fullmmx Marble Machine X
+iabbrev fullww Wintergatan Wednesdays
+iabbrev wgn Wintergatan
+iabbrev muscapt [♪  ♪]<Left><Left><Left>
+iabbrev muscont [♫]
+
+function! FixCommonErrors()
+    %s/\v\C i([ ']|$)/ I\1/g
+endfunction
