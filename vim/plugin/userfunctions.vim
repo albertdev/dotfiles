@@ -11,8 +11,7 @@ endfunction
 
 function! UserToggleConcealing()
   if &conceallevel == '0'
-    set conceallevel=1
-    set concealcursor=nc
+    let &conceallevel = g:Concealer_ConcealLevel
     echo "Concealing enabled"
   else
     set conceallevel=0
