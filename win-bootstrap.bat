@@ -39,11 +39,12 @@ CD "%USERPROFILE%\bin\"
 ECHO Downloading homemaker to %CD%
 
 :: Assumes we are on Windows 10, as these commands have been added to the System32 folder in 2017
-curl --tlsv1.2 https://foosoft.net/projects/homemaker/dl/homemaker_windows_amd64.tar.gz --output homemaker_windows_amd64.tar.gz
-tar -xz -f homemaker_windows_amd64.tar.gz
-MOVE "homemaker_windows_amd64\homemaker.exe" homemaker.exe
-RMDIR "homemaker_windows_amd64\"
-IF EXIST "%USERPROFILE%\bin\homemaker.exe" ERASE homemaker_windows_amd64.tar.gz
+curl -L --tlsv1.2 https://github.com/FooSoft/homemaker/releases/download/21.12.14.0/homemaker_windows_amd64.zip --output homemaker_windows_amd64.zip
+tar -x -f homemaker_windows_amd64.zip
+::Seems the exe is now in the root folder of the zip file
+::MOVE "homemaker_windows_amd64\homemaker.exe" homemaker.exe
+::RMDIR "homemaker_windows_amd64\"
+IF EXIST "%USERPROFILE%\bin\homemaker.exe" ERASE homemaker_windows_amd64.zip
 
 CD "%STARTDIR%"
 
