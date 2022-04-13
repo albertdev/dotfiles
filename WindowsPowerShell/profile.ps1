@@ -658,3 +658,33 @@ function Format-Json {
     }
     return $result -Join [Environment]::NewLine
 }
+
+function Compare-TTML {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        $sourceFile,
+
+        [Parameter(Mandatory = $false)]
+        $baseFile,
+
+        [Parameter(Mandatory = $true)]
+        $destFile
+    )
+    if ($null -eq (Get-Command kdiff3 -ErrorAction SilentlyContinue)) {
+        throw "KDiff3 not found in path";
+    }
+    if ($null -eq (Get-Command sed -ErrorAction SilentlyContinue)) {
+        throw "sed not found in path";
+    }
+    $sourceFile = Resolve-Path $sourceFile
+    $destFile = Resolve-Path $destFile
+
+    $diffArgs = @($sourceFile, $destFile, "--config", (Join-Path $env:HOME ".kdiff3rc_ttml"))
+
+    if ($baseFile) {
+        $baseFile = Resolve-Path $baseFile
+        $diffArgs = @($baseFile) + $diffArgs
+    }
+    kdiff3 @diffArgs
+}
