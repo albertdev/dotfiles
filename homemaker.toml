@@ -14,10 +14,9 @@
         ["AppData/local/totalcmd/usercmd.ini", "totalcmd/usercmd.ini"],
         ["AppData/local/totalcmd/totalcommander.bar", "totalcmd/totalcommander.bar"],
     ]
-    # File bug in homemaker: if file already exists then you get a prompt "clobber? Y/N". Choosing No overwrites the file anyway
-    #templates = [
-    #    ["AppData/local/totalcmd/wincmd_dirs.ini", "totalcmd/wincmd_dirs_template.ini"]
-    #]
+    templates = [
+        ["AppData/local/totalcmd/wincmd_dirs.ini", "totalcmd/wincmd_dirs_template.ini"]
+    ]
 
 [tasks.console-z]
     links = [
