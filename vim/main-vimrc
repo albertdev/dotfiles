@@ -166,6 +166,7 @@ syntax on
 "Change highlighting for "Ignore" group.
 hi Ignore ctermfg=Gray guifg=Gray
 
-if filereadable(glob("~/.vimrc.local")) 
-    source ~/.vimrc.local
+" Handy for machine-local options, like setting slightly different colors or experiment with plugins
+if filereadable(glob("~/.localvimrc"))
+    source ~/.localvimrc
 endif
