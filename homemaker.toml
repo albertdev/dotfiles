@@ -188,10 +188,10 @@
         [".themes", "gtk-themes"]
     ]
     #[".kdiff3rc"],
-    # File bug in homemaker: if file already exists then you get a prompt "clobber? Y/N". Choosing No overwrites the file anyway
-    #templates = [
-    #    [".localgitconfig", "rc-files/git_local_config_template"]
-    #]
+    templates = [
+        [".localgitconfig", "rc-files/git_local_config_template"],
+        [".localpentadactylrc", "rc-files/pentadactylrc_local_template"],
+    ]
 
 [tasks.vim]
     links = [
