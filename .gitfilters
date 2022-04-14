@@ -1,5 +1,7 @@
 # Don't forget to put the following two lines in the dotfiles git repo:
 #[include]
 #	path = ../.gitfilters
+[filter "clean-kdiff3-config"]
+  clean = $DOTFILESPATH/scripts/git-filter-clean-kdiff3.sh
 [filter "clean-totalcmd-config"]
   clean = $DOTFILESPATH/scripts/git-filter-clean-totalcmd.sh

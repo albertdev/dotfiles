@@ -183,11 +183,11 @@
         [".config/htop", "xdgconfighome/htop"],
         [".git_global_ignore", "rc-files/git_global_ignore"],
         [".gitconfig", "rc-files/git_global_config"],
+        [".kdiff3rc", "rc-files/kdiff3rc"],
         [".lesskey", "rc-files/lesskey"],
         [".pentadactylrc", "rc-files/pentadactylrc"],
         [".themes", "gtk-themes"]
     ]
-    #[".kdiff3rc"],
     templates = [
         [".localgitconfig", "rc-files/git_local_config_template"],
         [".localpentadactylrc", "rc-files/pentadactylrc_local_template"],
