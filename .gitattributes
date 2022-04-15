@@ -6,3 +6,11 @@
 
 rc-files/kdiff3rc text=auto filter=clean-kdiff3-config
 totalcmd/wincmd.ini filter=clean-totalcmd-config
+
+# Make sure that these are always normalized to LF. *nix Vim does not like CR chars in there
+vim/ftdetect/* text=auto
+vim/ftplugin/* text=auto
+vim/plugin/* text=auto
+vim/syntax/* text=auto
+vim/main-vimrc text=auto
+
