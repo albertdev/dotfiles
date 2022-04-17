@@ -669,7 +669,10 @@ function Compare-TTML {
         $baseFile,
 
         [Parameter(Mandatory = $true)]
-        $destFile
+        $destFile,
+
+        [Parameter(Mandatory = $false)]
+        [switch] $focusOnText
     )
     if ($null -eq (Get-Command kdiff3 -ErrorAction SilentlyContinue)) {
         throw "KDiff3 not found in path";
@@ -680,7 +683,22 @@ function Compare-TTML {
     $sourceFile = Resolve-Path $sourceFile
     $destFile = Resolve-Path $destFile
 
-    $diffArgs = @($sourceFile, $destFile, "--config", (Join-Path $env:HOME ".kdiff3rc_ttml"))
+    # Create a copy of the kdiff3 config file where we can override any config value we want
+    $tempConfig = New-TemporaryFile
+    Copy-Item (Join-Path $env:HOME ".kdiff3rc") $tempConfig.FullName > $null
+
+    $diffArgs = @($sourceFile, $destFile, "--config", (Resolve-Path $tempConfig),`
+        "--cs", "PreProcessorCmd=sed -e 's/^\\s\\+//;s/ region=\\x22bottom\\x22//g;s/ xml:id=\\x22[^\\x22]\\+\\x22//g'")
+
+    if ($focusOnText) {
+        # Strip out the <p start= end=> and </p> tags entirely so line matcher only sees the text. Newline becomes space
+        $diffArgs = $diffArgs + @("--cs", `
+            "LineMatchingPreProcessorCmd=sed -e 's@<br \\?/>@ @g;s/<p \\([^>]\\+\\)>\\(.*\\)/\\2/g;s@</p>@@g'")
+    } else {
+        # Newline becomes space during line matching, move <p ..> tag to end of line to make auto-aligning work better
+        $diffArgs = $diffArgs + @("--cs", `
+            "LineMatchingPreProcessorCmd=sed -e 's@<br \\?/>@ @g;s/<p \\([^>]\\+\\)>\\(.*\\)/\\2<p \\1>/g'")
+    }
 
     if ($baseFile) {
         $baseFile = Resolve-Path $baseFile
