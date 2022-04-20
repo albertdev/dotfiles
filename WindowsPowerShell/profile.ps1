@@ -687,8 +687,11 @@ function Compare-TTML {
     $tempConfig = New-TemporaryFile
     Copy-Item (Join-Path $env:HOME ".kdiff3rc") $tempConfig.FullName > $null
 
-    $diffArgs = @($sourceFile, $destFile, "--config", (Resolve-Path $tempConfig),`
-        "--cs", "PreProcessorCmd=sed -e 's/^\\s\\+//;s/ region=\\x22bottom\\x22//g;s/ xml:id=\\x22[^\\x22]\\+\\x22//g'")
+    # Strip indentation whitespace, strip (default) bottom region, strip paragraph ids,
+    # remove whitespace from a self-closed tag.
+    $preProcessor = "PreProcessorCmd=sed -E -e 's/^\\s+//;s/ region=\\x22bottom\\x22//g;s/ xml:id=\\x22[^\\x22]+\\x22//g;s@(<\w+) />@\1/>@g'"
+
+    $diffArgs = @($sourceFile, $destFile, "--config", (Resolve-Path $tempConfig), "--cs", $preProcessor)
 
     if ($focusOnText) {
         # Strip out the <p start= end=> and </p> tags entirely so line matcher only sees the text. Newline becomes space
@@ -697,7 +700,7 @@ function Compare-TTML {
     } else {
         # Newline becomes space during line matching, move <p ..> tag to end of line to make auto-aligning work better
         $diffArgs = $diffArgs + @("--cs", `
-            "LineMatchingPreProcessorCmd=sed -e 's@<br \\?/>@ @g;s/<p \\([^>]\\+\\)>\\(.*\\)/\\2<p \\1>/g'")
+            "LineMatchingPreProcessorCmd=sed -e 's@<br/>@ @g;s/<p \\([^>]\\+\\)>\\(.*\\)/\\2<p \\1>/g'")
     }
 
     if ($baseFile) {
