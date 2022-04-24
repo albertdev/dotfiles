@@ -38,6 +38,7 @@ Once there you can pick an item from the list and click "Change Key Sequence". D
 - Set cursor speed to 12, scroll multiple lines at a time, scroll 9-11 lines each time, scroll when hovering.
 
 ## System Tricks
+
 ### Disabling Intel HD Screen Dimming
 Found instructions on https://mikebattistablog.wordpress.com/2016/05/27/disable-intel-dpst-on-sp4/
 
@@ -45,6 +46,7 @@ Basically open regedit, find the `[HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Contr
 folder, then edit the `FeatureTestControl` so that the number has its 5th bit set (4th bit if 0-indexed). Reboot and check it again.
 
 ## Windows Subsystem for Linux (WSL)
+
 ### Binding WSL ports to host IP or loopback adapter
 WSL runs a part of Hyper-V in the background (referred to as "Virtual Machine Platform") and each WSL distribution gets its own IP address, which then
 sits behind a NAT to access the outside world.
@@ -87,3 +89,27 @@ The easiest way to permanently avoid this problem is thus to update the range of
 netsh int ipv4 set dynamic tcp start=49152 num=16384
 netsh int ipv6 set dynamic tcp start=49152 num=16384
 ````
+
+## Miscellaneous apps
+### Console / Command Prompt / Powershell
+- Right-click the default Windows Console and pick "Defaults".
+- Check the boxes for the following:
+  - QuickEdit mode
+  - Enable Ctrl key shortcuts
+  - Filter clipboard contents on paste
+  - Use Ctrl+Shift+C/V as Copy/Paste
+  - Enable line wrapping selection
+  - Extended text selection keys
+
+### Powershell
+Make sure to download v2.1.0 of PSReadline to get newer features like Ctrl+Space completion.
+See https://github.com/microsoft/terminal/issues/879 for troubleshooting.
+
+### Slack
+One needs to start chocolatey with specific parameters to make sure that Slack auto-starts:
+```
+choco install slack -y --install-arguments="'INSTALLLEVEL=2'"
+```
+
+Also don't forget to pin it using `choco pin add -n slack`; it auto-updates and the MSI installer might remove Windows taskbar pins when choco runs
+the MSI file again.
