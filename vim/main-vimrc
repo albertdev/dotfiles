@@ -61,6 +61,11 @@ Bundle 'mg979/vim-visual-multi'
 Bundle 'inkarkat/vim-ingo-library'
 Bundle 'inkarkat/vim-Concealer'
 
+" Handy for machine-local options, like setting slightly different colors or experiment with plugins
+if filereadable(glob("~/.localvimrc"))
+    source ~/.localvimrc
+endif
+
 " Load everything upon enabling filetype loading.
 " Required by Vundle
 filetype plugin indent on
@@ -165,8 +170,3 @@ syntax on
 
 "Change highlighting for "Ignore" group.
 hi Ignore ctermfg=Gray guifg=Gray
-
-" Handy for machine-local options, like setting slightly different colors or experiment with plugins
-if filereadable(glob("~/.localvimrc"))
-    source ~/.localvimrc
-endif
