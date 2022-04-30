@@ -689,7 +689,7 @@ function Compare-TTML {
 
     # Strip indentation whitespace, strip (default) bottom region, strip paragraph ids,
     # remove whitespace from a self-closed tag.
-    $preProcessor = "PreProcessorCmd=sed -E -e 's/^\\s+//;s/ region=\\x22bottom\\x22//g;s/ xml:id=\\x22[^\\x22]+\\x22//g;s@(<\w+) />@\1/>@g'"
+    $preProcessor = "PreProcessorCmd=sed -E -e 's/^\\s+//;s/ region=\\x22bottom\\x22//g;s/ xml:id=\\x22[^\\x22]+\\x22//g;s/ style=\\x22[^\\x22]+\\x22//g;s@(<\\w+) />@\\1/>@g'"
 
     $diffArgs = @($sourceFile, $destFile, "--config", (Resolve-Path $tempConfig), "--cs", $preProcessor)
 
