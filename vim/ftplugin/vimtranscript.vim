@@ -56,6 +56,9 @@ imap <buffer> <PageUp>   <Plug>(transcribe-seek-backward)
 map <buffer>  <bar>      <Plug>(transcribe-seekautocue)
 imap <buffer> <bar>      <Plug>(transcribe-seekautocue)
 
+map <buffer>  <F5>       <Plug>(transcribe-playcurrentinterval)
+imap <buffer> <F5>       <Plug>(transcribe-playcurrentinterval)
+
 nnoremap <buffer> <F7>  :<C-U>TranscribeSpeedSet 0.7<cr>
 nnoremap <buffer> <F8>  :<C-U>TranscribeSpeedSet 0.8<cr>
 nnoremap <buffer> <F9>  :<C-U>TranscribeSpeedSet 0.9<cr>
@@ -66,7 +69,7 @@ nnoremap <buffer> <F12> :<C-U>TranscribeSpeedSet 1.2<cr>
 " Automatically strip trailing whitespace in vimtranscript
 function! StripTrailingWhitespace()
     let pos = getpos(".")
-    silent! %s/\s\+$//e
+    silent! keeppatterns %s/\s\+$//e
     "if pos != getpos(".")
     "    echo "Stripped whitespace\n"
     "endif
