@@ -450,7 +450,7 @@ function GitReviewPR([int] $pullRequest)
         $reviewHeader = "Subject: Review of PR $pullRequest`nCommit: $reviewCommit`nTree: $commitTree`n"
         $reviewHeader | Out-File -Encoding UTF8 -NoNewline $reviewFile
         # Run diff command using cmd because PowerShell tends to clobber encoding
-        $diffCommand = "git diff -u `"review/PR$pullRequest^!`" review/PR$pullRequest >> $reviewFile"
+        $diffCommand = "git diff -u `"review/PR$pullRequest^@`" review/PR$pullRequest >> $reviewFile"
         cmd /c $diffCommand > $null
     }
 }
