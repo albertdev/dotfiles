@@ -33,7 +33,9 @@ MouseMoveRate := 50
 ScreenshotsRaised := 0
 
 ; Start ManicTime focus watcher timer
-SetTimer, WinFocusLoop, 500
+; Disabled for now, trying out Windows 10 virtual desktops means we can snap them right next to each other.
+; Also, the "force on top" trick did mean that an open menu in the main window would get covered by the screenshots window.
+; SetTimer, WinFocusLoop, 500
 
 ;;
 ;; End of auto-execute
@@ -71,10 +73,11 @@ Return
 
 
 ; These buttons trigger shortcuts in ManicTime 
+; Next / previous day move can have its shortcut assigned in ManicTime itself
 ; Move to previous day
-*NumpadDiv:: F7
+;*NumpadDiv:: F7
 ; Move to next day
-*NumpadMult:: F8
+;*NumpadMult:: F8
 ; Submit current dialog
 *NumpadEnter::
     Send {Ctrl Down}
