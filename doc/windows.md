@@ -86,8 +86,8 @@ https://docs.microsoft.com/en-US/troubleshoot/windows-server/networking/default-
 The easiest way to permanently avoid this problem is thus to update the range of ephemereal / dynamic ports using the following commands:
 
 ````
-netsh int ipv4 set dynamic tcp start=49152 num=16384
-netsh int ipv6 set dynamic tcp start=49152 num=16384
+netsh int ipv4 set dynamic tcp start=30000 num=20000
+netsh int ipv6 set dynamic tcp start=30000 num=20000
 ````
 
 ## Miscellaneous apps
