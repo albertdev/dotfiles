@@ -55,7 +55,7 @@ function! s:StartReview()
     " Fill location list and modify line's text to be a fancier display
     let diffwin = winnr()
     let diffbuffnr = bufnr(".")
-    lvimgrep /diff --git/ %
+    keeppatterns lvimgrep /\mdiff --[[:alpha:]]\+/ %
     let locations = getloclist(diffwin)
     for i in locations
         let i.text = s:BuildLocationLine(diffbuffnr, i)
@@ -291,9 +291,9 @@ function! s:BuildLocationLine(diffbuffnr,item)
     else
         let locationline .= '[ ] '
     endif
-    let changedfilenamepos = stridx(diffline, ' b/')
+    let changedfilenamepos = match(diffline, '\m --[[:alpha:]]\+\s\+\zs')
     " Substring the target filename without b/ prefix
-    let changedfilename = strpart(diffline, changedfilenamepos + 3)
+    let changedfilename = strpart(diffline, changedfilenamepos)
     return locationline . changedfilename
 endfunction
 
