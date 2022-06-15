@@ -9,3 +9,9 @@
 #
 #[credential "https://github.com"]
 #	helper = !/usr/bin/gh auth git-credential
+
+# Make WSL use the same credential manager as the Windows host. Second bit is necessary for Azure Devops
+#[credential]
+#    helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe
+#[credential "https://dev.azure.com"]
+#    useHttpPath = true

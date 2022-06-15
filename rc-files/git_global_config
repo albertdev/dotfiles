@@ -31,3 +31,5 @@
 	logwidthmarker = 72
 [gui]
 	historybrowser = c:\\\\Program Files\\\\Git\\\\bin\\\\sh.exe -login -i gitk
+[init]
+	defaultBranch = main

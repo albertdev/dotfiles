@@ -47,6 +47,13 @@ folder, then edit the `FeatureTestControl` so that the number has its 5th bit se
 
 ## Windows Subsystem for Linux (WSL)
 
+### Reusing git credentials between Windows host and WSL
+From [the Microsoft documentation on starting Git on WSL](https://docs.microsoft.com/en-us/windows/wsl/tutorials/wsl-git#git-credential-manager-setup):
+
+```
+git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe"
+```
+
 ### Binding WSL ports to host IP or loopback adapter
 WSL runs a part of Hyper-V in the background (referred to as "Virtual Machine Platform") and each WSL distribution gets its own IP address, which then
 sits behind a NAT to access the outside world.
