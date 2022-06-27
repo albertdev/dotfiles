@@ -217,15 +217,29 @@ Function TFGet-LatestId {
 Function GitFA() { git fetch --all }
 Function GitS() { git status }
 Function GitB() {
-    $currentBranch = git symbolic-ref -q --short HEAD
-    if ($LASTEXITCODE -ne 0) {
-        $global:LASTEXITCODE = 0
-        $currentBranch = "tag " + (git describe --tags --exact-match 2> $null)
+    [CmdletBinding()]
+    Param(
+        [Parameter()]
+        [switch]$Previous
+    )
+    if ($Previous) {
+        $commitId = git rev-parse --quiet --verify "@{-1}"
         if ($LASTEXITCODE -ne 0) {
-            $currentBranch = "detached at " + (git rev-parse --short=9 HEAD)
+            "No previous branch or branch was deleted."
+        } else {
+            git name-rev --name-only $commitId
         }
+    } else {
+        $currentBranch = git symbolic-ref -q --short HEAD
+        if ($LASTEXITCODE -ne 0) {
+            $global:LASTEXITCODE = 0
+            $currentBranch = "tag " + (git describe --tags --exact-match 2> $null)
+            if ($LASTEXITCODE -ne 0) {
+                $currentBranch = "detached at " + (git rev-parse --short=9 HEAD)
+            }
+        }
+        $currentBranch
     }
-    $currentBranch
 }
 Function GitI() { git diff --cached }
 Function GitSF() { git svn fetch }
