@@ -244,6 +244,7 @@ Function GitB() {
 Function GitI() { git diff --cached }
 Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
+
 Function GitFF($targetBranch) {
     $currentBranch = git rev-parse --abbrev-ref HEAD
     if ($LASTEXITCODE) { throw "Cannot determine current branch" }
@@ -410,6 +411,34 @@ Function GitClean() {
         $firstRun + $secondRun | Select-Object -Unique
     }
 }
+
+# Inspired by https://newbedev.com/add-tab-completion-for-git-branches-in-powershell,
+# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/register-argumentcompleter?view=powershell-7.2
+# and https://docs.microsoft.com/en-us/dotnet/core/tools/enable-tab-autocomplete?WT.mc_id=modinfra-35653-salean#powershell
+#
+Function GitBranchNameCompleterNative {
+    param($wordToComplete, $commandAst, $cursorPosition)
+
+    # Chop off any single quotes from last completion attempt
+    if ($wordToComplete -like "*'") {
+        $wordToComplete = $wordToComplete.Substring(0, $wordToComplete.Length - 1)
+    }
+    if ($wordToComplete -like "'*") {
+        $wordToComplete = $wordToComplete.Substring(1)
+    }
+    $branchList = git branch --quiet --list --all --format='%(refname:short)' "$($wordToComplete)*"
+    if ( ! $wordToComplete -or "HEAD".StartsWith($wordToComplete)) {
+        $branchList = [array] ( $branchList ) + "HEAD"
+    }
+    $branchList | ForEach-Object { "'$_'" }
+}
+Register-ArgumentCompleter -Native -CommandName ("gitk","gitku","gitkud","gitka","gitkad","gitff","gitlh") -ScriptBlock $function:GitBranchNameCompleterNative
+Function GitBranchNameCompleter {
+    param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
+
+    GitBranchNameCompleterNative $wordToComplete $commandAst 0
+}
+Register-ArgumentCompleter -CommandName "GitContains" -ParameterName "BranchOrCommit" -ScriptBlock $function:GitBranchNameCompleter
 
 # Used to review an Azure Devops Pull Request.
 # This depends on the fact that the remote Devops server has a ref for each PR pointing to a merge commit with its contents.
