@@ -298,12 +298,17 @@ Function GitKU() {
         First branch will be selected.
     #>
 
-    # Split off gitk options (if added) by filtering out arguments starting with '-' or '^'
+    # Split off gitk options (if added) by filtering out arguments starting with '-', '^', or '@'
     $gitkArgs = @()
     $branches = @()
     for ($i = 0; $i -lt ($args.length); $i += 1) {
         if ($args[$i] -like '-*' -or $args[$i] -like '^*') {
             $gitkArgs += $args[$i]
+        } elseif ($args[$i] -like '@*') {
+            # Chop '@' because that's the "escape char" and pass argument straight to gitk
+            # Necessary for including local branches with no upstream or remote refs
+            $ref = $args[$i].Substring(1);
+            $gitkArgs += $ref
         } else {
             $branches += $args[$i]
         }
