@@ -1,5 +1,10 @@
 Import-Module PSCX -Arg (Join-Path -Resolve $PSScriptRoot Pscx.UserPreferences.ps1)
 
+# Recommended by https://docs.microsoft.com/en-us/powershell/scripting/gallery/installing-psget?view=powershell-7.2#system-requirements
+# I wonder if we might need to make this conditional for Powershell 6 / 7
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls13
+
 New-Alias dirs cd
 
 # Load local profile for local aliases
