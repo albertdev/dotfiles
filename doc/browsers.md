@@ -49,7 +49,7 @@ Settings for extensions:
 - Adblock Latitude, an ad blocker. https://addons.palemoon.org/addon/adblock-latitude/
 - Add URL to Window Title v1.03, to work with ManicTime. https://github.com/erichgoldman/add-url-to-window-title
 - Developer Tools 1.0.0a1
-- Github Web Components Polyfill, stops GitHub from breaking. https://github.com/JustOff/github-wc-polyfill/
+- Pale Moon Web Technologies Polyfill Add-On (Palefill), stops GitHub from breaking. https://github.com/martok/palefill
 - Guerilla scripting. https://addons.palemoon.org/addon/guerilla-scripting/
 - Moon Tester Tool. https://addons.palemoon.org/addon/moon-tester-tool/
 - nMatrix, fantastic page breaking utility. https://addons.palemoon.org/addon/ematrix/
