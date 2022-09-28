@@ -18,9 +18,10 @@
         ["AppData/local/totalcmd/wincmd_dirs.ini", "totalcmd/wincmd_dirs_template.ini"]
     ]
 
-[tasks.console-z]
+[tasks.windows-terminal]
+    # Looks like a random path but it's official: https://learn.microsoft.com/en-us/windows/terminal/install#settings-json-file
     links = [
-        ["AppData/roaming/Console/console.xml", "console-z/console.xml"],
+        ["AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json", "rc-files/windows-terminal"],
     ]
 
 [tasks.eclipse]
@@ -99,18 +100,21 @@
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
         ["choco", "pin", "add", "--name", "adobereader"],
 
-        # Make sure that Git uses GVim as editor, MSYS2 vim doesn't work properly in Console-Z. Setting this in the registry so that the git config remains platform indedendent.
+        # Install Windows Terminal app using winget. Choco package tries to do the same thing, only through Get-AppX Powershell cmdlets
+        ["powershell", "-NoProfile", "-Command", "${HM_DEST}/AppData/Local/Microsoft/WindowsApps/winget.exe", "install", "Microsoft.WindowsTerminal"],
+
+        # Make sure that Git uses GVim as editor, MSYS2 vim doesn't always work properly in terminals. Setting this in the registry so that the git config remains platform indedendent.
         ["powershell", "-NoProfile", "-Command", "Set-ItemProperty", "-Path", 'HKCU:\Environment', "-Name", "GIT_EDITOR", "-Value", '"gvim.exe -f -i NONE"', "-Force"],
 
         ["powershell", "-NoProfile", "-Command", "Set-ItemProperty", "-Path", 'HKCU:\Environment', "-Name", "EDITOR", "-Value", "gvim.exe", "-Force"],
 
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Console.lnk'",
-            "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe"],
+            "-TargetPath", "${HM_DEST}/AppData/Local/Microsoft/WindowsApps/wt.exe"],
 
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Command prompt console.lnk'",
-            "-TargetPath", "C:/ProgramData/chocolatey/lib/ConsoleZ/tools/Console.exe", "-Arguments", "'-t Cmd'"],
+            "-TargetPath", "${HM_DEST}/AppData/Local/Microsoft/WindowsApps/wt.exe", "-Arguments", "'new-tab --profile {0caa0dad-35be-5f56-a8ff-afceeeaa6101}'"],
 
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Kitty.lnk'",
@@ -208,7 +212,7 @@
     deps = ["vim", "shared-rc"]
 
 [tasks.default__windows]
-    deps = ["default__", "windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "console-z", "windows-tweaks", "windows-software",
+    deps = ["default__", "windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "windows-terminal", "windows-tweaks", "windows-software",
             "windows-startup"]
 
 [tasks.default__linux]
