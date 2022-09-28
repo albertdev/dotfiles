@@ -79,8 +79,8 @@ javascript <<EOF
 //}
 hints.addMode('p','Open in private browsing',function(elem) dactyl.execute(":private winopen " + elem.href));
 
-silent source ~/.localpentadactylrc
-
 EOF
+
+silent source ~/.localpentadactylrc
 
 " vim: set ft=pentadactyl:
