@@ -37,6 +37,7 @@
     "copyFormatting": "none",
     "copyOnSelect": false,
     "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "launchMode": "maximized",
     "profiles": 
     {
         "defaults": 
@@ -98,6 +99,13 @@
                 "hidden": true,
                 "name": "Developer PowerShell for VS 2019",
                 "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "commandline": "\"c:\\Program Files\\Git\\bin\\bash.exe\" --login -i",
+                "guid": "{0e1b8408-9320-4a61-9642-a2366e275988}",
+                "hidden": false,
+                "icon": "C:\\Program Files\\Git\\mingw64\\share\\git\\git-for-windows.ico",
+                "name": "Git Bash"
             }
         ]
     },
