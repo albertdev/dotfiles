@@ -152,7 +152,18 @@
 [tasks.windows-bin]
     links = [
         ["bin/lst2mlt.exe", "windows-bin/lst2mlt.exe"],
-        ["bin/git-cola", "windows-bin/git-cola"]
+    ]
+    # Make git-cola wrapper which doesn't wait for process to exit
+    # (Attempt 1: point to included executable wrapper - this actually will always open a console window)
+    # ["powershell", "-NoProfile", "-Command", "C:/ProgramData/chocolatey/tools/shimgen.exe", "--output=\"${HM_DEST}/bin/git-cola.exe\"", "--path=\"${HM_DEST}/AppData/Local/Programs/git-cola/bin/git-cola.exe\"", "--gui"]
+
+    # Attempt 2:
+    cmds = [
+        ["powershell", "-NoProfile", "-Command", "C:/ProgramData/chocolatey/tools/shimgen.exe", "--gui",
+            "--output=\"${HM_DEST}/bin/git-cola.exe\"",
+            "--path=\"${HM_DEST}/AppData/Local/Programs/git-cola/Python/pythonw.exe\"",
+            "--command=\"${HM_DEST}/AppData/Local/Programs/git-cola/bin/git-cola.exe\"",
+            ]
     ]
 
 ##################################################################################
