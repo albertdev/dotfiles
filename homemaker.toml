@@ -38,7 +38,7 @@
 
 [tasks.powershell-modules]
     rejects = [
-        ["@powershell-check-modules", "PSCX,ZLocation,PSReadline"]
+        ["@powershell-check-modules", "PSCX,ZLocation,PSReadline,posh-git"]
     ]
     # Install nuget provider for PowerShellGet and install favourite modules
     cmds = [
@@ -48,6 +48,7 @@
         ["@powershell-install-module", "ZLocation"],
         ["@powershell-install-module", "PSReadline"],
         ["@powershell-install-module", "Recycle"],
+        ["@powershell-install-module", "posh-git"],
     ]
 
 [tasks.powershell]

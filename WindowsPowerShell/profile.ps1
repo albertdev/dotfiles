@@ -1,4 +1,10 @@
+# Define custom prompt identical to the default one, to stop posh-git from getting funny ideas
+Function prompt {
+    "PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1)) "
+}
+
 Import-Module PSCX -Arg (Join-Path -Resolve $PSScriptRoot Pscx.UserPreferences.ps1)
+Import-Module posh-git
 
 # Recommended by https://docs.microsoft.com/en-us/powershell/scripting/gallery/installing-psget?view=powershell-7.2#system-requirements
 # I wonder if we might need to make this conditional for Powershell 6 / 7
@@ -440,9 +446,9 @@ Function GitBranchNameCompleterNative {
     if ( ! $wordToComplete -or "HEAD".StartsWith($wordToComplete)) {
         $branchList = [array] ( $branchList ) + "HEAD"
     }
-    $branchList | ForEach-Object { "'$_'" }
+    $branchList | ForEach-Object { "$_" }
 }
-Register-ArgumentCompleter -Native -CommandName ("gitk","gitku","gitkud","gitka","gitkad","gitff","gitlh") -ScriptBlock $function:GitBranchNameCompleterNative
+Register-ArgumentCompleter -Native -CommandName ("gitku","gitkud","gitka","gitkad","gitff","gitlh") -ScriptBlock $function:GitBranchNameCompleterNative
 Function GitBranchNameCompleter {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
 
