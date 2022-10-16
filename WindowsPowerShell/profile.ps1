@@ -309,22 +309,28 @@ Function GitKU() {
         First branch will be selected.
     #>
 
-    # Split off gitk options (if added) by filtering out arguments starting with '-', '^', or '@'
+    # Split off gitk options (if added) by filtering out arguments starting with '-', '^', or ':'
     $gitkArgs = @()
     $branches = @()
+    $localBranches = @()
     for ($i = 0; $i -lt ($args.length); $i += 1) {
         if ($args[$i] -like '-*' -or $args[$i] -like '^*') {
             $gitkArgs += $args[$i]
-        } elseif ($args[$i] -like '@*') {
-            # Chop '@' because that's the "escape char" and pass argument straight to gitk
-            # Necessary for including local branches with no upstream or remote refs
+        } elseif ($args[$i] -like ':*') {
+            # Chop ':' because that's the "escape char"
             $ref = $args[$i].Substring(1);
-            $gitkArgs += $ref
+            $localBranches += $ref
+            if (!($selectedBranch)) {
+                $selectedBranch = $ref
+            }
         } else {
             $branches += $args[$i]
+            if (!($selectedBranch)) {
+                $selectedBranch = $args[$i]
+            }
         }
     }
-    if (!($branches)) {
+    if (!($branches) -and !($localBranches)) {
         $branches += "HEAD"
     }
     foreach ($branch in $branches) {
@@ -343,8 +349,12 @@ Function GitKU() {
         }
         $gitkArgs += $branch, $upstreamBranch
     }
-    $selectedBranch = $branches[0]
+    # Select HEAD if no branch was passed in arguments
+    if (!($selectedBranch)) {
+        $selectedBranch = $branches[0]
+    }
     $gitkArgs = @("--select-commit=$selectedBranch") + $gitkArgs
+    $gitkArgs += $localBranches
     gitk.exe @gitkArgs
 }
 Function GitKUD() { GITKU "--date-order" $args }
