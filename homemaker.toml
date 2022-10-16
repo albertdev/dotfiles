@@ -147,6 +147,11 @@
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/WinMaximizer.lnk'",
             "-TargetPath", "%DOTFILESPATH%/autohotkey/WinMaximizer.ahk"],
+
+        # Launchy-QT no longer creates a startup link whereas the original Launchy did
+        ["@powershell-create-link-start-home",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/Launchy.lnk'",
+            "-TargetPath", "C:/ProgramData/chocolatey/lib/launchyqt/tools/Launchy/Launchy.exe"]
     ]
 
 [tasks.windows-bin]
