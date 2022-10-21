@@ -4,4 +4,4 @@ vimperator/info/**
 eclipse/**
 ~eclipse/mechanic
 /xdgconfighome/Clementine/
-/WindowsPowerShell/Modules/*
+/WindowsPowerShell/Modules/PackageManagement
