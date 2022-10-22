@@ -5,9 +5,10 @@
     RootModule = "WebVideoUtils.psm1"
 	Description = 'Personal collection of Powershell functions to make yt-dlp easier to use in PS'
 
-    CmdletsToExport = @(
+    FunctionsToExport = @(
         'Backup-Video',
         'List-VideoSubtitle',
+        'Backup-VideoDescription',
         'Backup-VideoSubtitle'
 	)
 
