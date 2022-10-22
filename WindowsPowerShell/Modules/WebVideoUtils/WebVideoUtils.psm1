@@ -16,6 +16,12 @@ Function Backup-Video {
         [Parameter()]
         [switch]$AudioOnly,
 
+        [Parameter()]
+        [switch]$DescriptionIncluded,
+
+        [Parameter(Mandatory = $false)]
+        [string]$SubtitleLanguage,
+
         [parameter(Mandatory = $true, ValueFromRemainingArguments=$true)]
         [string[]]$VideoUrls
     )
@@ -44,13 +50,32 @@ Function Backup-Video {
             $outputTemplate = $script:DefaultOutputTemplateSocialMedia
         }
 
+        $downloadArgs = ("--download-archive",$downloadArchive,"--break-on-existing","-o",$outputTemplate)
         if ($AudioOnly) {
-            yt-dlp --download-archive $downloadArchive --break-on-existing -f "bestaudio" -o $outputTemplate $video
+            $downloadArgs += ("-f", "bestaudio")
         }
         else
         {
-            yt-dlp --download-archive $downloadArchive --break-on-existing -f "18/best*[height<=360]/worst" -o $outputTemplate $video
+            $downloadArgs += ("-f","18/best*[height<=360]/worst")
         }
+        if ($DescriptionIncluded) {
+            $downloadArgs += "--write-description"
+        }
+        if ($SubtitleLanguage) {
+            try {
+                $subdownloadArgs = CalculateSubtitleDownloadArguments -Language $SubtitleLanguage -VideoInfo $videoInfo
+                $downloadArgs += $subdownloadArgs
+            } catch {
+                Write-Warning "Subtitles for $video could not be found: $_"
+            }
+        }
+        $downloadArgs += $video
+
+        yt-dlp @downloadArgs
+        if ($LASTEXITCODE) {
+            Write-Error "Failed to download $video, yt-dlp exited with status $LASTEXITCODE"
+        }
+
         if (-not $NoDelay -and $index -lt $VideoUrls.Count) {
             Write-Output "Waiting before next download"
             Start-Sleep -Seconds 10
@@ -88,6 +113,27 @@ function Backup-VideoSubtitle {
         return
     }
     $videoInfo = ConvertFrom-Json $ytdlpOutput
+
+    $downloadArgs = CalculateSubtitleDownloadArguments -Language $Language -VideoInfo $videoInfo -Format $Format
+
+    $outputTemplate = $script:DefaultOutputTemplate
+    $downloadArgs += ("--skip-download","-o",$outputTemplate, $videoUrl)
+
+    yt-dlp @downloadArgs
+    if ($LASTEXITCODE) {
+        Write-Error "Failed to download subtitle for $video, yt-dlp exited with status $LASTEXITCODE"
+    }
+}
+
+function CalculateSubtitleDownloadArguments {
+    <# Validates the input parameters and returns the best available subtitle yt-dlp parameters. Throws an exception if no match is found #>
+    param(
+        [string]$Language,
+
+        $videoInfo,
+
+        [string]$Format
+    )
 
     if (!($Format)) {
         $Format = "ttml"
@@ -129,21 +175,20 @@ function Backup-VideoSubtitle {
                 }
             }
             if (!($chosenSubtitle)) {
-                Write-Error "Language $Language was found to have an automatic caption but not for format $Format"
-                return
+                throw "Language $Language was found to have an automatic caption but not for format $Format"
             }
             break
         }
         if (!($chosenSubtitle) -and -not $langFound) {
-            Write-Error "No automatic captions found in language $Language"
-            return
+            throw "No automatic captions found in language $Language"
         }
     }
+
+    $result = "--sub-lang", $chosenSubtitle.Language, "--sub-format", $Format
     if ($chosenSubtitle.Target -eq "AutomaticCaption") {
-        $outputTemplate = $script:DefaultOutputTemplate
-        yt-dlp --skip-download --write-auto-sub --sub-lang $chosenSubtitle.Language --sub-format $Format -o $outputTemplate $VideoUrl
+        $result += "--write-auto-sub"
     } else {
-        $outputTemplate = $script:DefaultOutputTemplate
-        yt-dlp --skip-download --write-sub --sub-lang $chosenSubtitle.Language --sub-format $Format -o $outputTemplate $VideoUrl
+        $result += "--write-sub"
     }
+    return $result
 }
