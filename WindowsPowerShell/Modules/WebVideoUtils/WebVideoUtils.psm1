@@ -3,11 +3,6 @@
 #
 Set-StrictMode -Version Latest
 
-$script:DefaultOutputTemplate = "%(channel)s_%(title)s-%(id)s.%(ext)s"
-
-# Twitter videos don't have a title so YT-DLP tries to use the tweet text - that's annoying
-$script:DefaultOutputTemplateSocialMedia = "%(uploader_id)s_NA-%(id)s.%(ext)s"
-
 Function Backup-Video {
     param(
         [Parameter()]
@@ -45,10 +40,8 @@ Function Backup-Video {
         }
         $videoInfo = ConvertFrom-Json $ytdlpOutput
 
-        $outputTemplate = $script:DefaultOutputTemplate
-        if ($videoInfo.extractor -ieq "twitter" -or $videoInfo.extractor -ieq "nitter") {
-            $outputTemplate = $script:DefaultOutputTemplateSocialMedia
-        }
+        $outputTemplatePrefix = $videoInfo.extractor_key + "_" + $videoInfo.id
+        $outputTemplate = $outputTemplatePrefix + ".%(ext)s"
 
         $downloadArgs = ("--download-archive",$downloadArchive,"--break-on-existing","-o",$outputTemplate)
         if ($AudioOnly) {
@@ -75,6 +68,8 @@ Function Backup-Video {
         if ($LASTEXITCODE) {
             Write-Error "Failed to download $video, yt-dlp exited with status $LASTEXITCODE"
         }
+
+        RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo
 
         if (-not $NoDelay -and $index -lt $VideoUrls.Count) {
             Write-Output "Waiting before next download"
@@ -116,13 +111,17 @@ function Backup-VideoSubtitle {
 
     $downloadArgs = CalculateSubtitleDownloadArguments -Language $Language -VideoInfo $videoInfo -Format $Format
 
-    $outputTemplate = $script:DefaultOutputTemplate
+    $outputTemplatePrefix = $videoInfo.extractorkey + "_" + $videoInfo.id
+    $outputTemplate = $outputTemplatePrefix + ".%(ext)s"
+
     $downloadArgs += ("--skip-download","-o",$outputTemplate, $videoUrl)
 
     yt-dlp @downloadArgs
     if ($LASTEXITCODE) {
         Write-Error "Failed to download subtitle for $video, yt-dlp exited with status $LASTEXITCODE"
     }
+
+    RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo
 }
 
 function CalculateSubtitleDownloadArguments {
@@ -191,4 +190,43 @@ function CalculateSubtitleDownloadArguments {
         $result += "--write-sub"
     }
     return $result
+}
+
+function RenameDownloadedItems {
+    param(
+        $videoInfo,
+
+        [string]$Prefix
+    )
+    # Calculate new file metadata
+    $id = $videoInfo.id
+    $title = $videoInfo.title
+
+    # Conditional rules for e.g. Twitter extractor where these values might not be set
+    if ($videoInfo | Get-Member -Name channel) {
+        $authorInformation = $videoInfo.channel
+    } else {
+        $authorInformation = $videoInfo.uploader
+    }
+    if ($videoInfo | Get-Member -Name release_date) {
+        $date = $videoInfo.release_date
+    } else {
+        $date = $videoInfo.upload_date
+    }
+
+    if ($title.Length -gt 52) {
+        $title = $title.Substring(0, 55) + "..."
+    }
+
+    $dateParsed = [datetime]::ParseExact($date, 'yyyyMMdd', $null)
+    $newPrefix = "{0}_{1}_{2}-{3}" -f $authorInformation, $date, $title, $id
+
+
+    # Look for files and process
+    $foundFiles = Get-ChildItem -Filter ($Prefix + '*')
+    foreach ($file in $foundFiles) {
+        $file.LastWriteTime = $dateParsed
+        $newName = Join-Path -Path $file.DirectoryName -ChildPath ($file.Name -Replace $Prefix, $newPrefix) 
+        $file.MoveTo($newName)
+    }
 }
