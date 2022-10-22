@@ -26,7 +26,11 @@ if (Test-Path -LiteralPath $VideoFileOrArgumentList) {
         foreach ($filePath in $argumentList) {
             if (Test-Path -LiteralPath $filePath) {
                 $file = Get-ChildItem -LiteralPath $filePath
-                Replace-VideoWithMarker $file
+                if (Test-VideoExtension $file) {
+                    Replace-VideoWithMarker $file
+                } else {
+                    Write-Error "File $file does not have a known video extension"
+                }
             } else {
                 Write-Error "File $file does not have a known video extension or isn't a file list. File $filePath not found"
                 break
