@@ -69,7 +69,7 @@ Function Backup-Video {
             Write-Error "Failed to download $video, yt-dlp exited with status $LASTEXITCODE"
         }
 
-        RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo
+        RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo > $null
 
         if (-not $NoDelay -and $index -lt $VideoUrls.Count) {
             Write-Output "Waiting before next download"
@@ -201,25 +201,38 @@ function RenameDownloadedItems {
     # Calculate new file metadata
     $id = $videoInfo.id
     $title = $videoInfo.title
+    $date = $null
+    $authorInformation = $null
 
     # Conditional rules for e.g. Twitter extractor where these values might not be set
     if ($videoInfo | Get-Member -Name channel) {
         $authorInformation = $videoInfo.channel
-    } else {
+    }
+    if (!($authorInformation)) {
         $authorInformation = $videoInfo.uploader
     }
     if ($videoInfo | Get-Member -Name release_date) {
         $date = $videoInfo.release_date
-    } else {
+    }
+    if (!($date)) {
         $date = $videoInfo.upload_date
     }
 
     if ($title.Length -gt 52) {
-        $title = $title.Substring(0, 55) + "..."
+        $title = $title.Substring(0, 52) + "..."
     }
 
     $dateParsed = [datetime]::ParseExact($date, 'yyyyMMdd', $null)
     $newPrefix = "{0}_{1}_{2}-{3}" -f $authorInformation, $date, $title, $id
+    if (!($newPrefix)) {
+        Write-Error "Failed to calculate new name"
+        return
+    }
+
+    foreach ($invalidchar in [System.IO.Path]::GetInvalidFileNameChars())
+    {
+        $newPrefix = $newPrefix.Replace($invalidchar, '_');
+    }
 
 
     # Look for files and process
@@ -227,6 +240,14 @@ function RenameDownloadedItems {
     foreach ($file in $foundFiles) {
         $file.LastWriteTime = $dateParsed
         $newName = Join-Path -Path $file.DirectoryName -ChildPath ($file.Name -Replace $Prefix, $newPrefix) 
-        $file.MoveTo($newName)
+        try {
+            $file.MoveTo($newName)
+        } catch {
+            Write-Warning "Cannot move $file to $newName`: $($_.Exception.Message)"
+        }
     }
+
+    Write-Information -InformationAction Continue "Moved files to $newPrefix"
+
+    return $newPrefix
 }
