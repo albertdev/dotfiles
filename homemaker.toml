@@ -11,6 +11,7 @@
     ]
     links = [
         ["AppData/local/totalcmd/wincmd.ini", "totalcmd/wincmd.ini"],
+        ["AppData/local/totalcmd/wincmd_usermenu.ini", "totalcmd/wincmd_usermenu.ini"],
         ["AppData/local/totalcmd/usercmd.ini", "totalcmd/usercmd.ini"],
         ["AppData/local/totalcmd/totalcommander.bar", "totalcmd/totalcommander.bar"],
     ]
