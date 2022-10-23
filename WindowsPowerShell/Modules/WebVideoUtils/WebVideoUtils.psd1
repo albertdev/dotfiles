@@ -7,8 +7,8 @@
 
     FunctionsToExport = @(
         'Backup-Video',
-        'List-VideoSubtitle',
         'Backup-VideoDescription',
+        'Get-VideoSubtitle',
         'Backup-VideoSubtitle'
 	)
 

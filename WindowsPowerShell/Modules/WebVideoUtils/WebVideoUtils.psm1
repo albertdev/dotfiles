@@ -81,21 +81,6 @@ Function Backup-Video {
     }
 }
 
-function List-VideoSubtitle {
-    [CmdletBinding(PositionalBinding=$false)]
-    param(
-        [parameter(Mandatory = $true)]
-        [string]$VideoUrl,
-        [string]$Format
-    )
-    $ytdlpOutput = yt-dlp --dump-json $video
-    if ($LASTEXITCODE) {
-        Write-Error "Failed to download $video, yt-dlp exited with status $LASTEXITCODE"
-        return
-    }
-    $videoInfo = ConvertFrom-Json $ytdlpOutput
-}
-
 Function Backup-VideoDescription {
     [CmdletBinding(PositionalBinding=$false)]
     param(
@@ -121,6 +106,21 @@ Function Backup-VideoDescription {
 
         Write-Information -InformationAction Continue "Video $newPrefix is $($videoInfo.duration_string) long, wrote description and json file"
     }
+}
+
+function Get-VideoSubtitle {
+    [CmdletBinding(PositionalBinding=$false)]
+    param(
+        [parameter(Mandatory = $true)]
+        [string]$VideoUrl,
+        [string]$Format
+    )
+    $ytdlpOutput = yt-dlp --dump-json $video
+    if ($LASTEXITCODE) {
+        Write-Error "Failed to download $video, yt-dlp exited with status $LASTEXITCODE"
+        return
+    }
+    $videoInfo = ConvertFrom-Json $ytdlpOutput
 }
 
 function Backup-VideoSubtitle {
@@ -289,3 +289,6 @@ function RenameDownloadedItems {
 
     return $newPrefix
 }
+
+
+Export-ModuleMember -Function "Backup-Video", "Get-VideoSubtitle", "Backup-VideoDescription", "Backup-VideoSubtitle"
