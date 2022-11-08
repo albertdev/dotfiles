@@ -18,6 +18,9 @@ Function Backup-Video {
         [Parameter(Mandatory = $false)]
         [string]$SubtitleLanguage,
 
+        [Parameter(Mandatory = $false)]
+        [string]$FormatHint,
+
         [parameter(Mandatory = $true, ValueFromRemainingArguments=$true)]
         [string[]]$VideoUrls
     )
@@ -51,7 +54,12 @@ Function Backup-Video {
         }
         else
         {
-            $downloadArgs += ("-f","18/best*[height<=360]/worst")
+            $formatChoices = "18/best*[height<=360]/worst"
+            if ($FormatHint)
+            {
+                $formatChoices = $FormatHint + "/" + $formatChoices
+            }
+            $downloadArgs += ("-f",$formatChoices)
         }
         if ($DescriptionIncluded) {
             $downloadArgs += "--write-description"
