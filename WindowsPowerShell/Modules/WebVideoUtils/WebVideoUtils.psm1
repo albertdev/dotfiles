@@ -32,14 +32,15 @@ Function Backup-Video {
 
         $ytdlpOutput = yt-dlp --dump-json --download-archive $downloadArchive $video
         if ($LASTEXITCODE) {
-            Write-Error "Failed to download $video, yt-dlp exited with status $LASTEXITCODE"
+            Write-Error "Failed to download `"$video`", yt-dlp exited with status $LASTEXITCODE"
             continue
         }
         if (-not $ytdlpOutput) {
-            Write-Warning "Video $video was already marked as downloaded in the download archive"
+            Write-Warning "Video `"$video`" was already marked as downloaded in the download archive"
             continue
         }
         $videoInfo = ConvertFrom-Json $ytdlpOutput
+        Write-Information -InformationAction Continue "Video `"$($videoInfo.title)`" is $($videoInfo.duration_string) long"
 
         $outputTemplatePrefix = $videoInfo.extractor_key + "_" + $videoInfo.id
         $outputTemplate = $outputTemplatePrefix + ".%(ext)s"
@@ -60,19 +61,18 @@ Function Backup-Video {
                 $subdownloadArgs = CalculateSubtitleDownloadArguments -Language $SubtitleLanguage -VideoInfo $videoInfo
                 $downloadArgs += $subdownloadArgs
             } catch {
-                Write-Warning "Subtitles for $video could not be found: $_"
+                Write-Warning "Subtitles for `"$video`" could not be found: $_"
             }
         }
         $downloadArgs += $video
 
         yt-dlp @downloadArgs
         if ($LASTEXITCODE) {
-            Write-Error "Failed to download $video, yt-dlp exited with status $LASTEXITCODE"
+            Write-Error "Failed to download `"$video`", yt-dlp exited with status $LASTEXITCODE"
         }
 
         $newPrefix = RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo
 
-        Write-Information -InformationAction Continue "Video $newPrefix is $($videoInfo.duration_string) long"
 
         if (-not $NoDelay -and $index -lt $VideoUrls.Count) {
             Write-Output "Waiting before next download"
@@ -92,10 +92,11 @@ Function Backup-VideoDescription {
 
         $ytdlpOutput = yt-dlp --dump-json $video
         if ($LASTEXITCODE) {
-            Write-Error "Failed to download description of $video, yt-dlp exited with status $LASTEXITCODE"
+            Write-Error "Failed to download description of `"$video`", yt-dlp exited with status $LASTEXITCODE"
             continue
         }
         $videoInfo = ConvertFrom-Json $ytdlpOutput
+        Write-Information -InformationAction Continue "Video `"$($videoInfo.title)`" is $($videoInfo.duration_string) long"
 
         $outputTemplatePrefix = $videoInfo.extractor_key + "_" + $videoInfo.id
 
@@ -103,8 +104,6 @@ Function Backup-VideoDescription {
         $videoInfo.description | Out-File -Encoding UTF8 -LiteralPath (Join-Path . ($outputTemplatePrefix + ".description"))
 
         $newPrefix = RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo
-
-        Write-Information -InformationAction Continue "Video $newPrefix is $($videoInfo.duration_string) long, wrote description and json file"
     }
 }
 
@@ -117,7 +116,7 @@ function Get-VideoSubtitle {
     )
     $ytdlpOutput = yt-dlp --dump-json $video
     if ($LASTEXITCODE) {
-        Write-Error "Failed to download $video, yt-dlp exited with status $LASTEXITCODE"
+        Write-Error "Failed to download `"$video`", yt-dlp exited with status $LASTEXITCODE"
         return
     }
     $videoInfo = ConvertFrom-Json $ytdlpOutput
@@ -127,7 +126,7 @@ function Backup-VideoSubtitle {
     [CmdletBinding(PositionalBinding=$false)]
     param(
         [parameter(Mandatory = $true, ValueFromRemainingArguments=$true)]
-        [string]$VideoUrls,
+        [string[]]$VideoUrls,
 
         [parameter(Mandatory = $true)]
         [string]$Language,
@@ -139,10 +138,11 @@ function Backup-VideoSubtitle {
 
         $ytdlpOutput = yt-dlp --dump-json $video
         if ($LASTEXITCODE) {
-            Write-Error "Failed to download $video, yt-dlp exited with status $LASTEXITCODE"
+            Write-Error "Failed to download `"$video`", yt-dlp exited with status $LASTEXITCODE"
             return
         }
         $videoInfo = ConvertFrom-Json $ytdlpOutput
+        Write-Information -InformationAction Continue "Video `"$($videoInfo.title)`" is $($videoInfo.duration_string) long"
 
         $downloadArgs = CalculateSubtitleDownloadArguments -Language $Language -VideoInfo $videoInfo -Format $Format
 
@@ -153,12 +153,10 @@ function Backup-VideoSubtitle {
 
         yt-dlp @downloadArgs
         if ($LASTEXITCODE) {
-            Write-Error "Failed to download subtitle for $video, yt-dlp exited with status $LASTEXITCODE"
+            Write-Error "Failed to download subtitle for `"$video`", yt-dlp exited with status $LASTEXITCODE"
         }
 
         $newPrefix = RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo
-
-        Write-Information -InformationAction Continue "Video $newPrefix is $($videoInfo.duration_string) long"
     }
 }
 
@@ -285,7 +283,7 @@ function RenameDownloadedItems {
         }
     }
 
-    Write-Information -InformationAction Continue "Moved files to $newPrefix"
+    Write-Information -InformationAction Continue "Moved files to `"$newPrefix`""
 
     return $newPrefix
 }
