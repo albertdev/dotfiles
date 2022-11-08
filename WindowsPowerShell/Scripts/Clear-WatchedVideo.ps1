@@ -11,7 +11,9 @@ function Test-VideoExtension($file) {
 function Replace-VideoWithMarker($file) {
     $fileDirectory = $file.Directory.FullName
     $marker = $file.BaseName + ".txt"
-    New-Item -Path $fileDirectory -Name $marker -ItemType File > $null
+    $newFile = New-Item -Path $fileDirectory -Name $marker -ItemType File
+    Get-Date -Format "o" | Out-File -Encoding ASCII $newFile
+    $newFile.LastWriteTime = $file.LastWriteTime
     Remove-Item -LiteralPath $file.FullName
     Write-Information -InformationAction Continue "Wrote marker to replace $file" 
 }
