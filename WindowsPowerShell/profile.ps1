@@ -13,6 +13,8 @@ Import-Module posh-git
 
 New-Alias dirs cd
 
+$global:Scripts = Join-Path -Resolve (Split-Path $Profile) "Scripts"
+
 # Load local profile for local aliases
 
 $localProfile = Join-Path $HOME ".localprofile.ps1"
