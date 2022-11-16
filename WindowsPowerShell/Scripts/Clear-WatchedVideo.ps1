@@ -12,7 +12,7 @@ function Replace-VideoWithMarker($file) {
     $fileDirectory = $file.Directory.FullName
     $marker = $file.BaseName + ".txt"
     $newFile = New-Item -Path $fileDirectory -Name $marker -ItemType File
-    Get-Date -Format "o" | Out-File -Encoding ASCII $newFile
+    Get-Date -Format "o" | Out-File -Encoding ASCII -LiteralPath $newFile
     $newFile.LastWriteTime = $file.LastWriteTime
     Remove-Item -LiteralPath $file.FullName
     Write-Information -InformationAction Continue "Wrote marker to replace $file" 
