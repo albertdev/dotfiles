@@ -14,8 +14,19 @@ function Replace-VideoWithMarker($file) {
     $newFile = New-Item -Path $fileDirectory -Name $marker -ItemType File
     Get-Date -Format "o" | Out-File -Encoding ASCII -LiteralPath $newFile
     $newFile.LastWriteTime = $file.LastWriteTime
-    Remove-Item -LiteralPath $file.FullName
+    Remove-ItemSafely -LiteralPath $file.FullName
     Write-Information -InformationAction Continue "Wrote marker to replace $file" 
+
+    # Find related files and move them to the Recycle Bin
+    #$escapedBaseName = [Management.Automation.WildCardPattern]::Escape($file.BaseName)
+    $relatedFiles = Get-ChildItem -LiteralPath $fileDirectory -Filter ($file.BaseName + ".*") | ? { $_ -notlike '*.txt' }
+    if ($relatedFiles) {
+        Remove-ItemSafely -LiteralPath $relatedFiles
+    }
+    Write-Information -InformationAction Continue "Recycled related files:"
+    foreach ($file in $relatedFiles) {
+        Write-Information -InformationAction Continue $file
+    }
 }
 
 if (Test-Path -LiteralPath $VideoFileOrArgumentList) {
