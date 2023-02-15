@@ -61,6 +61,14 @@ command! SlashForward let tmp=@/<Bar>s:\\:/:ge<Bar>let @/=tmp<Bar>noh
 "command! SlashBack let tmp=@/<Bar>s:/:\\:ge<Bar>let @/=tmp<Bar>noh
 command! SlashBack let tmp=@/<Bar>s:/:\\:ge<Bar>let @/=tmp<Bar>noh
 
+" Adapted from https://stackoverflow.com/a/3475364
+function! s:DeleteTrailingWS()
+    exe "normal mz"
+    keeppatterns %s/\s\+$//ge
+    exe "normal `z"
+endfunc
+command! DeleteTrailingWhiteSpace call s:DeleteTrailingWS()
+
 " Builds on Ingo Karkat's Concealer plugin to add a (local) conceal group based on the current search pattern
 command! ConcealSearch execute 'ConcealHere '.@/
 
