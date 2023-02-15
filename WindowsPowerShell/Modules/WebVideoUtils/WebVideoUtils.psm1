@@ -242,6 +242,12 @@ function RenameDownloadedItems {
 
         [string]$Prefix
     )
+    if (-not $Prefix) {
+        throw "No filename prefix passed, stopping rename of $videoInfo"
+    }
+    if (-not $videoInfo) {
+        throw "No video info passed, stopping rename $Prefix"
+    }
     # Calculate new file metadata
     $id = $videoInfo.id
     $title = $videoInfo.title
