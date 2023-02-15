@@ -54,6 +54,34 @@ From [the Microsoft documentation on starting Git on WSL](https://docs.microsoft
 git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe"
 ```
 
+### Installing a loopback adapter to have a fixed local IP address
+
+The basic trick is to install a fake network adapter.
+
+- Open Device Manager.
+- Do "Action" > "Add legacy hardware".
+- Continue manually picking hardware. Select the "Network adapters" category.
+- Select "Microsoft" and find the "Microsoft KM-TEST Loopback Adapter". Continue.
+
+### Disabling firewall for loopback adapter
+Since the loopback adapter is an actual network interface with dummy routing in the kernel it will pass through the firewall (in contrast with
+connections to 127.0.0.1 or ::1 which I believe take a shortcut in the kernel).
+
+First, run this to see which adapter is the loopback adapter:
+
+```
+Get-NetAdapter | Where-Object {$_.InterfaceDescription -ieq "Microsoft KM-TEST Loopback Adapter" } | Select-Object -Property Name
+```
+
+Based on https://superuser.com/a/1583817:
+
+- Open the "Windows Defender Firewall" MSC snapin.
+- Open "Windows Defender Firewall Properties" (right-click the root node, or click the link in the center pane).
+- For each of the first three tabs you should click the "Customize" button in the State group, labeled "Protected network connections".
+- Uncheck the checkbox corresponding to the adapter name of the loopback adapter.
+
+Note that this might issue a warning "Microsoft Defender Firewall is using settings that may make your device unsafe." in the Settings app.
+
 ### Binding WSL ports to host IP or loopback adapter
 WSL runs a part of Hyper-V in the background (referred to as "Virtual Machine Platform") and each WSL distribution gets its own IP address, which then
 sits behind a NAT to access the outside world.
