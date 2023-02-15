@@ -604,6 +604,28 @@ function GitContains ([string]$Needle, [string]$BranchOrCommit, [switch]$Remotes
         }
     }
 }
+# Resets the current branch and working copy to its upstream value, but only if no uncommitted changes would be lost.
+# (Uncommitted changes should be stashed or kept on a different branch; this command is just to avoid blowing it away with git reset)
+function GitResetUpstream
+{
+    $currentBranch = git symbolic-ref -q --short HEAD
+    if ($LASTEXITCODE -ne 0) {
+        throw "Currently no branch is checked out."
+    }
+    $upstreamBranch = git rev-parse --abbrev-ref --symbolic-full-name "HEAD@{upstream}" 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Write-Output "Branch $currentBranch has no upstream!"
+        return
+    }
+    # See https://stackoverflow.com/a/5737794/983949
+    $checkChanges = $(git status --porcelain --untracked-files=no)
+    if ($checkChanges) {
+        throw "Working directory is not clean!"
+    }
+    git reset --hard $upstreamBranch
+}
+
+
 function Add-ProjectPackages ()
 {
     <# .Description
