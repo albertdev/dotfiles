@@ -89,3 +89,9 @@ iabbrev muscont [♫]
 function! FixCommonErrors()
     %s/\v\C i([ ']|$)/ I\1/g
 endfunction
+
+" Vim-transcribe can divide a file but uses 1-based numbering.
+" Wintergatan uses 0-based numbering and calls it slots
+function! ReplaceSectionsWithSlots()
+    keeppatterns %s/\vSection ([0-9]+)/\='Slot ' . (submatch(1)-1)/g
+endfunction
