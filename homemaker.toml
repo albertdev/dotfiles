@@ -165,13 +165,15 @@
     # (Attempt 1: point to included executable wrapper - this actually will always open a console window)
     # ["powershell", "-NoProfile", "-Command", "C:/ProgramData/chocolatey/tools/shimgen.exe", "--output=\"${HM_DEST}/bin/git-cola.exe\"", "--path=\"${HM_DEST}/AppData/Local/Programs/git-cola/bin/git-cola.exe\"", "--gui"]
 
-    # Attempt 2:
+    # Attempt 2, + actually register bin folder on path
     cmds = [
         ["powershell", "-NoProfile", "-Command", "C:/ProgramData/chocolatey/tools/shimgen.exe", "--gui",
             "--output=\"${HM_DEST}/bin/git-cola.exe\"",
             "--path=\"${HM_DEST}/AppData/Local/Programs/git-cola/Python/pythonw.exe\"",
-            "--command=\"${HM_DEST}/AppData/Local/Programs/git-cola/bin/git-cola.exe\"",
-            ]
+            "--command=\"${HM_DEST}/AppData/Local/Programs/git-cola/bin/git-cola.exe\""],
+
+        ["powershell", "-NoProfile", "-Command", "Add-PathVariable", "-Prepend",
+            "-Value", "${HM_DEST}/bin/", "-Target", "User"]
     ]
 
 ##################################################################################
@@ -238,7 +240,7 @@
     deps = ["vim", "shared-rc"]
 
 [tasks.default__windows]
-    deps = ["windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "windows-terminal", "windows-tweaks", "windows-software",
+    deps = ["eclipse", "powershell", "windows-bin", "visualstudio", "totalcmd", "windows-terminal", "windows-tweaks", "windows-software",
             "default__", "windows-startup"]
 
 [tasks.default__linux]
