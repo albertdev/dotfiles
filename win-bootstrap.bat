@@ -23,6 +23,14 @@ powershell -NoProfile -Command Set-ItemProperty -Path HKCU:\Environment -Name DO
 SET "HOME=%USERPROFILE%"
 set "DOTFILESPATH=%BATCHDIR%"
 
+:: We need winget later on. Open Microsoft Store with that package opened and quit with error.
+:: Full package id which was used for testing: Microsoft.DesktopAppInstaller_1.19.10173.0_x64__8wekyb3d8bbwe
+IF NOT EXIST "%USERPROFILE%\AppData\Local\Microsoft\WindowsApps\winget.exe" (
+    ECHO Winget not installed! Opening Microsoft Store page now for Microsoft.DesktopAppInstaller.
+    START ms-windows-store://pdp/?ProductId=9NBLGGH4NNS1
+    EXIT /B 25
+)
+
 :: Initialize bin folder, check if homedir exists. If not, on Windows 10 we try to download it.
 IF NOT EXIST "%USERPROFILE%\bin\" MKDIR "%USERPROFILE%\bin"
 IF NOT EXIST "%USERPROFILE%\bin\homemaker.exe" CALL :downloadhomemaker
