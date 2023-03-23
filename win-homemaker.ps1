@@ -4,7 +4,7 @@ param (
     [parameter()]
     [string] $task
 )
-$commands = @(Get-Command "homemaker.exe" -ErrorAction Continue)
+$commands = @(Get-Command "homemaker.exe" -ErrorAction SilentlyContinue)
 if (-not ($commands)) {
 	$commands = @(Join-Path -Resolve "$env:HOME" "bin/homemaker.exe")
     if (-not ($commands)) {
