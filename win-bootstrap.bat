@@ -3,6 +3,13 @@
 
 SET "BATCHDIR=%~dp0"
 
+:: Encountered on a new PC: download dotfiles from github as a zip, extract them and now they were
+:: all marked as untrusted because Windows stored that they're from the Internet in an alternate stream.
+:: Powershell will treat scripts with this alternate stream as comming from a remote systen and hence
+:: won't run without a valid digital signature.
+:: This Powershell command will remove the alternate stream.
+powershell -NoProfile -Command Get-ChildItem -Recurse -File '%BATCHDIR%' "|" Unblock-File
+
 :: Windows NT added this command yet somehow messed up quoting. If DOTFILESDIR ends with a slash
 :: (which it always does) then the environment variable will contain a double quote at the end.
 ::SETX HOME "%USERPROFILE%"
