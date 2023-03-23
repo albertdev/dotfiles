@@ -222,6 +222,13 @@
         [".vim", "vim"], # Actually a folder
     ]
 
+# TODO: Figure out how we can something similar on Linux
+[tasks.vim__windows]
+    deps = ["vim__"]
+    cmds = [
+        ["cmd", "/C", "start", "vim", "-c", "BundleUpdate"]
+    ]
+
 ##################################################################################
 # BINDING ACTIONS
 ##################################################################################
@@ -231,8 +238,8 @@
     deps = ["vim", "shared-rc"]
 
 [tasks.default__windows]
-    deps = ["default__", "windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "windows-terminal", "windows-tweaks", "windows-software",
-            "windows-startup"]
+    deps = ["windows-bin", "eclipse", "powershell", "visualstudio", "totalcmd", "windows-terminal", "windows-tweaks", "windows-software",
+            "default__", "windows-startup"]
 
 [tasks.default__linux]
     deps = ["vim", "shared-rc", "xfce", "zsh"]
