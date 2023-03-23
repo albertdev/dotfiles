@@ -47,7 +47,7 @@
         ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Set-PSRepository", "PSGallery", "-InstallationPolicy", "Trusted"],
         ["@powershell-install-module", "PSCX", "-AllowClobber"],
         ["@powershell-install-module", "ZLocation"],
-        ["@powershell-install-module", "PSReadline"],
+        ["@powershell-install-module", "PSReadline", "-Force"],
         ["@powershell-install-module", "Recycle"],
         ["@powershell-install-module", "posh-git"],
     ]
