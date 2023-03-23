@@ -39,7 +39,7 @@
 
 [tasks.powershell-modules]
     rejects = [
-        ["@powershell-check-modules", "PSCX,ZLocation,PSReadline,posh-git"]
+        ["@powershell-check-modules", "PSCX,ZLocation,PSReadline,posh-git,Recycle"]
     ]
     # Install nuget provider for PowerShellGet and install favourite modules
     cmds = [
@@ -58,6 +58,7 @@
     cmds = [
         ["cmd", "/c", "powershell",                                          "-NoProfile", "-Command", "Set-ExecutionPolicy", "-Scope", "CurrentUser", "RemoteSigned"],
         ["cmd", "/c", "%windir%/syswow64/WindowsPowerShell/v1.0/powershell", "-NoProfile", "-Command", "Set-ExecutionPolicy", "-Scope", "CurrentUser", "RemoteSigned"],
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Update-Help"],
     ]
     links = [
         ["Documents/WindowsPowerShell", "WindowsPowerShell"],
