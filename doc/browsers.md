@@ -16,6 +16,7 @@ Chromium port with (allegedly) all the tracking demolished.
 - URL in title: great for use with ManicTime. https://chrome.google.com/webstore/detail/url-in-title/ignpacbgnbnkaiooknalneoeladjnfgb
   Configure title as `{title} @@ {protocol}://{hostname}{port}/{path}{hash} @@`
 - UBlock Origin: accept no substitute. https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm
+  Don't forget to use "Manage extension" on it and checking "Allow in Incognito"
 ### Settings
 - Do not save passwords, do not use Auto Sign-In. Do not store payment methods or addresses.
 - Cookies: Block third-party cookies in Incognito, Don't clear cookies on exit, Send DNT (as if)
@@ -73,3 +74,8 @@ Only used for development and testing.
 In Visual Studio, open the "IIS Express (<Browser>)" dropdown. Click "Browse With..." and wait until the build is done. Now you can click "Add...".
 
 In the new window, give the path to Chrome, e.g. `C:\Program Files (x86)\Google\Chrome\Application\chrome.exe`. As argument use `--auto-open-devtools-for-tabs`.
+
+## Firefor
+Only used for stuff where adblock might block genuine friendly applications.
+### Settings
+Dont't forget to turn of Firefox studies.
