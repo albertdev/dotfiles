@@ -4,13 +4,14 @@ things to change, at which point you can simply click "Apply".
 
 (BTW: a list of settings URLs can be found at https://docs.microsoft.com/en-us/windows/uwp/launch-resume/launch-settings-app#ms-settings-uri-scheme-reference )
 
-## UWP App Shortcuts
-- Open Windows' `Run` dialog. Enter `shell:appsFolder`.
-- Right click an UWP app and press "Create shortcut"
-- Windows will say that no shortcut can be created in the current location but it can be sent to the Desktop. Click Yes.
-- Go to the Desktop folder and move the created shortcut.
-- In case one wants to script this then you need to find the app id. To do this, open the 'lnk' file with HXD and look for a program id with a `!` character.
-- The homemaker.toml file has a few examples of scripts to create such shortcuts. There seems to be more at https://stackoverflow.com/q/38359492
+## Set keyboard on lock screen
+Loosely based on https://superuser.com/a/960889
+
+- Open Windows' `Run` dialog.
+- Enter `intl.cpl` to open the "Region" control panel window.
+- Go to the "Administrative" tab.
+- In the "Welcome screen and new user accounts" you should click "Copy settings".
+- Tick the checkboxes and press OK.
 
 ## Accessibility Settings
 While I'm sure these settings are nice for some people, having keys which reconfigure Windows by repeated or long pressing a key are troublesome.
@@ -37,13 +38,72 @@ Once there you can pick an item from the list and click "Change Key Sequence". D
 - Enter `ms-settings:mousetouchpad`
 - Set cursor speed to 12, scroll multiple lines at a time, scroll 9-11 lines each time, scroll when hovering.
 
-## System Tricks
+## Taskbar
+- Right-click taskbar and select "Taskbar settings".
 
-### Disabling Intel HD Screen Dimming
-Found instructions on https://mikebattistablog.wordpress.com/2016/05/27/disable-intel-dpst-on-sp4/
+Settings of note:
+- Lock the taskbar, use small taskbar buttons
+- Replace command prompt with Windows Powershell
+- Taskbar location on screen: Left (Oh, hi Windows 11, you don't have that?!)
+- Combine taskbar buttons: Never.
+- Multiple displays:
+    - Show taskbar on all displays
+    - Don't combine there either.
+- News and Interests: Turn it off.
+- People: Turn that off as well.
 
-Basically open regedit, find the `[HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000]` (or `\0001`)
-folder, then edit the `FeatureTestControl` so that the number has its 5th bit set (4th bit if 0-indexed). Reboot and check it again.
+## Multiple desktops
+Setup a second one by clicking the Task View button on the taskbar.
+
+Run `ms-settings:multitasking` and configure the following settings:
+
+- Snap windows.
+  Automatically fill available space, show what can be snapped next to it, auto-resizing
+- Virtual desktops:
+    - On the taskbar show windows from all desktops
+    - Pressing Alt+Tab should show windows from all desktops
+
+On that note, run `ms-settings:easeofaccess-display` and scroll down to "Simplify and personalize Windows":
+- Disable "Show animations in Windows".
+  It might make things more boring by turning off all animations, but the "Switch desktop" animation is annoying IMHO.
+- Disable "Automatically hide scroll bars in Windows".
+  It's fine if you're using a tablet, but for precise scroll bar adjustments it's just annoying.
+
+## Styling & Personalization
+
+- Run `ms-settings:personalization-background` and pick a solid color background.
+- Go to Colors:
+    - Use dark Windows mode, light app mode.
+    - "Show accent color on the following surfaces" only needs "Title bars and window borders"
+- Lock screen: choose a picture, turn off Windows Cortana stuff.
+  
+
+
+## Windows-Specific Config of Miscellaneous Apps
+### Console / Command Prompt / Powershell
+- Right-click the default Windows Console and pick "Defaults".
+- Check the boxes for the following:
+  - QuickEdit mode
+  - Enable Ctrl key shortcuts
+  - Filter clipboard contents on paste
+  - Use Ctrl+Shift+C/V as Copy/Paste
+  - Enable line wrapping selection
+  - Extended text selection keys
+
+### Powershell
+Make sure to download v2.1.0 of PSReadline to get newer features like Ctrl+Space completion.
+See https://github.com/microsoft/terminal/issues/879 for troubleshooting.
+
+### Slack
+One needs to start chocolatey with specific parameters to make sure that Slack auto-starts:
+```
+choco install slack -y --install-arguments="'INSTALLLEVEL=2'"
+```
+
+Also don't forget to pin it using `choco pin add -n slack`; it auto-updates and the MSI installer might remove Windows taskbar pins when choco runs
+the MSI file again.
+
+
 
 ## Windows Subsystem for Linux (WSL)
 
@@ -125,26 +185,18 @@ netsh int ipv4 set dynamic tcp start=30000 num=20000
 netsh int ipv6 set dynamic tcp start=30000 num=20000
 ````
 
-## Miscellaneous apps
-### Console / Command Prompt / Powershell
-- Right-click the default Windows Console and pick "Defaults".
-- Check the boxes for the following:
-  - QuickEdit mode
-  - Enable Ctrl key shortcuts
-  - Filter clipboard contents on paste
-  - Use Ctrl+Shift+C/V as Copy/Paste
-  - Enable line wrapping selection
-  - Extended text selection keys
+## System Tricks
 
-### Powershell
-Make sure to download v2.1.0 of PSReadline to get newer features like Ctrl+Space completion.
-See https://github.com/microsoft/terminal/issues/879 for troubleshooting.
+### UWP App Shortcuts
+- Open Windows' `Run` dialog. Enter `shell:appsFolder`.
+- Right click an UWP app and press "Create shortcut"
+- Windows will say that no shortcut can be created in the current location but it can be sent to the Desktop. Click Yes.
+- Go to the Desktop folder and move the created shortcut.
+- In case one wants to script this then you need to find the app id. To do this, open the 'lnk' file with HXD and look for a program id with a `!` character.
+- The homemaker.toml file has a few examples of scripts to create such shortcuts. There seems to be more at https://stackoverflow.com/q/38359492
 
-### Slack
-One needs to start chocolatey with specific parameters to make sure that Slack auto-starts:
-```
-choco install slack -y --install-arguments="'INSTALLLEVEL=2'"
-```
+### Disabling Intel HD Screen Dimming
+Found instructions on https://mikebattistablog.wordpress.com/2016/05/27/disable-intel-dpst-on-sp4/
 
-Also don't forget to pin it using `choco pin add -n slack`; it auto-updates and the MSI installer might remove Windows taskbar pins when choco runs
-the MSI file again.
+Basically open regedit, find the `[HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000]` (or `\0001`)
+folder, then edit the `FeatureTestControl` so that the number has its 5th bit set (4th bit if 0-indexed). Reboot and check it again.
