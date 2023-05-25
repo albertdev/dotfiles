@@ -1,4 +1,17 @@
-Source the script and then run the cmdlet:
+# Source the script and then run the cmdlet:
 
 . New-SelfSignedCertificateEx.ps1
+
 New-SelfSignedCertificateEx -Subject "CN=Development" -ProviderName "Microsoft Software Key Storage Provider" -AlgorithmName rsa -keylength 1024 -SignatureAlgorithm sha256 -Exportable -NotAfter "2025-01-01"
+
+# Or in case an explicit signing certificate is preferred rather than one without any restrictions:
+
+New-SelfSignedCertificateEx -Subject "CN=Development-Signing,OU=QA,o=Connective" -ProviderName "Microsoft Software Key Storage Provider" `
+-AlgorithmName rsa -keylength 1024 -SignatureAlgorithm sha256 -Exportable -NotAfter "2033-01-01" -EnhancedKeyUsage "1.3.6.1.4.1.311.10.3.12" -KeyUsage `
+"DigitalSignature"
+
+# Here's another example for an HTTPS server certificate:
+
+New-SelfSignedCertificateEx -Subject "CN=esig.tenant-sso.eu" -ProviderName "Microsoft Software Key Storage Provider" `
+-AlgorithmName rsa -keylength 1024 -SignatureAlgorithm sha256 -Exportable -NotAfter "2033-01-01" -EnhancedKeyUsage "1.3.6.1.5.5.7.3.1" -KeyUsage `
+"DigitalSignature, KeyEncipherment, DataEncipherment" -SubjectAlternativeName "esig.tenant-sso.eu"

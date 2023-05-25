@@ -50,7 +50,7 @@ function New-SelfSignedCertificateEx {
 	Specifies the intended uses of the public key contained in a certificate. You can
 	specify either, EKU friendly name (for example 'Server Authentication') or
 	object identifier (OID) value (for example '1.3.6.1.5.5.7.3.1').
-.PARAMETER KeyUsages
+.PARAMETER KeyUsage
 	Specifies restrictions on the operations that can be performed by the public key contained in the certificate.
 	Possible values (and their respective integer values to make bitwise operations) are:
 	EncipherOnly
