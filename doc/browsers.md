@@ -75,7 +75,28 @@ In Visual Studio, open the "IIS Express (<Browser>)" dropdown. Click "Browse Wit
 
 In the new window, give the path to Chrome, e.g. `C:\Program Files (x86)\Google\Chrome\Application\chrome.exe`. As argument use `--auto-open-devtools-for-tabs`.
 
-## Firefor
+Or here's a command to create an executable shim which passes this argument by itself:
+
+```
+C:/ProgramData/chocolatey/tools/shimgen.exe --gui --output="$HOME/bin/chrome-dev.exe" --path="C:/Program Files/Google/Chrome/Application/chrome.exe" --command="--auto-open-devtools-for-tabs"
+```
+
+## Firefox
 Only used for stuff where adblock might block genuine friendly applications.
 ### Settings
 Dont't forget to turn of Firefox studies.
+
+## Firefox Developer Edition
+Only used for development and testing. Uses its own profile. Get it from https://www.mozilla.org/en-GB/firefox/developer/
+### Extensions
+- Connective Browser Plugin
+### Setup for development
+In Visual Studio, open the "IIS Express (<Browser>)" dropdown. Click "Browse With..." and wait until the build is done. Now you can click "Add...".
+
+In the new window, give the path to this Firefox, e.g. `c:\Program Files\Firefox Developer Edition\firefox.exe`. As argument use `-devtools`.
+
+Or here's a command to create an executable shim which passes this argument by itself:
+
+```
+C:/ProgramData/chocolatey/tools/shimgen.exe --gui --output="$HOME/bin/firefox-dev.exe" --path="c:\Program Files\Firefox Developer Edition\firefox.exe" --command="-devtools"
+```
