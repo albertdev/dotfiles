@@ -33,6 +33,12 @@ To change it, either:
 
 Once there you can pick an item from the list and click "Change Key Sequence". Don't forget to press OK twice.
 
+## Set default keyboard to Colemak
+When adding the Colemak keyboard to the English language, it might still revert to the default QWERTY layout.
+
+On Windows 11 this seems to be hidden. Go to "Time & Language", pick "Typing" and then click "Advanced keyboard settings". That screen has a
+combobox underneath the "Override for default input method" label.
+
 ## Mouse Settings
 - Open Windows' `Run` dialog.
 - Enter `ms-settings:mousetouchpad`
