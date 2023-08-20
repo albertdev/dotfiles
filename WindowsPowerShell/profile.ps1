@@ -773,8 +773,40 @@ function Compare-TTML {
     if ($null -eq (Get-Command sed -ErrorAction SilentlyContinue)) {
         throw "sed not found in path";
     }
-    $sourceFile = Resolve-Path $sourceFile
-    $destFile = Resolve-Path $destFile
+    $conversionCommand = "subtitleedit"
+    if ($null -eq (Get-Command subtitleedit -ErrorAction SilentlyContinue)) {
+        if (Test-Path "c:\Program Files\Subtitle Edit\SubtitleEdit.exe") {
+            $conversionCommand = "c:\Program Files\Subtitle Edit\SubtitleEdit.exe"
+        } else {
+            $conversionCommand = $null
+        }
+    }
+    $sourceFile = Resolve-Path $sourceFile -ErrorAction Stop
+    $destFile = Resolve-Path $destFile -ErrorAction Stop
+
+    $sourceFileInfo = Get-ChildItem -LiteralPath $sourceFile
+    $destFileInfo = Get-ChildItem -LiteralPath $destFile
+
+    # Convert files if necessary
+    if ($sourceFileInfo.Extension -ne ".ttml" -and $sourceFileInfo.Extension -ne ".dfxp") {
+        # SubtitleEdit forces the dfxp extension, no matter if we pass .tmp
+        $conversion = New-TemporaryFile | % { Join-Path (Resolve-Path $_.Directory) ($_.BaseName + ".dfxp") }
+        & $conversioncommand "/convert" $sourceFileInfo.FullName "TimedTextdraft2006-04Ooyala" "/outputfilename:$($conversion)" | Out-Default
+        #Start-Process $conversioncommand -ArgumentList ("/convert", $sourceFileInfo.FullName, "dfxp", "/outputfilename:${$conversion.FullName}") -Wait
+        if ($global:LASTEXITCODE) {
+            throw "Conversion of file $sourceFile failed"
+        }
+        $sourceFile = $conversion
+    }
+    if ($destFileInfo.Extension -ne ".ttml" -and $destFileInfo.Extension -ne ".dfxp") {
+        # SubtitleEdit forces the dfxp extension, no matter if we pass .tmp
+        $conversion = New-TemporaryFile | % { Join-Path (Resolve-Path $_.Directory) ($_.BaseName + ".dfxp") }
+        & $conversioncommand "/convert" $destFileInfo.FullName "TimedTextdraft2006-04Ooyala" "/outputfilename:$($conversion)" | Out-Default
+        if ($global:LASTEXITCODE) {
+            throw "Conversion of file $destFile failed"
+        }
+        $destFile = $conversion
+    }
 
     # Create a copy of the kdiff3 config file where we can override any config value we want
     $tempConfig = New-TemporaryFile
@@ -782,7 +814,7 @@ function Compare-TTML {
 
     # Strip indentation whitespace, strip (default) bottom region, strip paragraph ids,
     # remove whitespace from a self-closed tag.
-    $preProcessor = "PreProcessorCmd=sed -E -e 's/^\\s+//;s/ region=\\x22bottom\\x22//g;s/ xml:id=\\x22[^\\x22]+\\x22//g;s/ style=\\x22[^\\x22]+\\x22//g;s@(<\\w+) />@\\1/>@g'"
+    $preProcessor = "PreProcessorCmd=sed -E -e 's/^\\s+//;s/ region=\\x22bottom\\x22//g;s/ (xml:)?id=\\x22[^\\x22]+\\x22//g;s/ style=\\x22[^\\x22]+\\x22//g;s@(<\\w+) />@\\1/>@g'"
 
     $diffArgs = @($sourceFile, $destFile, "--config", (Resolve-Path $tempConfig), "--cs", $preProcessor)
 
