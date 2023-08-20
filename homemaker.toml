@@ -137,7 +137,11 @@
 
         ["@powershell-create-link",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Settings.lnk'",
-            "-TargetPath", "shell:appsFolder\\windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel"]
+            "-TargetPath", "shell:appsFolder\\windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel"],
+
+        ["@powershell-create-link",
+            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/VLC (Start paused).lnk'",
+            "-TargetPath", "'c:/Program Files/VideoLAN/VLC/vlc.exe'", "-Arguments", "'--no-sub-autodetect-file --start-paused'"]
     ]
 
 # Register programs which get installed somewhere in this script and which should start automatically.
