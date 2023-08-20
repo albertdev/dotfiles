@@ -24,6 +24,9 @@ Function Backup-Video {
         [Parameter(Mandatory = $false)]
         [string]$FormatHint,
 
+        [Parameter(Mandatory = $false)]
+        [string]$Cookies,
+
         [parameter(Mandatory = $true, ValueFromRemainingArguments=$true)]
         [string[]]$VideoUrls
     )
@@ -31,16 +34,28 @@ Function Backup-Video {
     if (-not (Test-Path $downloadArchive)) {
         New-Item -Path $downloadArchive -ItemType File -Force > $null
     }
+    $cookiesFilePath = $null
+    if ($Cookies) {
+        if (-not (Test-Path $Cookies)) {
+            Write-Warning "Cookies file not found"
+        } else {
+            $cookiesFilePath = Resolve-Path $Cookies
+        }
+    }
 
     $index = 0
     foreach ($video in $VideoUrls) {
         $index += 1
 
-        if ($Force) {
-            $ytdlpOutput = yt-dlp --dump-json $video
-        } else {
-            $ytdlpOutput = yt-dlp --dump-json --download-archive $downloadArchive $video
+        $infoArgs = (,"--dump-json")
+        if (-not $Force) {
+            $infoArgs += ("--download-archive",$downloadArchive)
         }
+        if ($cookiesFilePath) {
+            $infoArgs += ("--cookies", $cookiesFilePath)
+        }
+        $infoArgs += "$video"
+        $ytdlpOutput = yt-dlp @infoArgs
 
         if ($LASTEXITCODE) {
             Write-Error "Failed to download `"$video`", yt-dlp exited with status $LASTEXITCODE"
@@ -59,6 +74,9 @@ Function Backup-Video {
         $downloadArgs = ("--break-on-existing","-o",$outputTemplate)
         if (! $Force) {
             $downloadArgs += ("--download-archive",$downloadArchive)
+        }
+        if ($cookiesFilePath) {
+            $downloadArgs += ("--cookies", $cookiesFilePath)
         }
 
         if ($AudioOnly) {
@@ -84,7 +102,7 @@ Function Backup-Video {
                 Write-Warning "Subtitles for `"$video`" could not be found: $_"
             }
         }
-        $downloadArgs += $video
+        $downloadArgs += "$video"
 
         yt-dlp @downloadArgs
         if ($LASTEXITCODE) {
