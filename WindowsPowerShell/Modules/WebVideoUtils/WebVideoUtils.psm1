@@ -15,6 +15,9 @@ Function Backup-Video {
         [Parameter()]
         [switch]$DescriptionIncluded,
 
+        [Parameter()]
+        [switch]$Force,
+
         [Parameter(Mandatory = $false)]
         [string]$SubtitleLanguage,
 
@@ -33,7 +36,12 @@ Function Backup-Video {
     foreach ($video in $VideoUrls) {
         $index += 1
 
-        $ytdlpOutput = yt-dlp --dump-json --download-archive $downloadArchive $video
+        if ($Force) {
+            $ytdlpOutput = yt-dlp --dump-json $video
+        } else {
+            $ytdlpOutput = yt-dlp --dump-json --download-archive $downloadArchive $video
+        }
+
         if ($LASTEXITCODE) {
             Write-Error "Failed to download `"$video`", yt-dlp exited with status $LASTEXITCODE"
             continue
@@ -48,7 +56,11 @@ Function Backup-Video {
         $outputTemplatePrefix = $videoInfo.extractor_key + "_" + $videoInfo.id
         $outputTemplate = $outputTemplatePrefix + ".%(ext)s"
 
-        $downloadArgs = ("--download-archive",$downloadArchive,"--break-on-existing","-o",$outputTemplate)
+        $downloadArgs = ("--break-on-existing","-o",$outputTemplate)
+        if (! $Force) {
+            $downloadArgs += ("--download-archive",$downloadArchive)
+        }
+
         if ($AudioOnly) {
             $downloadArgs += ("-f", "bestaudio")
         }
