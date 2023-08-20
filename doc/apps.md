@@ -1,4 +1,4 @@
-## Genenral App Preferences
+## General App Preferences
 
 ### LibreOffice
 
@@ -19,3 +19,20 @@ Click on "Macro Security". Set it to "Medium".
 - Video > Output modules: Either "Automatic" or "Direct3D9". (vout)
 - Playlist: "Use only one instance when started from file manager" can be turned off. (one-instance-when-started-from-file)
 - Interface > Hotkeys settings: "Play/Pause, Global column" can be set to Media Play Pause key. (global-key-play-pause)
+
+### Password Safe
+
+- System
+    - Open database read-only by default 
+    - Allow multiple instances
+
+### SubtitleEdit
+See custom profiles.
+
+- General
+    - Time code mode: HH:MM:SS.MS
+    - Split behavior: Add gap to the left of split point (focus right)
+    - Double-clicking line in main window: Go to video position and pause
+- Subtitle formats
+    - Default format: SubRip
+

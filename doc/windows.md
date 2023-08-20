@@ -103,6 +103,9 @@ choco install slack -y --install-arguments="'INSTALLLEVEL=2'"
 Also don't forget to pin it using `choco pin add -n slack`; it auto-updates and the MSI installer might remove Windows taskbar pins when choco runs
 the MSI file again.
 
+### Intel HD Graphics
+- Don't forget to click "Options and Support"
+  - On the "Hot Key Manager" tab, Disable "Manage Hot Keys" - the rotation shortcuts are a doozy
 
 
 ## Windows Subsystem for Linux (WSL)
