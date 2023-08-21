@@ -28,3 +28,4 @@ fi
 
 # Zsh and query parameter delimiters in URLs don't agree
 alias youtube-dl='noglob youtube-dl'
+alias yt-dlp='noglob yt-dlp'
