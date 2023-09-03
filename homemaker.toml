@@ -161,23 +161,24 @@
             "-TargetPath", "C:/ProgramData/chocolatey/lib/launchyqt/tools/Launchy/Launchy.exe"]
     ]
 
-[tasks.windows-bin]
+[tasks.windows-path]
+    deps = ["powershell-modules"]
     links = [
         ["bin/lst2mlt.exe", "windows-bin/lst2mlt.exe"],
     ]
     # Make git-cola wrapper which doesn't wait for process to exit
     # (Attempt 1: point to included executable wrapper - this actually will always open a console window)
     # ["powershell", "-NoProfile", "-Command", "C:/ProgramData/chocolatey/tools/shimgen.exe", "--output=\"${HM_DEST}/bin/git-cola.exe\"", "--path=\"${HM_DEST}/AppData/Local/Programs/git-cola/bin/git-cola.exe\"", "--gui"]
-
-    # Attempt 2, + actually register bin folder on path
+    # Attempt 2 using shimgen
+    # Then modify path so it includes bin folder plus other stuff.
+    # That script depends on PCSX to simplify modifying the PATH variable.
     cmds = [
         ["powershell", "-NoProfile", "-Command", "C:/ProgramData/chocolatey/tools/shimgen.exe", "--gui",
             "--output=\"${HM_DEST}/bin/git-cola.exe\"",
             "--path=\"${HM_DEST}/AppData/Local/Programs/git-cola/Python/pythonw.exe\"",
             "--command=\"${HM_DEST}/AppData/Local/Programs/git-cola/bin/git-cola.exe\""],
 
-        ["powershell", "-NoProfile", "-Command", "Add-PathVariable", "-Prepend",
-            "-Value", "${HM_DEST}/bin/", "-Target", "User"]
+        ["powershell", "-NoProfile", "-Command", "${HM_SRC}/win-modify-path.ps1", "'${HM_DEST}'"]
     ]
 
 ##################################################################################
@@ -244,7 +245,7 @@
     deps = ["vim", "shared-rc"]
 
 [tasks.default__windows]
-    deps = ["eclipse", "powershell", "windows-bin", "visualstudio", "totalcmd", "windows-terminal", "windows-tweaks", "windows-software",
+    deps = ["eclipse", "powershell", "visualstudio", "totalcmd", "windows-terminal", "windows-tweaks", "windows-software", "windows-path",
             "default__", "windows-startup"]
 
 [tasks.default__linux]
