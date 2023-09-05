@@ -13,6 +13,12 @@ Loosely based on https://superuser.com/a/960889
 - In the "Welcome screen and new user accounts" you should click "Copy settings".
 - Tick the checkboxes and press OK.
 
+## Set default keyboard to Colemak
+When adding the Colemak keyboard to the English language, it might still revert to the default QWERTY layout.
+
+On Windows 11 this seems to be hidden. Go to "Time & Language", pick "Typing" and then click "Advanced keyboard settings". That screen has a
+combobox underneath the "Override for default input method" label.
+
 ## Accessibility Settings
 While I'm sure these settings are nice for some people, having keys which reconfigure Windows by repeated or long pressing a key are troublesome.
 Here's how to disable them.
@@ -33,24 +39,18 @@ To change it, either:
 
 Once there you can pick an item from the list and click "Change Key Sequence". Don't forget to press OK twice.
 
-## Set default keyboard to Colemak
-When adding the Colemak keyboard to the English language, it might still revert to the default QWERTY layout.
-
-On Windows 11 this seems to be hidden. Go to "Time & Language", pick "Typing" and then click "Advanced keyboard settings". That screen has a
-combobox underneath the "Override for default input method" label.
-
 ## Mouse Settings
 - Open Windows' `Run` dialog.
 - Enter `ms-settings:mousetouchpad`
 - Set cursor speed to 12, scroll multiple lines at a time, scroll 9-11 lines each time, scroll when hovering.
 
-## Taskbar
+## Taskbar (Windows 10 and earlier 😢)
 - Right-click taskbar and select "Taskbar settings".
 
 Settings of note:
 - Lock the taskbar, use small taskbar buttons
 - Replace command prompt with Windows Powershell
-- Taskbar location on screen: Left (Oh, hi Windows 11, you don't have that?!)
+- Taskbar location on screen: Left
 - Combine taskbar buttons: Never.
 - Multiple displays:
     - Show taskbar on all displays
