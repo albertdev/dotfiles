@@ -10,9 +10,21 @@
 #[credential "https://github.com"]
 #	helper = !/usr/bin/gh auth git-credential
 
-# Make WSL use the same credential manager as the Windows host. Second bit is necessary for Azure Devops
+# Make WSL use the same credential manager as the Windows host. Second bit is necessary for Azure Devops as URL path part contains organization name
+# and git by default passes only "dev.azure.com" to the credential manager.
 # See https://docs.microsoft.com/en-us/windows/wsl/tutorials/wsl-git#git-credential-manager-setup
 #[credential]
 #    helper = /mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe
 #[credential "https://dev.azure.com"]
 #    useHttpPath = true
+
+# Use windows credential store 
+#[credential]
+#    helper = wincred
+
+# Use work credential in work Github repos by default.
+# Not needed at home when always signed into Github using personal credential.
+# See https://github.com/git-ecosystem/git-credential-manager/blob/main/docs/multiple-users.md#tldr-tell-gcm-to-remember-which-account-to-use
+#[credential "https://github.com"]
+#    username = XXXXX
+
