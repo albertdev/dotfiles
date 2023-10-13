@@ -20,6 +20,10 @@ Click on "Macro Security". Set it to "Medium".
 - Playlist: "Use only one instance when started from file manager" can be turned off. (one-instance-when-started-from-file)
 - Interface > Hotkeys settings: "Play/Pause, Global column" can be set to Media Play Pause key. (global-key-play-pause)
 
+### gitk
+
+Go to ~/.config/git/gitk and change `set selectbgcolor` to `#aad5ff`. The default might be set to `#0078d7` which is a bit dark.
+
 ### Password Safe
 
 - System
