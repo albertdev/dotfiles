@@ -5,6 +5,7 @@
 *.ico     binary
 
 rc-files/kdiff3rc text=auto filter=clean-kdiff3-config
+rc-files/kitty.ini text=auto filter=clean-kitty-config
 totalcmd/wincmd.ini filter=clean-totalcmd-config
 
 # Make sure that these are always normalized to LF. *nix Vim does not like CR chars in there

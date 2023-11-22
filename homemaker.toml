@@ -110,7 +110,7 @@
 # Meta task
 
 [tasks.windows-customization]
-    deps = ["windows-customization-git", "windows-customization-shortcuts", "windows-software-customization-irfanview"]
+    deps = ["windows-customization-git", "windows-customization-shortcuts", "windows-software-customization-irfanview", "windows-software-customization-kitty"]
 
 [tasks.windows-customization-git]
     # Make sure that Git uses GVim as editor, MSYS2 vim doesn't always work properly in terminals. Setting this in the registry so that the git config remains platform indedendent.
@@ -179,6 +179,23 @@
     ]
     cmds = [
         ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Out-File", "-Append", "-Encoding", "ASCII", "-LiteralPath", "'C:/program files/IrfanView/i_view64.ini'", "-InputObject", "'Admin_EnableDelete=0'"]
+    ]
+
+# KiTTY has at least one feature which PuTTY doesn't have: it can store its config in the AppData folders
+[tasks.windows-software-customization-kitty]
+    accepts = [
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "if(Get-Command", "kitty.exe", "-ErrorAction", "SilentlyContinue){exit", "0}exit", "1"],
+        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "exit", "[int](Test-Path", "-PathType", "Leaf", "-LiteralPath", "'c:/ProgramData/chocolatey/lib/kitty/tools/kitty.ini')"]
+    ]
+    #
+#       ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Out-File", "-Encoding", "ASCII", "-LiteralPath", "'c:/ProgramData/chocolatey/lib/kitty/tools/kitty.ini'",
+#           "-InputObject", "('[KiTTY]',", "'savemode=dir',", "('configdir='+(Resolve-Path", "'~/AppData/Roaming')+'/KiTTY'))"]
+    cmds = [
+        ["powershell", "-NoProfile", "-Command", "New-Item", "-Type", "Directory", "'~/AppData/Roaming/KiTTY'", "-Force"],
+        ["powershell", "-NoProfile", "-Command", "Set-ItemProperty", "-Path", 'HKCU:\Environment', "-Name", "KITTY_INI_FILE", "-Value", "([string](Resolve-Path '~/AppData/Roaming/KiTTY')+'/kitty.ini')", "-Force"]
+    ]
+    links = [
+        ["AppData/Roaming/KiTTY/kitty.ini", "rc-files/kitty.ini"]
     ]
 
 [tasks.windows-path]
