@@ -95,7 +95,7 @@
 
 [tasks.windows-software]
     # TODO: see what https://gist.github.com/alimbada/449ddf65b4ef9752eff3 has to offer
-    # Install software, pin some of them so software's auto-update mechanism doesn't conflict with chocolatey, create shortcuts
+    # Install software, pin some of them so software's auto-update mechanism doesn't conflict with chocolatey
     cmds = [
         ["choco", "install", "-y", "${HM_SRC}/win-choco-packages.config"],
 
@@ -104,13 +104,24 @@
         ["choco", "pin", "add", "--name", "adobereader"],
 
         # Install Windows Terminal app using winget. Choco package tries to do the same thing, only through Get-AppX Powershell cmdlets
-        ["powershell", "-NoProfile", "-Command", "${HM_DEST}/AppData/Local/Microsoft/WindowsApps/winget.exe", "install", "Microsoft.WindowsTerminal"],
+        ["powershell", "-NoProfile", "-Command", "${HM_DEST}/AppData/Local/Microsoft/WindowsApps/winget.exe", "install", "Microsoft.WindowsTerminal"]
+    ]
 
-        # Make sure that Git uses GVim as editor, MSYS2 vim doesn't always work properly in terminals. Setting this in the registry so that the git config remains platform indedendent.
+# Meta task
+
+[tasks.windows-customization]
+    deps = ["windows-customization-git", "windows-customization-shortcuts"]
+
+[tasks.windows-customization-git]
+    # Make sure that Git uses GVim as editor, MSYS2 vim doesn't always work properly in terminals. Setting this in the registry so that the git config remains platform indedendent.
+    cmds = [
         ["powershell", "-NoProfile", "-Command", "Set-ItemProperty", "-Path", 'HKCU:\Environment', "-Name", "GIT_EDITOR", "-Value", '"gvim.exe -f -i NONE"', "-Force"],
 
-        ["powershell", "-NoProfile", "-Command", "Set-ItemProperty", "-Path", 'HKCU:\Environment', "-Name", "EDITOR", "-Value", "gvim.exe", "-Force"],
+        ["powershell", "-NoProfile", "-Command", "Set-ItemProperty", "-Path", 'HKCU:\Environment', "-Name", "EDITOR", "-Value", "gvim.exe", "-Force"]
+    ]
 
+[tasks.windows-customization-shortcuts]
+    cmds = [
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Console.lnk'",
             "-TargetPath", "${HM_DEST}/AppData/Local/Microsoft/WindowsApps/wt.exe"],
@@ -245,8 +256,8 @@
     deps = ["vim", "shared-rc"]
 
 [tasks.default__windows]
-    deps = ["eclipse", "powershell", "visualstudio", "totalcmd", "windows-terminal", "windows-tweaks", "windows-software", "windows-path",
-            "default__", "windows-startup"]
+    deps = ["eclipse", "powershell", "visualstudio", "totalcmd", "windows-terminal", "windows-tweaks", "windows-software", "windows-customization",
+            "windows-path", "default__", "windows-startup"]
 
 [tasks.default__linux]
     deps = ["vim", "shared-rc", "xfce", "zsh"]
