@@ -66,7 +66,8 @@ Function Backup-Video {
             continue
         }
         $videoInfo = ConvertFrom-Json $ytdlpOutput
-        Write-Information -InformationAction Continue "Video `"$($videoInfo.title)`" is $($videoInfo.duration_string) long"
+        $videoFilePrefix = BuildVideoFilePrefix $videoInfo
+        Write-Information -InformationAction Continue "Video `"$videoFilePrefix`" is $($videoInfo.duration_string) long"
 
         $outputTemplatePrefix = $videoInfo.extractor_key + "_" + $videoInfo.id
         $outputTemplate = $outputTemplatePrefix + ".%(ext)s"
@@ -109,8 +110,7 @@ Function Backup-Video {
             Write-Error "Failed to download `"$video`", yt-dlp exited with status $LASTEXITCODE"
         }
 
-        $newPrefix = RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo
-
+        RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo -NewPrefix $videoFilePrefix
 
         if (-not $NoDelay -and $index -lt $VideoUrls.Count) {
             Write-Output "Waiting before next download"
@@ -134,14 +134,15 @@ Function Backup-VideoDescription {
             continue
         }
         $videoInfo = ConvertFrom-Json $ytdlpOutput
-        Write-Information -InformationAction Continue "Video `"$($videoInfo.title)`" is $($videoInfo.duration_string) long"
+        $videoFilePrefix = BuildVideoFilePrefix $videoInfo
+        Write-Information -InformationAction Continue "Video `"$videoFilePrefix`" is $($videoInfo.duration_string) long"
 
         $outputTemplatePrefix = $videoInfo.extractor_key + "_" + $videoInfo.id
 
         $videoInfo | ConvertTo-Json -Depth 100 | Out-File -Encoding UTF8 -LiteralPath (Join-Path . ($outputTemplatePrefix + ".json"))
         $videoInfo.description | Out-File -Encoding UTF8 -LiteralPath (Join-Path . ($outputTemplatePrefix + ".description"))
 
-        $newPrefix = RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo
+        RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo -NewPrefix $videoFilePrefix
     }
 }
 
@@ -180,7 +181,8 @@ function Backup-VideoSubtitle {
             return
         }
         $videoInfo = ConvertFrom-Json $ytdlpOutput
-        Write-Information -InformationAction Continue "Video `"$($videoInfo.title)`" is $($videoInfo.duration_string) long"
+        $videoFilePrefix = BuildVideoFilePrefix $videoInfo
+        Write-Information -InformationAction Continue "Video `"$videoFilePrefix`" is $($videoInfo.duration_string) long"
 
         $downloadArgs = CalculateSubtitleDownloadArguments -Language $Language -VideoInfo $videoInfo -Format $Format
 
@@ -194,7 +196,7 @@ function Backup-VideoSubtitle {
             Write-Error "Failed to download subtitle for `"$video`", yt-dlp exited with status $LASTEXITCODE"
         }
 
-        $newPrefix = RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo
+        RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo -NewPrefix $videoFilePrefix
     }
 }
 
@@ -266,17 +268,12 @@ function CalculateSubtitleDownloadArguments {
     return $result
 }
 
-function RenameDownloadedItems {
+function BuildVideoFilePrefix {
     param(
-        $videoInfo,
-
-        [string]$Prefix
+        $videoInfo
     )
-    if (-not $Prefix) {
-        throw "No filename prefix passed, stopping rename of $videoInfo"
-    }
     if (-not $videoInfo) {
-        throw "No video info passed, stopping rename $Prefix"
+        throw "No video info passed"
     }
     # Calculate new file metadata
     $id = $videoInfo.id
@@ -314,6 +311,34 @@ function RenameDownloadedItems {
         $newPrefix = $newPrefix.Replace($invalidchar, '_');
     }
 
+    return $newPrefix
+}
+
+function RenameDownloadedItems {
+    param(
+        $videoInfo,
+        [string]$Prefix,
+        [string]$NewPrefix
+    )
+    if (-not $videoInfo) {
+        throw "No video info passed, stopping rename $Prefix"
+    }
+    if (-not $Prefix) {
+        throw "No filename prefix passed, stopping rename of $videoInfo"
+    }
+    if (-not $NewPrefix) {
+        throw "No new filename prefix passed, stopping rename of $videoInfo"
+    }
+    $date = $null
+
+    # Conditional rules for e.g. Twitter extractor where these values might not be set
+    if ($videoInfo | Get-Member -Name release_date) {
+        $date = $videoInfo.release_date
+    }
+    if (!($date)) {
+        $date = $videoInfo.upload_date
+    }
+    $dateParsed = [datetime]::ParseExact($date, 'yyyyMMdd', $null)
 
     # Look for files and process
     $foundFiles = Get-ChildItem -Filter ($Prefix + '*')
@@ -328,8 +353,6 @@ function RenameDownloadedItems {
     }
 
     Write-Information -InformationAction Continue "Moved files to `"$newPrefix`""
-
-    return $newPrefix
 }
 
 
