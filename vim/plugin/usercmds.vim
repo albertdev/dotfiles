@@ -67,7 +67,8 @@ function! s:DeleteTrailingWS()
     keeppatterns %s/\s\+$//ge
     exe "normal `z"
 endfunc
-command! DeleteTrailingWhiteSpace call s:DeleteTrailingWS()
+command! TrimTrailingWhiteSpace call s:DeleteTrailingWS()
+command! TrailingWhiteSpaceCleanup call s:DeleteTrailingWS()
 
 " Builds on Ingo Karkat's Concealer plugin to add a (local) conceal group based on the current search pattern
 command! ConcealSearch execute 'ConcealHere '.@/
