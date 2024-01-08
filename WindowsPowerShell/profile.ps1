@@ -299,10 +299,10 @@ Function GitFF($targetBranch) {
         }
     }
 }
-Function GitMF() { git merge --ff-only $args }
-Function GitKD() { gitk.exe --date-order $args }
-Function GitKA() { gitk.exe --all $args }
-Function GitKAD() { gitk.exe --all --date-order $args }
+Function GitMF() { git merge --ff-only @args }
+Function GitKD() { gitk.exe --date-order @args }
+Function GitKA() { gitk.exe --all @args }
+Function GitKAD() { gitk.exe --all --date-order @args }
 Function GitKU() {
     <#
         .Description
@@ -359,7 +359,7 @@ Function GitKU() {
     $gitkArgs += $localBranches
     gitk.exe @gitkArgs
 }
-Function GitKUD() { GITKU "--date-order" $args }
+Function GitKUD() { GITKU "--date-order" @args }
 Function GitKStash([string] $stash) {
     <#
         .Description
