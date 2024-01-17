@@ -259,12 +259,17 @@ Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
 
 Function GitFF() {
-    foreach ($targetBranch in $args) {
-        $currentBranch = git rev-parse --abbrev-ref HEAD
-        if ($LASTEXITCODE) { throw "Cannot determine current branch" }
+    $currentBranch = git rev-parse --abbrev-ref HEAD
+    if ($LASTEXITCODE) { throw "Cannot determine current branch" }
 
-        # If no target branch is given or requested branch is currently checked out we do a pull to let it check state of index
-        if (-not ($targetBranch) -or $currentBranch -eq $targetBranch) {
+    # If no target branches are given then we will update the current branch
+    if (-not $args.Count) {
+        $args = @($currentBranch)
+    }
+
+    foreach ($targetBranch in $args) {
+        # If requested branch is currently checked out we do a pull to let it check state of index
+        if ($currentBranch -eq $targetBranch) {
             git pull --ff-only
             if ($LASTEXITCODE -eq 0) {
                 git submodule update
