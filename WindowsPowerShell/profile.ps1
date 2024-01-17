@@ -258,44 +258,46 @@ Function GitI() { git diff --cached }
 Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
 
-Function GitFF($targetBranch) {
-    $currentBranch = git rev-parse --abbrev-ref HEAD
-    if ($LASTEXITCODE) { throw "Cannot determine current branch" }
+Function GitFF() {
+    foreach ($targetBranch in $args) {
+        $currentBranch = git rev-parse --abbrev-ref HEAD
+        if ($LASTEXITCODE) { throw "Cannot determine current branch" }
 
-    # If no target branch is given or requested branch is currently checked out we do a pull to let it check state of index
-    if (-not ($targetBranch) -or $currentBranch -eq $targetBranch) {
-        git pull --ff-only
-        if ($LASTEXITCODE -eq 0) {
-            git submodule update
-            Write-Output "Branch $currentBranch in sync"
-        } elseif ($currentBranch -eq "HEAD") {
-            $detachedHeadInfo = git --no-pager log --max-count=1 --pretty=format:"%h%x20%x20%s" HEAD
-            Write-Output "Could not fast-forward due to detached head on commit $detachedHeadInfo"
+        # If no target branch is given or requested branch is currently checked out we do a pull to let it check state of index
+        if (-not ($targetBranch) -or $currentBranch -eq $targetBranch) {
+            git pull --ff-only
+            if ($LASTEXITCODE -eq 0) {
+                git submodule update
+                Write-Output "Branch $currentBranch in sync"
+            } elseif ($currentBranch -eq "HEAD") {
+                $detachedHeadInfo = git --no-pager log --max-count=1 --pretty=format:"%h%x20%x20%s" HEAD
+                Write-Warning "Could not fast-forward due to detached head on commit $detachedHeadInfo"
+            } else {
+                Write-Error "Could not fast-forward head $currentBranch"
+            }
         } else {
-            Write-Output "Could not fast-forward head $currentBranch"
-        }
-    } else {
-        $upstreamBranch = git rev-parse --abbrev-ref --symbolic-full-name "$targetBranch@{upstream}"
-        if ($LASTEXITCODE -or $null -eq $upstreamBranch) { throw "Failed to find branch '$targetBranch' or it has no configured upstream branch" }
-        $remoteSeparator = $upstreamBranch.IndexOf('/')
-        $remoteName = $upstreamBranch.Substring(0, $remoteSeparator)
-        $remoteBranchName = $upstreamBranch.Substring($remoteSeparator + 1)
-        #git fetch $remoteName
-        #if ($LASTEXITCODE) { throw "Failed to update remote for '$upstreamBranch'" }
+            $upstreamBranch = git rev-parse --abbrev-ref --symbolic-full-name "$targetBranch@{upstream}"
+            if ($LASTEXITCODE -or $null -eq $upstreamBranch) { Write-Error "Failed to find branch '$targetBranch' or it has no configured upstream branch" }
+            $remoteSeparator = $upstreamBranch.IndexOf('/')
+            $remoteName = $upstreamBranch.Substring(0, $remoteSeparator)
+            $remoteBranchName = $upstreamBranch.Substring($remoteSeparator + 1)
+            #git fetch $remoteName
+            #if ($LASTEXITCODE) { throw "Failed to update remote for '$upstreamBranch'" }
 
-        ## Make sure that local branch can be fast-forwarded (i.e. all local commits have been pushed or upstream hasn't somehow done a forced push)
-        #$currentLocalCommit = git rev-parse "refs/heads/$targetBranch"
-        #$upstreamCommit = git rev-parse $upstreamBranch
-        #git merge-base --is-ancestor $currentLocalCommit $upstreamCommit
-        #if ($LASTEXITCODE) { throw "Branch '$targetBranch' has diverged from '$upstreamBranch', needs a merge instead" }
+            ## Make sure that local branch can be fast-forwarded (i.e. all local commits have been pushed or upstream hasn't somehow done a forced push)
+            #$currentLocalCommit = git rev-parse "refs/heads/$targetBranch"
+            #$upstreamCommit = git rev-parse $upstreamBranch
+            #git merge-base --is-ancestor $currentLocalCommit $upstreamCommit
+            #if ($LASTEXITCODE) { throw "Branch '$targetBranch' has diverged from '$upstreamBranch', needs a merge instead" }
 
-        #git update-ref "refs/heads/$targetBranch" $upstreamCommit $currentLocalCommit
+            #git update-ref "refs/heads/$targetBranch" $upstreamCommit $currentLocalCommit
 
-        git fetch $remoteName "$($remoteBranchName):$targetBranch"
-        if ($LASTEXITCODE) {
-            throw "Branch '$targetBranch' might have diverged from '$upstreamBranch' or fetch failed to connect to remote"
-        } else {
-            Write-Output "Branch $targetBranch in sync"
+            git fetch $remoteName "$($remoteBranchName):$targetBranch"
+            if ($LASTEXITCODE) {
+                Write-Error "Branch '$targetBranch' might have diverged from '$upstreamBranch' or fetch failed to connect to remote"
+            } else {
+                Write-Output "Branch $targetBranch in sync"
+            }
         }
     }
 }
