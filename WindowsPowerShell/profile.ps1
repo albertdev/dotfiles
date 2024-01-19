@@ -282,7 +282,10 @@ Function GitFF() {
             }
         } else {
             $upstreamBranch = git rev-parse --abbrev-ref --symbolic-full-name "$targetBranch@{upstream}"
-            if ($LASTEXITCODE -or $null -eq $upstreamBranch) { Write-Error "Failed to find branch '$targetBranch' or it has no configured upstream branch" }
+            if ($LASTEXITCODE -or $null -eq $upstreamBranch) {
+                Write-Error "Failed to find branch '$targetBranch' or it has no configured upstream branch"
+                continue
+            }
             $remoteSeparator = $upstreamBranch.IndexOf('/')
             $remoteName = $upstreamBranch.Substring(0, $remoteSeparator)
             $remoteBranchName = $upstreamBranch.Substring($remoteSeparator + 1)
