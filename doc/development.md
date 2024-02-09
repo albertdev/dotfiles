@@ -10,7 +10,10 @@ List of development tools and their most important settings.
 - VSVim, because I've got the modal editing brainworm. https://marketplace.visualstudio.com/items?itemName=JaredParMSFT.VsVim
 ### Settings
 - External tools:
-    - Add `&Vim` as external tool. Command is `c:\Program Files (x86)\vim\vim81\gvim.exe`, arguments is `--servername VimStudio --remote-silent +"call cursor($(CurLine),$(CurCol))" "$(ItemFileName)$(ItemExt)"`, initial dir is `$(ItemDir)`
+    - Add `&Vim` as external tool. Command is `c:\tools\vim\vim<version>\gvim.exe`, arguments is `--servername VimStudio --remote-silent +"call cursor($(CurLine),$(CurCol))" "$(ItemFileName)$(ItemExt)"`, initial dir is `$(ItemDir)`
+- Keyboard (Shortcuts to customize):
+    - Alter shortcuts for `ReSharper.ReSharper_GotoContainingDeclaration` to point to <kbd>Ctrl</kbd> + <kbd>[<kbd>, <kbd>Ctrl</kbd> + <kbd>[<kbd>.
+      It defaults to just <kbd>Ctrl</kbd> + <kbd>[<kbd>, which steals the key for other shortcuts.
 
 ## VS Code
 ### Extensions
