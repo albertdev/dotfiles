@@ -291,9 +291,9 @@ function! s:BuildLocationLine(diffbuffnr,item)
     else
         let locationline .= '[ ] '
     endif
-    let changedfilenamepos = match(diffline, '\m --[[:alpha:]]\+\s\+\zs')
+    let changedfilenamepos = stridx(diffline, ' b/')
     " Substring the target filename without b/ prefix
-    let changedfilename = strpart(diffline, changedfilenamepos)
+    let changedfilename = strpart(diffline, changedfilenamepos + 3)
     return locationline . changedfilename
 endfunction
 
