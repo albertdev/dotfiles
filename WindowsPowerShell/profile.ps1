@@ -257,6 +257,14 @@ Function GitB() {
 Function GitI() { git diff --cached }
 Function GitSF() { git svn fetch }
 Function GitFA() { git fetch --all }
+# Returns for each file in the current directory at what date the file was last touched in git.
+Function GitLSModified() {
+    # Based on https://stackoverflow.com/a/56373126
+    Get-ChildItem | % {
+        $date = [string] (git log -1 --pretty="format:%ci " $_.FullName);
+        New-object PSObject -Property @{ Date=$date; File=$_ }
+    }
+}
 
 Function GitFF() {
     $currentBranch = git rev-parse --abbrev-ref HEAD
