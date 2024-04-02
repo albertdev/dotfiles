@@ -100,6 +100,7 @@
         ["choco", "install", "-y", "${HM_SRC}/win-choco-packages.config"],
 
         ["choco", "pin", "add", "--name", "palemoon"],
+        ["choco", "pin", "add", "--name", "firefox"],
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
         ["choco", "pin", "add", "--name", "adobereader"],
 
