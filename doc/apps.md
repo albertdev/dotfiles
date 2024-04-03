@@ -39,4 +39,9 @@ See custom profiles.
     - Double-clicking line in main window: Go to video position and pause
 - Subtitle formats
     - Default format: SubRip
+- Shortcuts:
+    (Incomplete)
+    - Unbind "Change casing" and bind Ctrl+Shift+C to "Toggle shot change".
+    - Unbind "Auto-translate" (Ctrl+Shift+G)
+    - Unbind "Go to subtitle line number" and bind Ctrl+G to "Select next subtitle (from video position, keep video pos)"
 
