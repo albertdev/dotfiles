@@ -10,6 +10,15 @@ There are a few which are not added in that list though because their URL needs 
 - Keyword: `j`
 - `https://{organization}.atlassian.net/secure/QuickSearch.jspa?searchString=%s`
 
+## Firefox
+Used instead of Iridium.
+### Extensions
+- environment-marker: to color-code deployment environments. https://addons.mozilla.org/en-US/firefox/addon/environment-marker/ https://github.com/XjSv/environment-marker
+- ManicTime URL extractor: to get info about sites on timeline https://addons.mozilla.org/en-US/firefox/addon/manictime-url-extractor/
+- Tampermonkey: to customize websites https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/
+### Settings
+Dont't forget to hide the Pocket button in the toolbar.
+
 ## Iridium browser
 Chromium port with (allegedly) all the tracking demolished.
 ### Extensions
@@ -80,11 +89,6 @@ Or here's a command to create an executable shim which passes this argument by i
 ```
 C:/ProgramData/chocolatey/tools/shimgen.exe --gui --output="$HOME/bin/chrome-dev.exe" --path="C:/Program Files/Google/Chrome/Application/chrome.exe" --command="--auto-open-devtools-for-tabs"
 ```
-
-## Firefox
-Only used for stuff where adblock might block genuine friendly applications.
-### Settings
-Dont't forget to turn of Firefox studies.
 
 ## Firefox Developer Edition
 Only used for development and testing. Uses its own profile. Get it from https://www.mozilla.org/en-GB/firefox/developer/
