@@ -99,7 +99,7 @@ set number
 " Disable sound for reaching EOF - since line numbers are on it's obvious we can no longer scroll
 set t_vb=
 set visualbell
-" Make normal mode's ~ command wait for a motion, just like gu / gU do
+" Make normal mode ~ command wait for a motion, just like gu / gU do
 set tildeop
 " Settings above get reset after gVim is started, fix it AGAIN
 autocmd GUIEnter * set visualbell t_vb=

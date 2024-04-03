@@ -18,10 +18,10 @@ imap <buffer> <C-Up>  <Plug>(transcribe-findcode-backward)
 map  <buffer> <C-Down> <Plug>(transcribe-findcode-forward)
 imap <buffer> <C-Down> <Plug>(transcribe-findcode-forward)
 
-nmap + <Plug>(transcribe-movenextline)
-nmap - <Plug>(transcribe-moveprevline)
-nmap _ <Plug>(transcribe-underscoreline)
-nmap ^ <Plug>(transcribe-startofline)
+nmap <buffer> + <Plug>(transcribe-movenextline)
+nmap <buffer> - <Plug>(transcribe-moveprevline)
+nmap <buffer> _ <Plug>(transcribe-underscoreline)
+nmap <buffer> ^ <Plug>(transcribe-startofline)
 
 map  <buffer> <M-Right> <Plug>(transcribe-inc-frames-seek)
 map  <buffer> <M-Left> <Plug>(transcribe-dec-frames-seek)
@@ -43,6 +43,8 @@ imap <buffer> <C-T> <Plug>(transcribe-insertcode)
 nmap <buffer> dc <Plug>(transcribe-deletecode)
 
 nmap <buffer> dC J<Plug>(transcribe-deletecode)
+
+nmap <buffer> go <Plug>(transcribe-divideparagraph)
 
 map  <buffer> <C-Tab> <Plug>(transcribe-seek-backward-long)
 imap <buffer> <C-Tab> <Plug>(transcribe-seek-backward-long)
