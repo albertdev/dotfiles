@@ -393,13 +393,13 @@ if resource:sub(1,7) == '/?type=' then
     engineId = resource:sub(8)
 
     searchEngineHtml = [[
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>]] .. engineId .. [[</title>
-        <link rel="search"
-              type="application/opensearchdescription+xml"
-]] .. ' title="' .. engineId .. '" href="http://localhost:8080/' .. engineId .. [[.osd.xml"/>
+        <link rel="search" type="application/opensearchdescription+xml" ]]
+            .. ' title="' .. engineId .. '" href="/' .. engineId .. [[.osd.xml"/>
     </head>
     <body>
         <h1>]] .. engineId .. [[</h1>
