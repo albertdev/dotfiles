@@ -104,6 +104,8 @@
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
         ["choco", "pin", "add", "--name", "adobereader"],
 
+        # Refresh Winget - a fresh Windows 11 Pro install had a broken version included
+        ["powershell", "-NoProfile", "-Command", "Add-AppPackage", "-path", "https://cdn.winget.microsoft.com/cache/source.msix."],
         # Install Windows Terminal app using winget. Choco package tries to do the same thing, only through Get-AppX Powershell cmdlets
         ["powershell", "-NoProfile", "-Command", "${HM_DEST}/AppData/Local/Microsoft/WindowsApps/winget.exe", "install", "Microsoft.WindowsTerminal"]
     ]
