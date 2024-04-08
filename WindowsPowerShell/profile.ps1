@@ -635,15 +635,58 @@ function GitResetUpstream
         Write-Output "Branch $currentBranch has no upstream!"
         return
     }
-    # See https://stackoverflow.com/a/5737794/983949
+    # See https://stackoverflow.com/a/5737794/983949 for how to check that working copy has no changes
     $checkChanges = $(git status --porcelain --untracked-files=no)
     if ($checkChanges) {
         throw "Working directory is not clean!"
     }
     git reset --hard $upstreamBranch
 }
+# Resets the current branch and working copy to a new merge commit between two branches.
+# The prerequisite is that HEAD is on a commit which contains all commits from both branches (i.e. their contents have been merged to HEAD).
+# After this command is done, HEAD will point to the new merge commit.
+function GitResetHardMerge ([string] $ourBranch, [string] $theirBranch) {
+    # See https://stackoverflow.com/a/5737794/983949 for how to check that working copy has no changes
+    $checkChanges = $(git status --porcelain --untracked-files=no)
+    if ($checkChanges) {
+        throw "Working directory is not clean!"
+    }
+    $currentTree = git log --max-count=1 "--pretty=format:%T"
+    $parent1 = git rev-parse --quiet --verify "$ourBranch^{commit}"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Branch $ourBranch not found"
+        return
+    }
+    $parent2 = git rev-parse --quiet --verify "$theirBranch^{commit}"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Branch $theirBranch not found"
+        return
+    }
+    git merge-base --is-ancestor $parent1 HEAD
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Branch $ourBranch has commits which are not merged into HEAD"
+        return
+    }
+    git merge-base --is-ancestor $parent2 HEAD
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Branch $theirBranch has commits which are not merged into HEAD"
+        return
+    }
 
-
+    $currentBranch = git symbolic-ref -q --short HEAD
+    if ($LASTEXITCODE -ne 0) {
+        Write-Output ""
+        Write-Warning "Currently no branch is checked out. Use 'git commit --amend --reset-author' to fix message, then make sure to fix detached HEAD."
+        Write-Output ""
+        $currentBranch = "HEAD"
+    }
+    $newCommit = git commit-tree -p $parent1 -p $parent2 -m "Merge branch '$theirBranch' into $currentBranch" $currentTree
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to create merge commit"
+        return
+    }
+    git reset --hard $newCommit
+}
 function Add-ProjectPackages ()
 {
     <# .Description
