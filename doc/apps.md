@@ -8,12 +8,15 @@ Click on "Macro Security". Set it to "Medium".
 
 ### VLC
 (Setting names in RC will be in parentheses.)
+Config file on Windows is ~/AppData/Roaming/vlc/vlcrc
 
 - First of all, switch the "Show settings" radiobox to "All".
   Interface > Main interface > Qt: "Show advanced preferences over simple ones" option to make it permanent.
   Also Interface: "Show advanced options"
 - Video > Filters > Rotate: Set angle to 180 or whatever is needed. (rotate-angle)
-- Interface > Main interface > Qt: Untick "Activate the updates availibility notification". (qt-updates-notif)
+- Interface > Main interface > Qt:
+    - Untick "Activate the updates availibility notification". (qt-updates-notif)
+    - Untick "Resize interface to the native video size". (qt-video-autoresize)
 - Inputs / Codecs > Audio codecs > FluidSynth: Configure soundfont. (soundfont)
 - Video: "Show media title on video" turned off. (video-title-show)
 - Video > Output modules: Either "Automatic" or "Direct3D9". (vout)
@@ -29,6 +32,23 @@ Go to ~/.config/git/gitk and change `set selectbgcolor` to `#aad5ff`. The defaul
 - System
     - Open database read-only by default 
     - Allow multiple instances
+- Misc
+    - Escape key closes application
+    - Double click action: copy username
+    - Shift Double click action: copy password
+    - Autotype:
+        - Minimize after autotype
+        - Default autotype string: `\p`
+- Security
+    - Clear clipboard upon minimize
+    - Clear clipboard upon exit
+    - Exclude from clipboard history
+    - (Off) Confirm copy of password to clipboard
+    - Exclude from screen capture
+    - Lock password database
+        - (Off) On minimize
+        - On workstation lock
+    - Unlock difficulty - specific per database
 
 ### SubtitleEdit
 See custom profiles.
