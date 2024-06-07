@@ -65,19 +65,20 @@ See custom profiles.
 - Shortcuts:
     - Leave "Toggle Play/Pause" to default Ctrl+P.
     - Bind Ctrl+Shift+Return to "Merge with next".
-    - Unbind "Go To Next Subtitle" and assign Shift+Return to "Go to start of current subtitle".
-    - Bind "Go to end of current subtitle" as Alt+Shift+Return.
+    - Unbind "Go To Next Line" and assign Shift+Return to "Go to current line start".
+    - Bind "Go to current line end" as Alt+Shift+Return.
     - Unbind "Change casing" and bind Ctrl+Shift+C to "Toggle shot change".
     - Unbind "Auto-translate" (Ctrl+Shift+G).
-    - Unbind "Go to subtitle line number" and bind Ctrl+G to "Select next subtitle (from video position, keep video pos)".
+    - Unbind "Go to subtitle number..." and bind Ctrl+G to "Select next subtitle (from video position, keep video pos)".
     - Unbind "New File" and bind Ctrl+N to "Small selected time forward".
     - Unbind "Renumber" and bind Ctrl+Shift+N to "Small selected time back".
     - Bind "One frame forward" as Ctrl+E.
-    - Bind "One frame back" as Ctrl+Shift+E.
+    - Unbind "Extend selected lines to next subtitle" and bind Ctrl+Shift+E to "One frame back".
+    - Unbind "Extend selected lines to previous subtitle" (Alt+Shift+E).
     - Unbind "Save As" and bind Ctrl+Shift+S to "Spell check" only.
     - Unbind "Play from just before" (Shift+F10).
     - Bind "Five seconds forward" as Ctrl+PageDown.
-    - Bind "Five seconds backward" as Ctrl+PageUp.
+    - Bind "Five seconds back" as Ctrl+PageUp.
     - Bind "Go to next subtitle (from video position)" as Alt+Shift+Down.
     - Bind "Go to previous subtitle (from video position)" as Alt+Shift+Up.
     - Bind "Split line at cursor/video position" as Ctrl+Alt+S.
@@ -90,7 +91,6 @@ See custom profiles.
     - Change "Vertical zoom out" to Shift+OemMinus.
     - Bind (Waveform) "Zoom in" as OemPlus.
     - Bind (Waveform) "Zoom out" as OemMinus.
-    - Bind (Waveform) "Split" as Ctrl+Alt+S.
 - Video player
     - Select "mpv" engine
     - Untick "mpv handles preview text" to show text underneath video, and using all 3 possible lines.
@@ -115,3 +115,6 @@ See custom profiles.
       This affects the Ctrl+N shortcut and is useful for precise movement in audio files (where you can't move a single video frame forward because
       there are is no video).
     - Set the video player's volume to 100%, otherwise it starts at 75%
+    - In the waveform view, click the "Center" button next to the zoom and play controls.
+    - In the waveform view, check the "Select current subtitle when playing" option.
+    - Right click on the list view's columns, enable the "Chars/sec" and "Gap" columns.
