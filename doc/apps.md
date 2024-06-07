@@ -54,14 +54,64 @@ Go to ~/.config/git/gitk and change `set selectbgcolor` to `#aad5ff`. The defaul
 See custom profiles.
 
 - General
+    - Default frame rate: 30
+    - Start with last file loaded: Unticked
     - Time code mode: HH:MM:SS.MS
     - Split behavior: Add gap to the left of split point (focus right)
     - Double-clicking line in main window: Go to video position and pause
 - Subtitle formats
     - Default format: SubRip
+    - Favorites: SubRip, Youtube SBV, WebVTT
 - Shortcuts:
-    (Incomplete)
+    - Leave "Toggle Play/Pause" to default Ctrl+P.
+    - Bind Ctrl+Shift+Return to "Merge with next".
+    - Unbind "Go To Next Subtitle" and assign Shift+Return to "Go to start of current subtitle".
+    - Bind "Go to end of current subtitle" as Alt+Shift+Return.
     - Unbind "Change casing" and bind Ctrl+Shift+C to "Toggle shot change".
-    - Unbind "Auto-translate" (Ctrl+Shift+G)
-    - Unbind "Go to subtitle line number" and bind Ctrl+G to "Select next subtitle (from video position, keep video pos)"
+    - Unbind "Auto-translate" (Ctrl+Shift+G).
+    - Unbind "Go to subtitle line number" and bind Ctrl+G to "Select next subtitle (from video position, keep video pos)".
+    - Unbind "New File" and bind Ctrl+N to "Small selected time forward".
+    - Unbind "Renumber" and bind Ctrl+Shift+N to "Small selected time back".
+    - Bind "One frame forward" as Ctrl+E.
+    - Bind "One frame back" as Ctrl+Shift+E.
+    - Unbind "Save As" and bind Ctrl+Shift+S to "Spell check" only.
+    - Unbind "Play from just before" (Shift+F10).
+    - Bind "Five seconds forward" as Ctrl+PageDown.
+    - Bind "Five seconds backward" as Ctrl+PageUp.
+    - Bind "Go to next subtitle (from video position)" as Alt+Shift+Down.
+    - Bind "Go to previous subtitle (from video position)" as Alt+Shift+Up.
+    - Bind "Split line at cursor/video position" as Ctrl+Alt+S.
+    - Bind "Set end minus gap, go to next and start next here" as Shift+F12.
+    - Bind "Set start and set end of previous (minus min gap)" as Shift+F11.
+    - Bind "Set start time, keep duration" as Ctrl+F11.
+    - Bind "Unbreak text" as Ctrl+Back(space).
+    - Bind "Toggle focus between list view and subtitle text box" as Ctrl+Tab.
+    - Change "Vertical zoom in" to Shift+OemPlus.
+    - Change "Vertical zoom out" to Shift+OemMinus.
+    - Bind (Waveform) "Zoom in" as OemPlus.
+    - Bind (Waveform) "Zoom out" as OemMinus.
+    - Bind (Waveform) "Split" as Ctrl+Alt+S.
+- Video player
+    - Select "mpv" engine
+    - Untick "mpv handles preview text" to show text underneath video, and using all 3 possible lines.
+    - Untick "Bold" next to the font dropdown.
 
+- Toolbar:
+    Make sure these are ticked as Visible, everything else gets unticked:
+
+    - "New"
+    - "Open"
+    - "Open Video"
+    - "Save"
+    - "Find"
+    - "Replace"
+    - "Spell check"
+    - "Help"
+    - "Toggle list/source view"
+    - "Show framerate in toolbar"
+
+- Misc:
+    - Don't forget to click on the "Adjust" tab tab next to the waveform, and modify the "Small selected time" to 0,025 instead of "0,500".
+      This affects the Ctrl+N shortcut and is useful for precise movement in audio files (where you can't move a single video frame forward because
+      there are is no video).
+    - Set the video player's volume to 100%, otherwise it starts at 75%
