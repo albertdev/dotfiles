@@ -39,10 +39,10 @@
     ]
 
 [macros.powershell-check-modules]
-    prefix = ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Import-Module"]
+    prefix = ["powershell", "-NoProfile", "-Command", "Import-Module"]
 
 [macros.powershell-install-module]
-    prefix = ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Install-Module"]
+    prefix = ["powershell", "-NoProfile", "-Command", "Install-Module"]
 
 [tasks.powershell-modules]
     rejects = [
@@ -50,8 +50,8 @@
     ]
     # Install nuget provider for PowerShellGet and install favourite modules
     cmds = [
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Install-PackageProvider", "-Name", "NuGet", "-MinimumVersion", "2.8.5.201"],
-        ["cmd", "/c", "powershell", "-NoProfile", "-Command", "Set-PSRepository", "PSGallery", "-InstallationPolicy", "Trusted"],
+        ["powershell", "-NoProfile", "-Command", "Install-PackageProvider", "-Name", "NuGet", "-MinimumVersion", "2.8.5.201"],
+        ["powershell", "-NoProfile", "-Command", "Set-PSRepository", "PSGallery", "-InstallationPolicy", "Trusted"],
         ["@powershell-install-module", "PSCX", "-AllowClobber"],
         ["@powershell-install-module", "ZLocation"],
         ["@powershell-install-module", "PSReadline", "-Force"],
@@ -90,31 +90,32 @@
 [macros.powershell-create-link-start-home]
     # Next parameter after macro is location of link file
     # Target path still needs to be specified to tell where to link to
-    prefix = ["cmd", "/c", "powershell", "-NoProfile", "-Command", "${HM_SRC}/WindowsPowershell/Scripts/New-ShellLink.ps1",
+    prefix = ["powershell", "-NoProfile", "-Command", "& {& '${HM_SRC}/WindowsPowershell/Scripts/New-ShellLink.ps1'",
                 "-Force", "-LinkOutputPath"]
-    suffix = ["-StartPath", "'%USERPROFILE%'"]
+    suffix = ["-StartPath", "'%USERPROFILE%'}"]
 
 [macros.powershell-create-link]
     # Next parameter after macro is location of link file
     # Target path still needs to be specified to tell where to link to
-    prefix = ["cmd", "/c", "powershell", "-NoProfile", "-Command", "${HM_SRC}/WindowsPowershell/Scripts/New-ShellLink.ps1",
+    prefix = ["powershell", "-NoProfile", "-Command", "& {& '${HM_SRC}/WindowsPowershell/Scripts/New-ShellLink.ps1'",
                 "-Force", "-LinkOutputPath"]
+    suffix = ["}"]
 
 [tasks.windows-software]
     # TODO: see what https://gist.github.com/alimbada/449ddf65b4ef9752eff3 has to offer
     # Install software, pin some of them so software's auto-update mechanism doesn't conflict with chocolatey
+    # ["choco", "pin", "add", "--name", "adobereader"],
     cmds = [
         ["choco", "install", "-y", "${HM_SRC}/win-choco-packages.config"],
 
         ["choco", "pin", "add", "--name", "palemoon"],
         ["choco", "pin", "add", "--name", "firefox"],
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
-        ["choco", "pin", "add", "--name", "adobereader"],
 
         # Refresh Winget - a fresh Windows 11 Pro install had a broken version included
         ["powershell", "-NoProfile", "-Command", "Add-AppPackage", "-path", "https://cdn.winget.microsoft.com/cache/source.msix."],
         # Install Windows Terminal app using winget. Choco package tries to do the same thing, only through Get-AppX Powershell cmdlets
-        ["powershell", "-NoProfile", "-Command", "${HM_DEST}/AppData/Local/Microsoft/WindowsApps/winget.exe", "install", "Microsoft.WindowsTerminal"]
+        ["powershell", "-NoProfile", "-Command", "& '${HM_DEST}/AppData/Local/Microsoft/WindowsApps/winget.exe' install Microsoft.WindowsTerminal"]
     ]
 
 # Meta task
@@ -134,11 +135,11 @@
     cmds = [
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Console.lnk'",
-            "-TargetPath", "${HM_DEST}/AppData/Local/Microsoft/WindowsApps/wt.exe"],
+            "-TargetPath", "'${HM_DEST}/AppData/Local/Microsoft/WindowsApps/wt.exe'"],
 
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Command prompt console.lnk'",
-            "-TargetPath", "${HM_DEST}/AppData/Local/Microsoft/WindowsApps/wt.exe", "-Arguments", "'new-tab --profile {0caa0dad-35be-5f56-a8ff-afceeeaa6101}'"],
+            "-TargetPath", "'${HM_DEST}/AppData/Local/Microsoft/WindowsApps/wt.exe'", "-Arguments", "'new-tab --profile {0caa0dad-35be-5f56-a8ff-afceeeaa6101}'"],
 
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Kitty.lnk'",
@@ -170,11 +171,11 @@
     cmds = [
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/WinManagement.lnk'",
-            "-TargetPath", "%DOTFILESPATH%/autohotkey/WinManagement.ahk"],
+            "-TargetPath", "'%DOTFILESPATH%/autohotkey/WinManagement.ahk'"],
 
         ["@powershell-create-link-start-home",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/WinMaximizer.lnk'",
-            "-TargetPath", "%DOTFILESPATH%/autohotkey/WinMaximizer.ahk"],
+            "-TargetPath", "'%DOTFILESPATH%/autohotkey/WinMaximizer.ahk'"],
 
         # Launchy-QT no longer creates a startup link whereas the original Launchy did
         ["@powershell-create-link-start-home",
@@ -220,12 +221,12 @@
     # Then modify path so it includes bin folder plus other stuff.
     # That script depends on PCSX to simplify modifying the PATH variable.
     cmds = [
-        ["powershell", "-NoProfile", "-Command", "C:/ProgramData/chocolatey/tools/shimgen.exe", "--gui",
+        ["C:/ProgramData/chocolatey/tools/shimgen.exe", "--gui",
             "--output=\"${HM_DEST}/bin/git-cola.exe\"",
             "--path=\"${HM_DEST}/AppData/Local/Programs/git-cola/Python/pythonw.exe\"",
             "--command=\"${HM_DEST}/AppData/Local/Programs/git-cola/bin/git-cola.exe\""],
 
-        ["powershell", "-NoProfile", "-Command", "${HM_SRC}/win-modify-path.ps1", "'${HM_DEST}'"]
+        ["powershell", "-NoProfile", "-Command", "& '${HM_SRC}/win-modify-path.ps1' \"${HM_DEST}\""]
     ]
 
 ##################################################################################

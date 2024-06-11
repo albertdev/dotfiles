@@ -2,8 +2,8 @@
 #[include]
 #	path = ../.gitfilters
 [filter "clean-kdiff3-config"]
-  clean = $DOTFILESPATH/scripts/git-filter-clean-kdiff3.sh
+  clean = "\"$DOTFILESPATH/scripts/git-filter-clean-kdiff3.sh\""
 [filter "clean-totalcmd-config"]
-  clean = $DOTFILESPATH/scripts/git-filter-clean-totalcmd.sh
+  clean = "\"$DOTFILESPATH/scripts/git-filter-clean-totalcmd.sh\""
 [filter "clean-kitty-config"]
-  clean = $DOTFILESPATH/scripts/git-filter-clean-kitty.sh
+  clean = "\"$DOTFILESPATH/scripts/git-filter-clean-kitty.sh\""
