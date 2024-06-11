@@ -4,12 +4,19 @@
 # WINDOWS
 ##################################################################################
 
+[tasks.totalcmd-create-dummy-license]
+    cmds = [
+        ["powershell", "-NoProfile", "-Command", "if(!(Test-Path", "'${HM_SRC}/totalcmd/wincmd.key'", ")){New-Item", "'${HM_SRC}/totalcmd/wincmd.key'}"]
+    ]
+
 [tasks.totalcmd]
+    deps = ["totalcmd-create-dummy-license"]
     cmds = [
         ["reg", "add", 'HKCU\Software\Ghisler\Total Commander', "/v", "IniFileName", "/d", '%LocalAppData%\totalcmd\wincmd.ini', "/f"],
         ["reg", "add", 'HKCU\Software\Ghisler\Total Commander', "/v", "FtpIniName",  "/d", '%LocalAppData%\totalcmd\wcx_ftp.ini', "/f"],
     ]
     links = [
+        ["AppData/local/totalcmd/wincmd.key", "totalcmd/wincmd.key"],
         ["AppData/local/totalcmd/wincmd.ini", "totalcmd/wincmd.ini"],
         ["AppData/local/totalcmd/wincmd_usermenu.ini", "totalcmd/wincmd_usermenu.ini"],
         ["AppData/local/totalcmd/usercmd.ini", "totalcmd/usercmd.ini"],
