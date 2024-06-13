@@ -121,7 +121,7 @@
 # Meta task
 
 [tasks.windows-customization]
-    deps = ["windows-customization-git", "windows-customization-shortcuts", "windows-software-customization-irfanview", "windows-software-customization-kitty"]
+    deps = ["windows-customization-git", "windows-customization-shortcuts", "windows-software-customization-irfanview", "windows-git-cola", "windows-software-customization-kitty"]
 
 [tasks.windows-customization-git]
     # Make sure that Git uses GVim as editor, MSYS2 vim doesn't always work properly in terminals. Setting this in the registry so that the git config remains platform indedendent.
@@ -206,6 +206,15 @@
     links = [
         ["bin/lst2mlt.exe", "windows-bin/lst2mlt.exe"],
     ]
+    cmds = [
+        ["powershell", "-NoProfile", "-Command", "& '${HM_SRC}/win-modify-path.ps1' \"${HM_DEST}\""]
+    ]
+
+[tasks.windows-git-cola]
+    deps = ["powershell-modules"]
+    accepts = [
+        ["powershell", "-NoProfile", "-Command", "exit", "[int](Test-Path", "-PathType", "Leaf", "-LiteralPath", "'${HM_DEST}/bin/git-cola.exe')"]
+    ]
     # Make git-cola wrapper which doesn't wait for process to exit
     # (Attempt 1: point to included executable wrapper - this actually will always open a console window)
     # ["powershell", "-NoProfile", "-Command", "C:/ProgramData/chocolatey/tools/shimgen.exe", "--output=\"${HM_DEST}/bin/git-cola.exe\"", "--path=\"${HM_DEST}/AppData/Local/Programs/git-cola/bin/git-cola.exe\"", "--gui"]
@@ -217,8 +226,6 @@
             "--output=\"${HM_DEST}/bin/git-cola.exe\"",
             "--path=\"${HM_DEST}/AppData/Local/Programs/git-cola/Python/pythonw.exe\"",
             "--command=\"${HM_DEST}/AppData/Local/Programs/git-cola/bin/git-cola.exe\""],
-
-        ["powershell", "-NoProfile", "-Command", "& '${HM_SRC}/win-modify-path.ps1' \"${HM_DEST}\""]
     ]
 
 ##################################################################################
