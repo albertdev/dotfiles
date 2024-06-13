@@ -154,14 +154,6 @@
             "-TargetPath", "c:/ProgramData/chocolatey/lib/logexpert/tools/LogExpert.exe"],
 
         ["@powershell-create-link",
-            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Calculator.lnk'",
-            "-TargetPath", "shell:appsFolder\\Microsoft.WindowsCalculator_8wekyb3d8bbwe!App"],
-
-        ["@powershell-create-link",
-            "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Settings.lnk'",
-            "-TargetPath", "shell:appsFolder\\windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel"],
-
-        ["@powershell-create-link",
             "'${HM_DEST}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/VLC (Start paused).lnk'",
             "-TargetPath", "'c:/Program Files/VideoLAN/VLC/vlc.exe'", "-Arguments", "'--no-sub-autodetect-file --start-paused'"]
     ]
