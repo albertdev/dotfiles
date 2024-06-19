@@ -17,7 +17,17 @@ Used instead of Iridium.
 - ManicTime URL extractor: to get info about sites on timeline https://addons.mozilla.org/en-US/firefox/addon/manictime-url-extractor/
 - Tampermonkey: to customize websites https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/
 ### Settings
-Dont't forget to hide the Pocket button in the toolbar.
+- app.shield.optoutstudies.enabled : false
+- browser.download.useDownloadDir : false
+- browser.newtabpage.enabled : false
+- browser.newtabpage.activity-stream.showSponsoredTopSites
+- browser.startup.homepage : chrome://browser/content/blanktab.html
+- browser.startup.page : 3
+  (Sets to remember tabs from last time)
+- browser.toolbars.bookmarks.visibility : always
+- browser.translations.automaticallyPopup : false
+- browser.translations.panelShown : true
+- Dont't forget to hide the Pocket button in the toolbar
 
 ## Iridium browser
 Chromium port with (allegedly) all the tracking demolished.
