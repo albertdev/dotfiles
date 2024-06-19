@@ -58,6 +58,23 @@ Settings of note:
 - News and Interests: Turn it off.
 - People: Turn that off as well.
 
+## Taskbar (Windows 11's Limited Setup Since 2023 Update)
+- Right-click taskbar and select "Taskbar settings".
+
+Settings of note:
+- Disable Search by picking the "Hide" option.
+- Turn off Widgets.
+- Unfold "Other system tray icons":
+    - Turn off "Microsoft OneDrive".
+- Unfold "Taskbar behaviors":
+    - Taskbar alignment: Left
+    - Show badges
+    - Show flashing
+    - Show my taskbar on all displays
+    - Select the far corner of the taskbar to show the desktop
+    - Combine taskbar buttons and hide labels: Never
+    - Combine taskbar buttons and hide labels on other taskbars: Never
+
 ## Multiple desktops
 Setup a second one by clicking the Task View button on the taskbar.
 
@@ -69,21 +86,67 @@ Run `ms-settings:multitasking` and configure the following settings:
     - On the taskbar show windows from all desktops
     - Pressing Alt+Tab should show windows from all desktops
 
-On that note, run `ms-settings:easeofaccess-display` and scroll down to "Simplify and personalize Windows":
+~~On that note, run `ms-settings:easeofaccess-display` and scroll down to "Simplify and personalize Windows":
 - Disable "Show animations in Windows".
   It might make things more boring by turning off all animations, but the "Switch desktop" animation is annoying IMHO.
 - Disable "Automatically hide scroll bars in Windows".
-  It's fine if you're using a tablet, but for precise scroll bar adjustments it's just annoying.
+  It's fine if you're using a tablet, but for precise scroll bar adjustments it's just annoying.~~
+
+On that note, run `ms-settings:easeofaccess-visualeffects`: 
+- Enable "Always show scrollbars".
+- Disable "Animation effects".
 
 ## Styling & Personalization
 
 - Run `ms-settings:personalization-background` and pick a solid color background.
-- Go to Colors:
-    - Use dark Windows mode, light app mode.
-    - "Show accent color on the following surfaces" only needs "Title bars and window borders"
-- Lock screen: choose a picture, turn off Windows Cortana stuff.
-  
 
+- Go to Colors using `ms-settings:personalization-colors`:
+    - ~~Use dark Windows mode, light app mode.~~
+    - Choose your mode: "Custom"
+        - Choose your default Windows mode: Dark.
+        - Choose your default app mode: Light.
+    - "Show accent color on the following surfaces" only needs "Title bars and window borders"
+
+- Go to Lock screen using `ms-settings:lockscreen`:
+    - Choose a picture, turn off Windows Cortana stuff.
+
+## Sleep And Lock Timeouts
+
+Go to `ms-settings:powersleep`: "System > Power & battery"
+
+Unfold "Screen and sleep".
+
+To change advanced settings, run `powercfg.cpl`. Click on "Change plan settings" for the current power plan.
+Then click "Change advanced power settings".
+
+## Enabling Hibernate, Changing Power Button Function
+
+From [the Microsoft documentation](https://support.microsoft.com/en-us/windows/shut-down-sleep-or-hibernate-your-pc-2941d165-7d0a-a5e8-c5ad-8c972e8e6eff#ID0EBD=Windows_11):
+
+
+1. Select Search on the taskbar, type control panel, and select it from the results.
+
+1. Select System and Security.
+
+1. In the Power Options section, select Change what the power buttons do.
+
+1. Select Change settings that are currently unavailable.
+
+1. In the Shutdown settings section, select Hibernate.
+
+1. Select Save changes.
+
+### Disabling automatic suspend / sleep / lock screen on a Lenovo
+
+PC locking itself while ignoring the sleep settings from Windows? It might be a "feature".
+
+Based on https://forums.lenovo.com/t5/ThinkPad-X-Series-Laptops/System-keeps-going-to-sleep-every-30-seconds/m-p/5094181 :
+
+* Open Lenovo Commercial Vantage.
+* Find the Device menu and find the "Smart Assist" option.
+* There's only one section, "Intelligent Security". **Disable** the "Zero Touch Lock".
+
+Maybe this feature works better when the camera is not closed, but I don't like to feel watched all the time.
 
 ## Windows-Specific Config of Miscellaneous Apps
 ### Console / Command Prompt / Powershell
