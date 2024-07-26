@@ -1,5 +1,14 @@
 ## General App Preferences
 
+### Notepad++
+
+#### Fonts
+Settings > Style Configurator...
+
+Select Global Styles in the "Language" list and then pick "Default Style" in the Style list.
+
+Set the Font to DejaVu Sans Mono, size 9.
+
 ### LibreOffice
 
 Options -> LibreOffice -> Security

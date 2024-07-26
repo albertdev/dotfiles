@@ -4,16 +4,17 @@ List of development tools and their most important settings.
 ### Extensions
 - Resharper, it's a drug. Download from https://jetbrains.com
 - File Path On Footer, because I like to see a more complete path somewhere in the UI. https://marketplace.visualstudio.com/items?itemName=ShemeerNS.FilePathOnFooter
-- Editor Guidelines, for the line length OCD programmer. https://marketplace.visualstudio.com/items?itemName=PaulHarrington.EditorGuidelines
-- (VS 2017 / 2019) #Regions Are Evil, yes they are. https://marketplace.visualstudio.com/items?itemName=PaulMelia.RegionsAreEvil001
+- (VS 2022 ) Editor Guidelines, for the line length OCD programmer. https://marketplace.visualstudio.com/items?itemName=PaulHarrington.EditorGuidelinesPreview
+- (VS 2015 / 2019) Editor Guidelines, for the line length OCD programmer. https://marketplace.visualstudio.com/items?itemName=PaulHarrington.EditorGuidelines
+- (VS 2017 / 2022) #Regions Are Evil, yes they are. https://marketplace.visualstudio.com/items?itemName=PaulMelia.RegionsAreEvil001
 - (VS 2015) I Hate #Regions, so I need this. https://marketplace.visualstudio.com/items?itemName=Shanewho.IHateRegions#overview
 - VSVim, because I've got the modal editing brainworm. https://marketplace.visualstudio.com/items?itemName=JaredParMSFT.VsVim
 ### Settings
 - External tools:
     - Add `&Vim` as external tool. Command is `c:\tools\vim\vim<version>\gvim.exe`, arguments is `--servername VimStudio --remote-silent +"call cursor($(CurLine),$(CurCol))" "$(ItemFileName)$(ItemExt)"`, initial dir is `$(ItemDir)`
 - Keyboard (Shortcuts to customize):
-    - Alter shortcuts for `ReSharper.ReSharper_GotoContainingDeclaration` to point to <kbd>Ctrl</kbd> + <kbd>[<kbd>, <kbd>Ctrl</kbd> + <kbd>[<kbd>.
-      It defaults to just <kbd>Ctrl</kbd> + <kbd>[<kbd>, which steals the key for other shortcuts.
+    - Alter shortcuts for `ReSharper.ReSharper_GotoContainingDeclaration` to point to <kbd>Ctrl</kbd> + <kbd>&lbrack;</kbd>, <kbd>Ctrl</kbd> + <kbd>&lbrack;</kbd>.
+      It defaults to just <kbd>Ctrl</kbd> + <kbd>&lbrack;</kbd>, which steals the key for other shortcuts.
 
 ## VS Code
 ### Extensions
