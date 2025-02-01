@@ -40,9 +40,11 @@ map  <buffer> <C-X> <Plug>(transcribe-dec-seconds-seek)
 map  <buffer> <C-T> <Plug>(transcribe-insertcode)
 imap <buffer> <C-T> <Plug>(transcribe-insertcode)
 
-nmap <buffer> dc <Plug>(transcribe-deletecode)
+nmap <buffer> dc <Plug>(transcribe-deletecode)==
 
 nmap <buffer> dC J<Plug>(transcribe-deletecode)
+
+nmap <buffer> <C-G> <Plug>(transcribe-charactercount)
 
 nmap <buffer> go <Plug>(transcribe-divideparagraph)
 
@@ -97,3 +99,11 @@ endfunction
 function! ReplaceSectionsWithSlots()
     keeppatterns %s/\vSection ([0-9]+)/\='Slot ' . (submatch(1)-1)/g
 endfunction
+
+" Shortcuts for switch case. Tilde is not available in baselayer on all my keyboards
+nnoremap <buffer> gc ~l
+nnoremap <buffer> gC gUl
+" Depends on the twiddlecase function defined elsewhere
+vnoremap <buffer> gc y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
+vnoremap <buffer> gC y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
+
