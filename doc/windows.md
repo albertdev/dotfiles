@@ -259,6 +259,14 @@ netsh int ipv6 set dynamic tcp start=30000 num=20000
 
 ## System Tricks
 
+### Unattended sleep timeout
+Not sure if this is what's showing the lock screen, but here goes:
+
+https://www.sevenforums.com/tutorials/246364-power-options-add-system-unattended-sleep-timeout-post3256599.html?s=044ca5eb63573e145705cb30cabd164a#post3256599
+
+For Lenovo laptops it's important to check "Smart Assist" in the "Vantage" app as that has a "Human Presence Detection" or "Zero Touch Lock" thing
+where it can lock your screen when the computer thinks it is unattended.
+
 ### UWP App Shortcuts
 - Open Windows' `Run` dialog. Enter `shell:appsFolder`.
 - Right click an UWP app and press "Create shortcut"

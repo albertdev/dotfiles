@@ -32,6 +32,15 @@ Config file on Windows is ~/AppData/Roaming/vlc/vlcrc
 - Playlist: "Use only one instance when started from file manager" can be turned off. (one-instance-when-started-from-file)
 - Interface > Hotkeys settings: "Play/Pause, Global column" can be set to Media Play Pause key. (global-key-play-pause)
 
+#### Show subtitles below video:
+Based on https://superuser.com/a/1784269 and https://www.vlchelp.com/how-to-change-subtitle-position-in-vlc/ :
+
+- Open advanced settings.
+- Click on Filters.
+- Tick the "Video cropping filter" checkbox.
+- Go to Filters > Cropadd.
+- Add 100 pixels to the bottom.
+
 ### gitk
 
 Go to ~/.config/git/gitk and change `set selectbgcolor` to `#aad5ff`. The default might be set to `#0078d7` which is a bit dark.
