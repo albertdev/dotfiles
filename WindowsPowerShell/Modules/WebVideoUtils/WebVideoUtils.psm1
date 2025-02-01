@@ -85,7 +85,7 @@ Function Backup-Video {
         }
         else
         {
-            $formatChoices = "18/best*[height<=360]/worst"
+            $formatChoices = "18/best*[height<=360]+bestaudio/worst"
             if ($FormatHint)
             {
                 $formatChoices = $FormatHint + "/" + $formatChoices

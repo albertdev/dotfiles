@@ -5,7 +5,7 @@ param (
 )
 
 function Test-VideoExtension($file) {
-    $file.Extension -eq ".mp4" -or $file.Extension -eq ".webm" -or $file.Extension -eq ".3gp"
+    $file.Extension -eq ".mp4" -or $file.Extension -eq ".webm" -or $file.Extension -eq ".3gp" -or $file.Extension -eq ".mkv"
 }
 
 function Replace-VideoWithMarker($file) {
