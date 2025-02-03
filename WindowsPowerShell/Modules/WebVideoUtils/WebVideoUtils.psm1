@@ -123,14 +123,31 @@ Function Backup-VideoDescription {
     [CmdletBinding(PositionalBinding=$false)]
     param(
         [parameter(Mandatory = $true, ValueFromRemainingArguments=$true)]
-        [string[]]$VideoUrls
+        [string[]]$VideoUrls,
+
+        [Parameter()]
+        [switch]$MarkDownloaded
     )
+    $downloadArchive = Join-Path (Resolve-Path ([environment]::getfolderpath("mydocuments"))) "YouTube\download-archive.txt"
+    if (-not (Test-Path $downloadArchive)) {
+        New-Item -Path $downloadArchive -ItemType File -Force > $null
+    }
 
     foreach ($video in $VideoUrls) {
 
-        $ytdlpOutput = yt-dlp --dump-json $video
+        $infoArgs = (,"--dump-json")
+        if ($MarkDownloaded) {
+            $infoArgs += ("--download-archive",$downloadArchive)
+        }
+        $infoArgs += "$video"
+        $ytdlpOutput = yt-dlp @infoArgs
+
         if ($LASTEXITCODE) {
             Write-Error "Failed to download description of `"$video`", yt-dlp exited with status $LASTEXITCODE"
+            continue
+        }
+        if (-not $ytdlpOutput) {
+            Write-Warning "Video `"$video`" was already marked as downloaded in the download archive"
             continue
         }
         $videoInfo = ConvertFrom-Json $ytdlpOutput
