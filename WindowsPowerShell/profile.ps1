@@ -895,3 +895,69 @@ function Compare-TTML {
     }
     kdiff3 @diffArgs
 }
+function Set-LogLevel {
+    <#
+    .SYNOPSIS
+        Change the output stream preferences.
+    .DESCRIPTION
+        Offers a quick way to set all of the Powershell variables related to output stream,
+        like $ErrorPreference, $WarningPreference, $InformationPreference, etc.
+    .PARAMETER LogLevel
+        Required: [string] A mnemonic for the sort of output you want.
+        Recognized values: Off, No(ne), E(rror), W(arning), I(nformation), V(erbose), D(ebug), A(ll)
+    .EXAMPLE
+        Set-LogLevel info
+    #>
+    Param(
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string]$LogLevel
+    )
+    $Recognized = $False
+    $OldErrorActionPreference = $global:ErrorActionPreference 
+    $OldWarningPreference = $global:WarningPreference 
+    $OldInformationPreference = $global:InformationPreference 
+    $OldVerbosePreference = $global:VerbosePreference 
+    $OldDebugPreference = $global:DebugPreference 
+
+    $global:ErrorActionPreference = "SilentlyContinue"
+    $global:WarningPreference = "SilentlyContinue"
+    $global:InformationPreference = "SilentlyContinue"
+    $global:VerbosePreference = "SilentlyContinue"
+    $global:DebugPreference = "SilentlyContinue"
+
+    if ($LogLevel -like "Off" -or $LogLevel -like "No*") {
+        return
+    }
+    if ($LogLevel -like "A*") {
+        $Recognized = $True
+    }
+    if ($LogLevel -like "D*" -or $Recognized) {
+        $Recognized = $True
+        $global:DebugPreference = "Continue"
+    }
+    if ($LogLevel -like "V*" -or $Recognized) {
+        $Recognized = $True
+        $global:VerbosePreference = "Continue"
+    }
+    if ($LogLevel -like "I*" -or $Recognized) {
+        $Recognized = $True
+        $global:InformationPreference = "Continue"
+    }
+    if ($LogLevel -like "W*" -or $Recognized) {
+        $Recognized = $True
+        $global:WarningPreference = "Continue"
+    }
+    if ($LogLevel -like "E*") {
+        $Recognized = $True
+        $global:ErrorActionPreference = "Continue"
+    }
+    if (-not $Recognized) {
+        # Restore settings
+        $global:ErrorActionPreference = $OldErrorActionPreference 
+        $global:WarningPreference = $OldWarningPreference 
+        $global:InformationPreference = $OldInformationPreference 
+        $global:VerbosePreference = $OldVerbosePreference 
+        $global:DebugPreference = $OldDebugPreference 
+        throw "Input loglevel [" + $LogLevel + "] not recognized"
+    }
+}
