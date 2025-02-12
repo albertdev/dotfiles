@@ -44,6 +44,12 @@ Once there you can pick an item from the list and click "Change Key Sequence". D
 - Enter `ms-settings:mousetouchpad`
 - Set cursor speed to 12, scroll multiple lines at a time, scroll 9-11 lines each time, scroll when hovering.
 
+## Notification Settings
+- Open windows' `Run` dialog.
+- Enter `ms-settings:notifications`
+- Scroll down to the bottom, open the "Additional Settings" folding and uncheck "Show the Windows welcome experience ..."
+  and "Get tips and suggestions when using Windows"
+
 ## Taskbar (Windows 10 and earlier 😢)
 - Right-click taskbar and select "Taskbar settings".
 
