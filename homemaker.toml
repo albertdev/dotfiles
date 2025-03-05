@@ -111,6 +111,7 @@
         ["choco", "pin", "add", "--name", "palemoon"],
         ["choco", "pin", "add", "--name", "firefox"],
         ["choco", "pin", "add", "--name", "notepadplusplus.install"],
+        ["choco", "pin", "add", "--name", "libreoffice-fresh"],
 
         # Refresh Winget - a fresh Windows 11 Pro install had a broken version included
         ["powershell", "-NoProfile", "-Command", "Add-AppPackage", "-path", "https://cdn.winget.microsoft.com/cache/source.msix."],
