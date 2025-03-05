@@ -86,6 +86,8 @@ See custom profiles.
     - Unbind "Go To Next Line" and assign Shift+Return to "Go to current line start".
     - Bind "Go to current line end" as Alt+Shift+Return.
     - Unbind "Change casing" and bind Ctrl+Shift+C to "Toggle shot change".
+    - Bind Ctrl+Shift+Left to "Go to previous shot change"
+    - Bind Ctrl+Shift+Right to "Go to next shot change"
     - Unbind "Auto-translate" (Ctrl+Shift+G).
     - Unbind "Go to subtitle number..." and bind Ctrl+G to "Select next subtitle (from video position, keep video pos)".
     - Unbind "New File" and bind Ctrl+N to "Small selected time forward".
@@ -100,8 +102,10 @@ See custom profiles.
     - Bind "Go to next subtitle (from video position)" as Alt+Shift+Down.
     - Bind "Go to previous subtitle (from video position)" as Alt+Shift+Up.
     - Bind "Split line at cursor/video position" as Ctrl+Alt+S.
-    - Bind "Set end minus gap, go to next and start next here" as Shift+F12.
-    - Bind "Set start and set end of previous (minus min gap)" as Shift+F11.
+    - Reassign "Set Start Time" from F11 to Shift+F11.
+    - Bind "Set start and set end of previous (minus min gap)" as F11.
+    - Reassign "Set end time" from F12 to Shift+F12.
+    - Bind "Set end minus gap, go to next and start next here" as F12.
     - Bind "Set start time, keep duration" as Ctrl+F11.
     - Bind "Unbreak text" as Ctrl+Back(space).
     - Bind "Toggle focus between list view and subtitle text box" as Ctrl+Tab.
