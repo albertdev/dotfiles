@@ -85,6 +85,7 @@ endfunction
 autocmd BufWritePre <buffer> :call StripTrailingWhitespace()
 
 iabbrev fullmmx Marble Machine X
+iabbrev fullmmx Marble Machine 3
 iabbrev fullww Wintergatan Wednesdays
 iabbrev wgn Wintergatan
 iabbrev muscapt [♪ ♪]<Left><Left><Left>
