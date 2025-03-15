@@ -185,7 +185,7 @@ function Backup-VideoSubtitle {
         [string[]]$VideoUrls,
 
         [parameter(Mandatory = $true)]
-        [string]$Language,
+        [string]$SubtitleLanguage,
 
         [parameter()]
         [string]$Format
@@ -201,7 +201,7 @@ function Backup-VideoSubtitle {
         $videoFilePrefix = BuildVideoFilePrefix $videoInfo
         Write-Information -InformationAction Continue "Video `"$videoFilePrefix`" is $($videoInfo.duration_string) long"
 
-        $downloadArgs = CalculateSubtitleDownloadArguments -Language $Language -VideoInfo $videoInfo -Format $Format
+        $downloadArgs = CalculateSubtitleDownloadArguments -Language $SubtitleLanguage -VideoInfo $videoInfo -Format $Format
 
         $outputTemplatePrefix = $videoInfo.extractor_key + "_" + $videoInfo.id
         $outputTemplate = $outputTemplatePrefix + ".%(ext)s"
