@@ -25,7 +25,7 @@
 [cola]
 	fontdiff = DejaVu Sans Mono,9,-1,5,50,0,0,0,0,0
 	tabwidth = 4
-	textwidth = 72
+	textwidth = 80
 	spellcheck = false
 [tgit]
 	logwidthmarker = 72
