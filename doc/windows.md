@@ -39,6 +39,15 @@ To change it, either:
 
 Once there you can pick an item from the list and click "Change Key Sequence". Don't forget to press OK twice.
 
+## Stop Print Scr button from opening Snipping Tool
+
+Snipping tool can be opened with <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>. Having it on Print Screen button is a bit overkill.
+
+- Open Windows' `Run` dialog.
+- Enter `ms-settings:easeofaccess-keyboard`
+- Scroll down to the "On-screen keyboard, access keys and Print screen" section
+- Toggle off "Use the Print screen key to open screen capture"
+
 ## Mouse Settings
 - Open Windows' `Run` dialog.
 - Enter `ms-settings:mousetouchpad`
@@ -49,6 +58,7 @@ Once there you can pick an item from the list and click "Change Key Sequence". D
 - Enter `ms-settings:notifications`
 - Scroll down to the bottom, open the "Additional Settings" folding and uncheck "Show the Windows welcome experience ..."
   and "Get tips and suggestions when using Windows"
+- In the "Notifications from apps and other senders" find "Suggested" and turn it off.
 
 ## Taskbar (Windows 10 and earlier 😢)
 - Right-click taskbar and select "Taskbar settings".

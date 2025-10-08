@@ -17,6 +17,7 @@ List of development tools and their most important settings.
       It defaults to just <kbd>Ctrl</kbd> + <kbd>&lbrack;</kbd>, which steals the key for other shortcuts.
 
 ## VS Code
+
 ### Extensions
 - Azure Pipelines, for completion of YAML pipeline descriptors. Id: `ms-azure-devops.azure-pipelines`
 - C#, for quickly viewing some sources. Id: `ms-dotnettools.csharp`
@@ -24,10 +25,23 @@ List of development tools and their most important settings.
 - Swagger Viewer, not sure what this one did vs the previous one. Id: `arjun.swagger-viewer`
 - PowerShell, the replacement of the ISE. Id: `ms-vscode.powershell`
 - Remote - WSL, for better WSL project editing integration. Still experimental. Id: `ms-vscode-remote.remote-wsl`
-- Solarized, for its beige light theme. Id: `ryanolsonx.solarized`
 - Vim, because I've got the modal editing brainworm. Id: `vscodevim.vim`
-- XML Tools, because formatting by hand is overrated. Id: `dotjoshjohnson.xml`
+- XML Toolvs, because formatting by hand is overrated. Id: `dotjoshjohnson.xml`
 - YAML, for when you're editing raw YAML or Kubernetes descriptors. Id: `redhat.vscode-yaml`
+- Markdown Preview Mermaid support, chart previews in Markdown. Id: `bierner.markdown-mermaid`
+- Markdown Mermaid Syntax highlighting. Id: `bpruitt-goddard.mermaid-markdown-syntax-highlighting`
+
+### settings
+- Use VS Code light theme.
+- Play with tab labels: https://stackoverflow.com/questions/78779772/how-to-change-label-format-of-open-editors-panel-in-vs-code
+  For example:
+  ```
+  "workbench.editor.customLabels.patterns": {
+  "**/flows/**/index.mdx": "[F]${dirname}",
+  "**/index.mdx": "idx:${dirname}",
+  "**/services/*/index.mdx": "[S}${dirname}"
+  }
+  ```
 
 ## Notepad++
 ### Extensions

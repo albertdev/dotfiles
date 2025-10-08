@@ -28,6 +28,7 @@ Used instead of Iridium.
 - browser.translations.automaticallyPopup : false
 - browser.translations.panelShown : true
 - Dont't forget to hide the Pocket button in the toolbar
+- widget.disable-swipe-tracker to disable all gestures; browser.gesture.swipe to disable some.
 
 ## Iridium browser
 Chromium port with (allegedly) all the tracking demolished.
