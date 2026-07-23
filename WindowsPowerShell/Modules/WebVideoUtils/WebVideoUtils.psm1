@@ -137,6 +137,9 @@ Function Backup-VideoDescription {
         [string[]]$VideoUrls,
 
         [Parameter()]
+        [switch]$Force,
+
+        [Parameter()]
         [switch]$MarkDownloaded
     )
     $downloadArchive = Join-Path (Resolve-Path ([environment]::getfolderpath("mydocuments"))) "YouTube\download-archive.txt"
@@ -144,11 +147,13 @@ Function Backup-VideoDescription {
         New-Item -Path $downloadArchive -ItemType File -Force > $null
     }
 
+    $index = 0
     foreach ($video in $VideoUrls) {
+        $index += 1
 
         $infoArgs = (,"--dump-json")
-        if ($MarkDownloaded) {
-            $infoArgs += ("--download-archive",$downloadArchive)
+        if (! $Force) {
+            $downloadArgs += ("--download-archive",$downloadArchive)
         }
         $infoArgs += "$video"
         $ytdlpOutput = yt-dlp @infoArgs
@@ -171,6 +176,16 @@ Function Backup-VideoDescription {
         $videoInfo.description | Out-File -Encoding UTF8 -LiteralPath (Join-Path . ($outputTemplatePrefix + ".description"))
 
         RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo -NewPrefix $videoFilePrefix
+
+        if ($MarkDownloaded) {
+            $downloadedId = $videoInfo.extractor + " " + $videoInfo.id
+            Add-Content -LiteralPath $downloadArchive -Encoding UTF8 -Value $downloadedId
+        }
+
+        if ($index -lt $VideoUrls.Count) {
+            Write-Output "Waiting before next download"
+            Start-Sleep -Seconds 10
+        }
     }
 }
 
