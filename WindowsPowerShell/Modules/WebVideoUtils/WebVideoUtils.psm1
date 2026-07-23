@@ -259,19 +259,25 @@ function CalculateSubtitleDownloadArguments {
 
     $chosenSubtitle = $null
     $langFound = $false
+    $langCandidates = @()
     foreach ($lang in $videoInfo.subtitles.PSObject.Properties) {
-        if ($lang.Name -ne $Language) {
-            continue
+        # Match both language short code, and country-specific versions
+        if (($lang.Name -eq $Language) -or ($lang.Name -ilike "$Language-?*")) {
+            $langCandidates += New-Object PSObject -Property @{ Name = $lang.Name; Value = $lang.Value }
         }
+    }
+    $langCandidates = $langCandidates | Sort-Object -Property "Name"
+    foreach ($lang in $langCandidates) {
         $langFound = $true
         foreach ($variant in $lang.Value) {
             if ($variant.ext -eq $Format) {
-                $chosenSubtitle = New-Object PSObject -Property @{ Language = $Language; Target = "Subtitle" }
+                $chosenSubtitle = New-Object PSObject -Property @{ Language = $lang.Name; Target = "Subtitle" }
                 break
             }
         }
         if (!($chosenSubtitle)) {
-            Write-Warning "Language $Language was found to have subtitles but not for format $Format, checking automatic captions"
+            Write-Warning "Language $($lang.Name) was found to have subtitles but not for format $Format, checking other options"
+            continue
         }
         break
     }
@@ -282,18 +288,18 @@ function CalculateSubtitleDownloadArguments {
 
         $langFound = $false
         foreach ($lang in $videoInfo.automatic_captions.PSObject.Properties) {
-            if ($lang.Name -ne $Language) {
+            if (($lang.Name -ne $Language) -and !($lang.Name -ilike "$Language-orig")) {
                 continue
             }
             $langFound = $true
             foreach ($variant in $lang.Value) {
                 if ($variant.ext -eq $Format) {
-                    $chosenSubtitle = New-Object PSObject -Property @{ Language = $Language; Target = "AutomaticCaption" }
+                    $chosenSubtitle = New-Object PSObject -Property @{ Language = $lang.Name; Target = "AutomaticCaption" }
                     break
                 }
             }
             if (!($chosenSubtitle)) {
-                throw "Language $Language was found to have an automatic caption but not for format $Format"
+                throw "Language $($lang.Name) was found to have an automatic caption but not for format $Format"
             }
             break
         }
