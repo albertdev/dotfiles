@@ -333,8 +333,11 @@ function BuildVideoFilePrefix {
     if ($videoInfo | Get-Member -Name channel) {
         $authorInformation = $videoInfo.channel
     }
-    if (!($authorInformation)) {
+    if (!($authorInformation) -and ($videoInfo | Get-Member -Name uploader)) {
         $authorInformation = $videoInfo.uploader
+    }
+    if (!($authorInformation)) {
+        $authorInformation = "NA"
     }
     if ($videoInfo | Get-Member -Name release_date) {
         $date = $videoInfo.release_date
