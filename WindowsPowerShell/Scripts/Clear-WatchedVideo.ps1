@@ -5,14 +5,22 @@ param (
 )
 
 function Test-VideoExtension($file) {
-    $file.Extension -eq ".mp4" -or $file.Extension -eq ".webm" -or $file.Extension -eq ".3gp" -or $file.Extension -eq ".mkv"
+    $file.Extension -eq ".mp4" -or $file.Extension -eq ".webm" -or $file.Extension -eq ".3gp" -or $file.Extension -eq ".mkv" `
+        -or ($file.Directory.Name -ieq "Videos" -and $file.Extension -eq ".json")
 }
 
 function Replace-VideoWithMarker($file) {
     $fileDirectory = $file.Directory.FullName
     $marker = $file.BaseName + ".txt"
     $newFile = New-Item -Path $fileDirectory -Name $marker -ItemType File
-    Get-Date -Format "o" | Out-File -Encoding ASCII -LiteralPath $newFile
+    # .json file is typically when the "Mark Downloaded" feature of Backup-VideoDescription was used.
+    # Set marker date to when the json file was created (last modified is video publishing date, and today's date is not correct)
+    if ($file.Extension -eq ".json") {
+        $dateWatched = Get-Date -Format "o" $file.CreationTime
+    } else {
+        $dateWatched = Get-Date -Format "o"
+    }
+    $dateWatched | Out-File -Encoding ASCII -LiteralPath $newFile
     $newFile.LastWriteTime = $file.LastWriteTime
     Remove-ItemSafely -LiteralPath $file.FullName
     Write-Information -InformationAction Continue "Wrote marker to replace $file" 
