@@ -95,6 +95,7 @@ Function Backup-Video {
         if ($DescriptionIncluded) {
             $downloadArgs += "--write-description"
         }
+        $downloadArgsBackup = $downloadArgs
         if ($SubtitleLanguage) {
             try {
                 $subdownloadArgs = CalculateSubtitleDownloadArguments -Language $SubtitleLanguage -VideoInfo $videoInfo
@@ -108,6 +109,16 @@ Function Backup-Video {
         yt-dlp @downloadArgs
         if ($LASTEXITCODE) {
             Write-Error "Failed to download `"$video`", yt-dlp exited with status $LASTEXITCODE"
+            if ($SubtitleLanguage) {
+                Write-Warning "Might be a subtitle download error. Waiting before trying again"
+                Start-Sleep -Seconds 5
+                $downloadArgs = $downloadArgsBackup
+                $downloadArgs += "$video"
+                yt-dlp @downloadArgs
+                if ($LASTEXITCODE) {
+                    Write-Error "Failed to download `"$video`" second time, yt-dlp exited with status $LASTEXITCODE"
+                }
+            }
         }
 
         RenameDownloadedItems -Prefix $outputTemplatePrefix -VideoInfo $videoInfo -NewPrefix $videoFilePrefix
