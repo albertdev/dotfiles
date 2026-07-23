@@ -305,6 +305,11 @@ function CalculateSubtitleDownloadArguments {
     $result = "--sub-lang", $chosenSubtitle.Language, "--sub-format", $Format
     if ($chosenSubtitle.Target -eq "AutomaticCaption") {
         $result += "--write-auto-sub"
+        # Original language can be chosen without much issue, auto-translated ones frequently hit HTTP 429 error
+        if (!($chosenSubtitle.Language -ilike "*-orig")) {
+            $result += "--sleep-subtitles"
+            $result += "61"
+        }
     } else {
         $result += "--write-sub"
     }
